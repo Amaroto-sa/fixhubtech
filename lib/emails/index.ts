@@ -26,7 +26,7 @@ export async function sendEmail({
             to,
             subject,
             html,
-            replyTo: replyTo || process.env.RESEND_REPLY_TO,
+            reply_to: replyTo || process.env.RESEND_REPLY_TO,
         });
 
         if (error) {
