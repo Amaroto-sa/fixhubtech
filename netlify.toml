@@ -1,0 +1,25 @@
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+# Next.js on Netlify requires the official plugin
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
+
+# Environment variables (set these in the Netlify Dashboard → Site Settings → Environment Variables)
+# DATABASE_URL, CLERK keys, etc — do NOT put secrets here.
+
+# Redirect /admin to /admin/dashboard
+[[redirects]]
+  from = "/admin"
+  to = "/admin/dashboard"
+  status = 302
+
+# Headers for security
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Permissions-Policy = "camera=(), microphone=(), geolocation=()"

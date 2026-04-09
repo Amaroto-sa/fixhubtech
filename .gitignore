@@ -1,0 +1,75 @@
+# ========================
+# Dependencies
+# ========================
+node_modules/
+.pnp
+.pnp.js
+.pnp.cjs
+
+# ========================
+# Next.js
+# ========================
+.next/
+out/
+build/
+
+# ========================
+# Environment Variables
+# ========================
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# ========================
+# Vercel
+# ========================
+.vercel
+
+# ========================
+# Debug & Logs
+# ========================
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+.log
+
+# ========================
+# Editor / IDE
+# ========================
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# ========================
+# TypeScript
+# ========================
+*.tsbuildinfo
+next-env.d.ts
+
+# ========================
+# Drizzle
+# ========================
+drizzle/meta/
+
+# ========================
+# Testing
+# ========================
+coverage/
+.nyc_output/
+
+# ========================
+# Misc
+# ========================
+*.pem
+*.key
+*.cert
+FixHub_Technology_Platform_PRD.docx
+FixHub_Technology_Platform_PRD.md
+prompt.txt
