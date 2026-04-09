@@ -1,12 +1,12 @@
-import { SignIn } from "@clerk/nextjs";
+import { SignUp } from "@clerk/nextjs";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-    title: "Sign In",
-    description: "Sign in to your FixHub Technology client portal.",
+    title: "Create Account",
+    description: "Create your FixHub Technology account to manage projects and track progress.",
 };
 
-export default function SignInPage() {
+export default function SignUpPage() {
     return (
         <div className="min-h-screen flex items-center justify-center bg-background relative overflow-hidden">
             {/* Ambient glow */}
@@ -19,16 +19,18 @@ export default function SignInPage() {
                         F
                     </div>
                     <h1 className="font-display text-2xl font-bold text-foreground tracking-tight mb-2">
-                        Welcome Back
+                        Create Account
                     </h1>
                     <p className="text-sm text-muted-foreground">
-                        Sign in to access your FixHub dashboard.
+                        Join FixHub to track your projects and manage your digital presence.
                     </p>
                 </div>
 
-                {/* Clerk SignIn Component */}
+                {/* Clerk SignUp Component */}
                 <div className="flex justify-center mt-6">
-                    <SignIn
+                    <SignUp
+                        routing="path"
+                        path="/sign-up"
                         appearance={{
                             elements: {
                                 card: "bg-[#0a0a0e] border border-white/[0.05] shadow-2xl",
