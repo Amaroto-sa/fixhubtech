@@ -27,29 +27,21 @@ export default function SignInPage() {
                 </div>
 
                 {/* Clerk SignIn Component */}
-                <div className="flex justify-center">
+                <div className="flex justify-center mt-6">
                     <SignIn
                         appearance={{
                             elements: {
-                                rootBox: "w-full",
-                                card: "bg-transparent shadow-none border-none p-0 w-full",
-                                headerTitle: "hidden",
-                                headerSubtitle: "hidden",
-                                socialButtonsBlockButton:
-                                    "bg-white/[0.04] border border-white/[0.08] hover:bg-white/[0.08] transition-all",
-                                formButtonPrimary:
-                                    "bg-gradient-to-b from-indigo-400 to-indigo-600 hover:from-indigo-500 hover:to-indigo-700 shadow-[inset_0_1px_0_rgba(255,255,255,0.2),0_4px_14px_rgba(79,70,229,0.4)] transition-all text-sm font-medium",
-                                formFieldInput:
-                                    "bg-white/[0.04] border-white/[0.08] focus:border-indigo-500/50 focus:ring-indigo-500/20 text-foreground rounded-lg",
-                                formFieldLabel: "text-muted-foreground text-sm",
-                                footerActionLink:
-                                    "text-indigo-400 hover:text-indigo-300 transition-colors",
-                                identityPreviewEditButton:
-                                    "text-indigo-400 hover:text-indigo-300",
-                                dividerLine: "bg-white/[0.08]",
+                                card: "bg-[#0a0a0e] border border-white/[0.05] shadow-2xl",
+                                headerTitle: "text-foreground font-display",
+                                headerSubtitle: "text-muted-foreground",
+                                formButtonPrimary: "bg-indigo-600 hover:bg-indigo-700 text-sm normal-case",
+                                formFieldInput: "bg-white/[0.03] border-white/10 text-foreground",
+                                formFieldLabel: "text-muted-foreground",
+                                footerActionLink: "text-indigo-400 hover:text-indigo-300",
+                                socialButtonsBlockButton: "border-white/10 hover:bg-white/[0.02]",
+                                dividerLine: "bg-white/10",
                                 dividerText: "text-muted-foreground/50",
-                                footer: "hidden",
-                            },
+                            }
                         }}
                     />
                 </div>
