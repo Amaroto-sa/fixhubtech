@@ -73,30 +73,32 @@
 }
 
 @layer components {
+
   /* ---- Card Variants ---- */
   .card-glass {
-    background: linear-gradient(
-      135deg,
-      hsl(240 10% 8% / 0.8),
-      hsl(240 10% 6% / 0.6)
-    );
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid hsl(240 10% 14% / 0.5);
+    background: linear-gradient(135deg,
+        hsl(240 10% 8% / 0.8),
+        hsl(240 10% 6% / 0.6));
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    border: 1px solid hsl(240 10% 14% / 0.3);
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05),
+      0 4px 24px -4px rgba(0, 0, 0, 0.5);
     border-radius: var(--radius);
   }
 
   .card-elevated {
     background: hsl(var(--card));
-    border: 1px solid hsl(var(--border));
+    border: 1px solid hsl(var(--border) / 0.5);
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.02);
     border-radius: var(--radius);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .card-elevated:hover {
     border-color: hsl(239 84% 67% / 0.3);
-    box-shadow: 0 0 30px hsl(239 84% 67% / 0.06);
-    transform: translateY(-2px);
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.05),
+      0 10px 40px -10px rgba(99, 102, 241, 0.1);
   }
 
   /* ---- Button Variants ---- */
@@ -107,23 +109,27 @@
     gap: 0.5rem;
     padding: 0.875rem 2rem;
     font-size: 0.9375rem;
-    font-weight: 600;
+    font-weight: 500;
+    letter-spacing: -0.01em;
     color: white;
-    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+    background: linear-gradient(180deg, #818cf8 0%, #4f46e5 100%);
     border-radius: 0.75rem;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     cursor: pointer;
     border: none;
     outline: none;
     position: relative;
     overflow: hidden;
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2),
+      0 0 0 1px rgba(0, 0, 0, 0.5),
+      0 4px 14px 0 rgba(79, 70, 229, 0.39);
   }
 
   .btn-primary::before {
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(135deg, #818cf8, #a78bfa);
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, transparent 100%);
     opacity: 0;
     transition: opacity 0.3s;
   }
@@ -133,8 +139,9 @@
   }
 
   .btn-primary:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 8px 30px rgba(99, 102, 241, 0.35);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3),
+      0 0 0 1px rgba(0, 0, 0, 0.5),
+      0 6px 20px 0 rgba(79, 70, 229, 0.5);
   }
 
   .btn-primary span {
@@ -149,19 +156,20 @@
     gap: 0.5rem;
     padding: 0.875rem 2rem;
     font-size: 0.9375rem;
-    font-weight: 600;
+    font-weight: 500;
+    letter-spacing: -0.01em;
     color: hsl(var(--foreground));
-    background: transparent;
+    background: hsl(240 10% 12%);
     border: 1px solid hsl(240 10% 18%);
+    box-shadow: inset 0 1px 0 0 rgba(255, 255, 255, 0.02);
     border-radius: 0.75rem;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
     cursor: pointer;
   }
 
   .btn-secondary:hover {
-    border-color: hsl(239 84% 67% / 0.5);
-    background: hsl(239 84% 67% / 0.08);
-    transform: translateY(-1px);
+    background: hsl(240 10% 16%);
+    border-color: hsl(240 10% 24%);
   }
 
   /* ---- Typography ---- */
@@ -212,23 +220,19 @@
 
   /* ---- Dot Grid Pattern ---- */
   .bg-dot-pattern {
-    background-image: radial-gradient(
-      circle,
-      hsl(240 10% 18%) 1px,
-      transparent 1px
-    );
+    background-image: radial-gradient(circle,
+        hsl(240 10% 18%) 1px,
+        transparent 1px);
     background-size: 24px 24px;
   }
 
   /* ---- Divider ---- */
   .divider-gradient {
     height: 1px;
-    background: linear-gradient(
-      90deg,
-      transparent,
-      hsl(239 84% 67% / 0.3),
-      transparent
-    );
+    background: linear-gradient(90deg,
+        transparent,
+        hsl(239 84% 67% / 0.3),
+        transparent);
   }
 
   /* ---- Badge ---- */
@@ -287,18 +291,23 @@
   .animate-delay-100 {
     animation-delay: 100ms;
   }
+
   .animate-delay-200 {
     animation-delay: 200ms;
   }
+
   .animate-delay-300 {
     animation-delay: 300ms;
   }
+
   .animate-delay-400 {
     animation-delay: 400ms;
   }
+
   .animate-delay-500 {
     animation-delay: 500ms;
   }
+
   .animate-delay-600 {
     animation-delay: 600ms;
   }
