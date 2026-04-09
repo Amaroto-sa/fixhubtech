@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { UserButton, useUser } from "@clerk/nextjs";
 import {
-    LayoutHeadline,
+    LayoutDashboard,
     FolderKanban,
     HardDrive,
     CreditCard,
@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 
 const clientNavItems = [
-    { label: "Overview", href: "/dashboard", icon: LayoutHeadline },
+    { label: "Overview", href: "/dashboard", icon: LayoutDashboard },
     { label: "Projects", href: "/dashboard/projects", icon: FolderKanban },
     { label: "Files", href: "/dashboard/files", icon: HardDrive },
     { label: "Invoices", href: "/dashboard/invoices", icon: CreditCard },
