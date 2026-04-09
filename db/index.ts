@@ -17,7 +17,7 @@ let _db: ReturnType<typeof createDb> | undefined;
 export const db = new Proxy({} as ReturnType<typeof createDb>, {
   get(_, prop) {
     if (!_db) _db = createDb();
-    return (_db as Record<string | symbol, unknown>)[prop];
+    return (_db as unknown as Record<string | symbol, unknown>)[prop];
   },
 });
 
