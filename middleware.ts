@@ -7,12 +7,12 @@ const isAdminRoute = createRouteMatcher(["/admin(.*)"]);
 export default clerkMiddleware(async (auth, req) => {
     // Protect client routes
     if (isClientRoute(req)) {
-        await auth.protect();
+        await auth().protect();
     }
 
     // Protect admin routes + check for admin role
     if (isAdminRoute(req)) {
-        await auth.protect((has) => {
+        await auth().protect((has) => {
             return has({ role: "org:admin" }) || has({ role: "org:super_admin" });
         });
     }
