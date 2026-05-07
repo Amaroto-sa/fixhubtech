@@ -1,18 +1,17 @@
 import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
-// Routes that require authentication
 const isClientRoute = createRouteMatcher(["/dashboard(.*)"]);
 const isAdminRoute = createRouteMatcher(["/admin(.*)"]);
 
 export default clerkMiddleware(async (auth, req) => {
-    // Protect client routes — redirect to sign-in if unauthenticated
+    // Protect client routes
     if (isClientRoute(req)) {
-        await auth.protect();
+        await auth().protect();
     }
 
-    // Protect admin routes — require org:admin or org:super_admin role
+    // Protect admin routes + check for admin role
     if (isAdminRoute(req)) {
-        await auth.protect((has) => {
+        await auth().protect((has) => {
             return has({ role: "org:admin" }) || has({ role: "org:super_admin" });
         });
     }
