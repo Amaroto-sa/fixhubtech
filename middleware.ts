@@ -1,33 +1,22 @@
-import { NextFetchEvent, NextRequest } from "next/server";
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
 
-// Dynamic import wrapper to prevent Netlify from evaluating Clerk before environment variables (CLERK_SECRET_KEY) are fully hydrated
-const runClerkMiddleware = async (req: NextRequest, event: NextFetchEvent) => {
-    const { clerkMiddleware, createRouteMatcher } = await import("@clerk/nextjs/server");
+// Routes that require authentication
+const isClientRoute = createRouteMatcher(["/dashboard(.*)"]);
+const isAdminRoute = createRouteMatcher(["/admin(.*)"]);
 
-    // Routes that require authentication
-    const isClientRoute = createRouteMatcher(["/dashboard(.*)"]);
-    const isAdminRoute = createRouteMatcher(["/admin(.*)"]);
+export default clerkMiddleware(async (auth, req) => {
+    // Protect client routes — redirect to sign-in if unauthenticated
+    if (isClientRoute(req)) {
+        await auth.protect();
+    }
 
-    const middleware = clerkMiddleware(async (auth, req) => {
-        // Protect client routes
-        if (isClientRoute(req)) {
-            await auth().protect();
-        }
-
-        // Protect admin routes + check for admin role
-        if (isAdminRoute(req)) {
-            await auth().protect((has) => {
-                return has({ role: "org:admin" }) || has({ role: "org:super_admin" });
-            });
-        }
-    });
-
-    return middleware(req, event);
-};
-
-export default function middleware(req: NextRequest, event: NextFetchEvent) {
-    return runClerkMiddleware(req, event);
-}
+    // Protect admin routes — require org:admin or org:super_admin role
+    if (isAdminRoute(req)) {
+        await auth.protect((has) => {
+            return has({ role: "org:admin" }) || has({ role: "org:super_admin" });
+        });
+    }
+});
 
 export const config = {
     matcher: [
