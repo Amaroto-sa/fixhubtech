@@ -23,45 +23,51 @@ export default async function ClientDashboard() {
     const user = await currentUser();
     if (!user) return null;
 
-    // Fetch DB user
-    const [dbUser] = await db.select().from(users).where(eq(users.clerkId, user.id));
-    
     let activeProjectsCount = 0;
     let pendingInvoicesCount = 0;
     let openTicketsCount = 0;
     let recentProjectsList: any[] = [];
+    let dbError = false;
 
-    if (dbUser) {
-        const [client] = await db.select().from(clients).where(eq(clients.userId, dbUser.id));
+    try {
+        // Fetch DB user
+        const [dbUser] = await db.select().from(users).where(eq(users.clerkId, user.id));
+        
+        if (dbUser) {
+            const [client] = await db.select().from(clients).where(eq(clients.userId, dbUser.id));
 
-        if (client) {
-            // Fetch projects
-            const clientProjects = await db.select().from(projects).where(eq(projects.clientId, client.id));
-            activeProjectsCount = clientProjects.length;
+            if (client) {
+                // Fetch projects
+                const clientProjects = await db.select().from(projects).where(eq(projects.clientId, client.id));
+                activeProjectsCount = clientProjects.length;
 
-            // Fetch pending invoices
-            const clientInvoices = await db.select().from(invoices).where(
-                and(eq(invoices.clientId, client.id), eq(invoices.status, "draft"))
-            );
-            pendingInvoicesCount = clientInvoices.length;
+                // Fetch pending invoices
+                const clientInvoices = await db.select().from(invoices).where(
+                    and(eq(invoices.clientId, client.id), eq(invoices.status, "draft"))
+                );
+                pendingInvoicesCount = clientInvoices.length;
 
-            // Fetch open tickets
-            const tickets = await db.select().from(supportTickets).where(
-                and(eq(supportTickets.clientId, client.id), eq(supportTickets.status, "open"))
-            );
-            openTicketsCount = tickets.length;
+                // Fetch open tickets
+                const tickets = await db.select().from(supportTickets).where(
+                    and(eq(supportTickets.clientId, client.id), eq(supportTickets.status, "open"))
+                );
+                openTicketsCount = tickets.length;
 
-            // Map recent projects
-            recentProjectsList = clientProjects.slice(0, 3).map(p => ({
-                name: p.name,
-                status: p.status,
-                statusIcon: CircleDotDashed,
-                statusColor: "text-indigo-400 bg-indigo-500/10 border-indigo-500/20",
-                milestone: "Ongoing",
-                dueDate: p.dueDate ? p.dueDate.toLocaleDateString() : "TBD",
-                progress: p.status === 'completed' ? 100 : 50,
-            }));
+                // Map recent projects
+                recentProjectsList = clientProjects.slice(0, 3).map(p => ({
+                    name: p.name,
+                    status: p.status,
+                    statusIcon: CircleDotDashed,
+                    statusColor: "text-indigo-400 bg-indigo-500/10 border-indigo-500/20",
+                    milestone: "Ongoing",
+                    dueDate: p.dueDate ? new Date(p.dueDate).toLocaleDateString() : "TBD",
+                    progress: p.status === 'completed' ? 100 : 50,
+                }));
+            }
         }
+    } catch (error) {
+        console.error("Dashboard DB Error:", error);
+        dbError = true;
     }
 
     const stats = [
@@ -110,6 +116,11 @@ export default async function ClientDashboard() {
                     <p className="text-muted-foreground/80 text-lg">
                         Here&apos;s an overview of your active operations and pending tasks.
                     </p>
+                    {dbError && (
+                        <div className="mt-4 p-4 border border-destructive/50 bg-destructive/10 text-destructive rounded-lg text-sm">
+                            There was an error connecting to the database. Make sure your DATABASE_URL is set and the database schema is pushed.
+                        </div>
+                    )}
                 </div>
             </FadeIn>
 
