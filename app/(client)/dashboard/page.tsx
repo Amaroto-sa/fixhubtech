@@ -1,7 +1,8 @@
-"use client";
-
 import Link from "next/link";
-import { useUser } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs/server";
+import { db } from "@/db";
+import { users, clients, projects, invoices, supportTickets } from "@/db/schema";
+import { eq, and } from "drizzle-orm";
 import {
     SpotlightCard,
     FadeIn,
@@ -18,72 +19,83 @@ import {
     CheckCircle2
 } from "lucide-react";
 
-export default function ClientDashboard() {
-    const { user, isLoaded } = useUser();
+export default async function ClientDashboard() {
+    const user = await currentUser();
+    if (!user) return null;
 
-    // Mock Stats
+    // Fetch DB user
+    const [dbUser] = await db.select().from(users).where(eq(users.clerkId, user.id));
+    
+    let activeProjectsCount = 0;
+    let pendingInvoicesCount = 0;
+    let openTicketsCount = 0;
+    let recentProjectsList: any[] = [];
+
+    if (dbUser) {
+        const [client] = await db.select().from(clients).where(eq(clients.userId, dbUser.id));
+
+        if (client) {
+            // Fetch projects
+            const clientProjects = await db.select().from(projects).where(eq(projects.clientId, client.id));
+            activeProjectsCount = clientProjects.length;
+
+            // Fetch pending invoices
+            const clientInvoices = await db.select().from(invoices).where(
+                and(eq(invoices.clientId, client.id), eq(invoices.status, "draft"))
+            );
+            pendingInvoicesCount = clientInvoices.length;
+
+            // Fetch open tickets
+            const tickets = await db.select().from(supportTickets).where(
+                and(eq(supportTickets.clientId, client.id), eq(supportTickets.status, "open"))
+            );
+            openTicketsCount = tickets.length;
+
+            // Map recent projects
+            recentProjectsList = clientProjects.slice(0, 3).map(p => ({
+                name: p.name,
+                status: p.status,
+                statusIcon: CircleDotDashed,
+                statusColor: "text-indigo-400 bg-indigo-500/10 border-indigo-500/20",
+                milestone: "Ongoing",
+                dueDate: p.dueDate ? p.dueDate.toLocaleDateString() : "TBD",
+                progress: p.status === 'completed' ? 100 : 50,
+            }));
+        }
+    }
+
     const stats = [
         {
             label: "Active Projects",
-            value: "3",
-            change: "All on track",
+            value: activeProjectsCount.toString(),
+            change: activeProjectsCount > 0 ? "All on track" : "No active projects",
             color: "from-indigo-500/20 to-indigo-500/5",
             borderColor: "border-indigo-500/20",
             icon: FolderKanban,
         },
         {
             label: "Pending Invoices",
-            value: "1",
-            change: "$1,499 due April 15",
+            value: pendingInvoicesCount.toString(),
+            change: pendingInvoicesCount > 0 ? "Action required" : "All paid up",
             color: "from-amber-500/20 to-amber-500/5",
             borderColor: "border-amber-500/20",
             icon: CreditCard,
         },
         {
             label: "Unread Messages",
-            value: "5",
-            change: "From project team",
+            value: "0",
+            change: "Up to date",
             color: "from-cyan-500/20 to-cyan-500/5",
             borderColor: "border-cyan-500/20",
             icon: MessageSquare,
         },
         {
             label: "Open Tickets",
-            value: "0",
-            change: "Everything is resolved",
+            value: openTicketsCount.toString(),
+            change: openTicketsCount > 0 ? "Support team is on it" : "Everything is resolved",
             color: "from-emerald-500/20 to-emerald-500/5",
             borderColor: "border-emerald-500/20",
             icon: LifeBuoy,
-        },
-    ];
-
-    const recentProjects = [
-        {
-            name: "Company Website Redesign",
-            status: "In Progress",
-            statusIcon: CircleDotDashed,
-            statusColor: "text-indigo-400 bg-indigo-500/10 border-indigo-500/20",
-            milestone: "Design Review",
-            dueDate: "Apr 15, 2026",
-            progress: 65,
-        },
-        {
-            name: "Landing Page — Q2 Campaign",
-            status: "Client Review",
-            statusIcon: CheckCircle2,
-            statusColor: "text-amber-400 bg-amber-500/10 border-amber-500/20",
-            milestone: "Final Feedback",
-            dueDate: "Apr 18, 2026",
-            progress: 90,
-        },
-        {
-            name: "Booking System Integration",
-            status: "Planning",
-            statusIcon: CircleDotDashed,
-            statusColor: "text-cyan-400 bg-cyan-500/10 border-cyan-500/20",
-            milestone: "Scope Approval",
-            dueDate: "Apr 22, 2026",
-            progress: 15,
         },
     ];
 
@@ -93,7 +105,7 @@ export default function ClientDashboard() {
             <FadeIn>
                 <div className="mb-10">
                     <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-2">
-                        Welcome back{isLoaded && user ? `, ${user.firstName}` : ""}
+                        Welcome back, {user.firstName || "Client"}
                     </h1>
                     <p className="text-muted-foreground/80 text-lg">
                         Here&apos;s an overview of your active operations and pending tasks.
@@ -144,7 +156,7 @@ export default function ClientDashboard() {
                             </div>
 
                             <div className="divide-y divide-white/[0.05]">
-                                {recentProjects.map((project, idx) => {
+                                {recentProjectsList.length > 0 ? recentProjectsList.map((project, idx) => {
                                     const StatusIcon = project.statusIcon;
                                     return (
                                         <div
@@ -186,7 +198,11 @@ export default function ClientDashboard() {
                                             </div>
                                         </div>
                                     );
-                                })}
+                                }) : (
+                                    <div className="p-8 text-center text-muted-foreground">
+                                        No active projects at the moment.
+                                    </div>
+                                )}
                             </div>
                         </div>
                     </SectionReveal>

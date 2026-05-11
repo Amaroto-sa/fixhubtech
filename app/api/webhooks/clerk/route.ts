@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Webhook } from "svix";
+import { db } from "@/db";
+import { users } from "@/db/schema";
+import { eq } from "drizzle-orm";
 
 export async function POST(req: NextRequest) {
     try {
@@ -28,29 +31,49 @@ export async function POST(req: NextRequest) {
                         image_url: string;
                     };
 
-                // In production: create user in database
-                // await db.insert(users).values({
-                //   clerkId: id,
-                //   email: email_addresses[0].email_address,
-                //   firstName: first_name,
-                //   lastName: last_name,
-                //   avatar: image_url,
-                //   role: "client",
-                // });
+                // Create user in database
+                await db.insert(users).values({
+                  clerkId: id,
+                  email: email_addresses[0].email_address,
+                  firstName: first_name || "",
+                  lastName: last_name || "",
+                  avatar: image_url || "",
+                  role: "client",
+                });
 
                 console.log(`[CLERK] User created: ${id}`);
                 break;
             }
 
             case "user.updated": {
-                // In production: update user record
-                console.log("[CLERK] User updated:", event.data.id);
+                const { id, email_addresses, first_name, last_name, image_url } =
+                    event.data as {
+                        id: string;
+                        email_addresses: { email_address: string }[];
+                        first_name: string;
+                        last_name: string;
+                        image_url: string;
+                    };
+
+                await db.update(users).set({
+                  email: email_addresses[0].email_address,
+                  firstName: first_name || "",
+                  lastName: last_name || "",
+                  avatar: image_url || "",
+                }).where(eq(users.clerkId, id));
+
+                console.log("[CLERK] User updated:", id);
                 break;
             }
 
             case "user.deleted": {
-                // In production: soft-delete or deactivate user
-                console.log("[CLERK] User deleted:", event.data.id);
+                const { id } = event.data as { id: string };
+                
+                await db.update(users).set({
+                  isActive: false,
+                }).where(eq(users.clerkId, id));
+
+                console.log("[CLERK] User deleted/deactivated:", id);
                 break;
             }
         }
