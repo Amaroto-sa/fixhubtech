@@ -177,7 +177,7 @@ export default async function AdminDashboard() {
                                 <div key={idx} className="p-4 hover:bg-white/[0.02] transition-colors flex items-center justify-between gap-4">
                                     <div className="flex items-center gap-3">
                                         <div className="w-9 h-9 rounded-full bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-xs font-bold text-indigo-400">
-                                            {lead.name.split(" ").map(n => n[0]).join("")}
+                                            {String(lead.name).split(" ").map((n: string) => n[0]).join("")}
                                         </div>
                                         <div>
                                             <p className="text-[14px] font-medium text-foreground tracking-tight">
