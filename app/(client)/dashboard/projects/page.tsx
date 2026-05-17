@@ -5,7 +5,6 @@ import { users, clients, projects } from "@/db/schema";
 import { eq, desc } from "drizzle-orm";
 import { FadeIn, SectionReveal } from "@/components/shared/motion";
 import { FolderKanban, ArrowRight } from "lucide-react";
-import { format } from "date-fns";
 
 export default async function ClientProjectsPage() {
     const user = await currentUser();
@@ -86,12 +85,12 @@ export default async function ClientProjectsPage() {
                                 </div>
                                 <div>
                                     <p className="text-[11px] text-muted-foreground uppercase tracking-wide">Started</p>
-                                    <p className="text-[14px] text-foreground/90">{format(new Date(project.createdAt), "MMM d, yyyy")}</p>
+                                    <p className="text-[14px] text-foreground/90">{new Date(project.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</p>
                                 </div>
                                 {project.dueDate && (
                                     <div>
                                         <p className="text-[11px] text-muted-foreground uppercase tracking-wide">Est. Delivery</p>
-                                        <p className="text-[14px] text-foreground/90">{format(new Date(project.dueDate), "MMM d, yyyy")}</p>
+                                        <p className="text-[14px] text-foreground/90">{new Date(project.dueDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}</p>
                                     </div>
                                 )}
                             </div>

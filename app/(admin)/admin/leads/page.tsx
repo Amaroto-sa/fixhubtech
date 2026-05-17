@@ -13,7 +13,6 @@ import {
     Filter,
     MoreHorizontal
 } from "lucide-react";
-import { format } from "date-fns";
 
 export default async function LeadsPage() {
     let allLeads = [];
@@ -109,7 +108,7 @@ export default async function LeadsPage() {
                                         </span>
                                     </td>
                                     <td className="px-6 py-4 text-[13px] text-muted-foreground">
-                                        {format(new Date(lead.createdAt), "MMM d, yyyy")}
+                                        {new Date(lead.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
                                     </td>
                                     <td className="px-6 py-4 text-right">
                                         <Link 

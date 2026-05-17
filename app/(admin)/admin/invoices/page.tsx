@@ -4,7 +4,6 @@ import { invoices, projects, clients } from "@/db/schema";
 import { desc, eq } from "drizzle-orm";
 import { FadeIn, SectionReveal } from "@/components/shared/motion";
 import { BadgeDollarSign, ArrowRight, Search, Filter } from "lucide-react";
-import { format } from "date-fns";
 
 export default async function InvoicesPage() {
     let allInvoices = [];
@@ -112,7 +111,7 @@ export default async function InvoicesPage() {
                                         </span>
                                     </td>
                                     <td className="px-6 py-4 text-[13px] text-muted-foreground">
-                                        {format(new Date(inv.dueDate), "MMM d, yyyy")}
+                                        {new Date(inv.dueDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
                                     </td>
                                     <td className="px-6 py-4 text-right">
                                         <Link 

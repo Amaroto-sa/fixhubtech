@@ -12,7 +12,6 @@ import {
     Search,
     Filter
 } from "lucide-react";
-import { format } from "date-fns";
 
 export default async function ProjectsPage() {
     let allProjects = [];
@@ -118,7 +117,7 @@ export default async function ProjectsPage() {
                                         </span>
                                     </td>
                                     <td className="px-6 py-4 text-[13px] text-muted-foreground">
-                                        {project.dueDate ? format(new Date(project.dueDate), "MMM d, yyyy") : "Not set"}
+                                        {project.dueDate ? new Date(project.dueDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }) : "Not set"}
                                     </td>
                                     <td className="px-6 py-4 text-right">
                                         <Link 

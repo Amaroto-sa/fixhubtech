@@ -16,7 +16,6 @@ import {
     Target
 } from "lucide-react";
 import { updateLeadStatus } from "../actions";
-import { format } from "date-fns";
 
 export default async function LeadDetailsPage({ params }: { params: { id: string } }) {
     const leadRecords = await db.select().from(leads).where(eq(leads.id, params.id));
@@ -175,7 +174,7 @@ export default async function LeadDetailsPage({ params }: { params: { id: string
                                     <Calendar className="w-4 h-4 text-muted-foreground mt-0.5" />
                                     <div>
                                         <p className="text-[11px] text-muted-foreground uppercase tracking-wide">Received On</p>
-                                        <p className="text-[14px] font-medium text-foreground">{format(new Date(lead.createdAt), "PPP 'at' p")}</p>
+                                        <p className="text-[14px] font-medium text-foreground">{new Date(lead.createdAt).toLocaleString("en-US", { dateStyle: "long", timeStyle: "short" })}</p>
                                     </div>
                                 </div>
                                 <div className="flex items-start gap-3">
