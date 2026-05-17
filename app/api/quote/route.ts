@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { quoteFormSchema } from "@/lib/validation/schemas";
+import { db } from "@/db";
+import { leads } from "@/db/schema";
+import { sendLeadConfirmation, notifyAdminNewLead } from "@/lib/emails";
 
 export async function POST(req: NextRequest) {
     try {
@@ -16,26 +19,26 @@ export async function POST(req: NextRequest) {
 
         const data = parsed.data;
 
-        // In production: insert into leads table with source "quote"
-        // const [lead] = await db.insert(leads).values({
-        //   name: data.name,
-        //   email: data.email,
-        //   phone: data.phone,
-        //   company: data.businessName,
-        //   industry: data.industry,
-        //   serviceNeeded: data.serviceNeeded,
-        //   budgetRange: data.budgetRange,
-        //   timeline: data.timeline,
-        //   currentWebsite: data.currentWebsite,
-        //   projectSummary: data.projectSummary,
-        //   preferredContact: data.preferredContact,
-        //   source: "quote",
-        //   status: "new",
-        // }).returning();
+        // Insert into leads table with source "quote"
+        await db.insert(leads).values({
+          name: data.name,
+          email: data.email,
+          phone: data.phone,
+          company: data.businessName,
+          industry: data.industry,
+          serviceNeeded: data.serviceNeeded,
+          budgetRange: data.budgetRange,
+          timeline: data.timeline,
+          currentWebsite: data.currentWebsite,
+          projectSummary: data.projectSummary,
+          preferredContact: data.preferredContact,
+          source: "quote",
+          status: "new",
+        });
 
-        // In production: send emails
-        // await sendLeadConfirmation({ name: data.name, email: data.email });
-        // await notifyAdminNewLead({ name: data.name, email: data.email, service: data.serviceNeeded, source: "quote" });
+        // Send emails
+        await sendLeadConfirmation({ name: data.name, email: data.email });
+        await notifyAdminNewLead({ name: data.name, email: data.email, service: data.serviceNeeded, source: "quote" });
 
         return NextResponse.json(
             { success: true, message: "Quote request submitted successfully" },

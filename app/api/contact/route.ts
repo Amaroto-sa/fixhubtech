@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { contactFormSchema } from "@/lib/validation/schemas";
+import { db } from "@/db";
+import { contactRequests } from "@/db/schema";
+import { sendLeadConfirmation, notifyAdminNewLead } from "@/lib/emails";
 
 export async function POST(req: NextRequest) {
     try {
@@ -16,12 +19,18 @@ export async function POST(req: NextRequest) {
 
         const { name, email, phone, subject, message } = parsed.data;
 
-        // In production: insert into contactRequests table
-        // const [record] = await db.insert(contactRequests).values({...}).returning();
+        // Insert into contactRequests table
+        await db.insert(contactRequests).values({
+            name,
+            email,
+            phone,
+            subject,
+            message,
+        });
 
-        // In production: send confirmation + notify admin
-        // await sendLeadConfirmation({ name, email });
-        // await notifyAdminNewLead({ name, email, service: subject || "Contact", source: "contact" });
+        // Send confirmation + notify admin
+        await sendLeadConfirmation({ name, email });
+        await notifyAdminNewLead({ name, email, service: subject || "Contact", source: "contact" });
 
         return NextResponse.json(
             { success: true, message: "Contact request submitted successfully" },

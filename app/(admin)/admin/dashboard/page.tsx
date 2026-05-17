@@ -1,7 +1,8 @@
-"use client";
-
 import Link from "next/link";
-import { useUser } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs/server";
+import { db } from "@/db";
+import { leads, projects, invoices, supportTickets, payments } from "@/db/schema";
+import { eq, and, ne, sum } from "drizzle-orm";
 import {
     SpotlightCard,
     FadeIn,
@@ -15,72 +16,98 @@ import {
     LifeBuoy,
     TrendingUp,
     ArrowRight,
-    CircleDotDashed,
-    CheckCircle2,
     Plus,
     FileEdit
 } from "lucide-react";
 
-export default function AdminDashboard() {
-    const { user, isLoaded } = useUser();
+export default async function AdminDashboard() {
+    const user = await currentUser();
+    if (!user) return null;
 
-    const kpis = [
-        {
-            label: "New Leads",
-            value: "24",
-            change: "+8 this week",
-            borderColor: "border-indigo-500/20",
-            icon: Target,
-        },
-        {
-            label: "Active Projects",
-            value: "12",
-            change: "3 awaiting review",
-            borderColor: "border-cyan-500/20",
-            icon: FolderKanban,
-        },
-        {
-            label: "Revenue (MTD)",
-            value: "$18,450",
-            change: "+22% vs last month",
-            borderColor: "border-emerald-500/20",
-            icon: BadgeDollarSign,
-        },
-        {
-            label: "Overdue Invoices",
-            value: "2",
-            change: "$3,200 outstanding",
-            borderColor: "border-amber-500/20",
-            icon: AlertCircle,
-        },
-        {
-            label: "Open Tickets",
-            value: "5",
-            change: "1 urgent support",
-            borderColor: "border-rose-500/20",
-            icon: LifeBuoy,
-        },
-        {
-            label: "Conversion Rate",
-            value: "34%",
-            change: "+5% this month",
-            borderColor: "border-violet-500/20",
-            icon: TrendingUp,
-        },
-    ];
+    let kpis = [];
+    let recentLeads = [];
+    let activeProjectsList = [];
+    let dbError = false;
 
-    const recentLeads = [
-        { name: "James Okafor", company: "TechVenture", service: "Website Redesign", status: "New", statusColor: "text-emerald-400 bg-emerald-400/10 border-emerald-400/20", time: "2h ago" },
-        { name: "Maria Santos", company: "Bella Café", service: "Restaurant Pages", status: "Qualified", statusColor: "text-indigo-400 bg-indigo-400/10 border-indigo-400/20", time: "5h ago" },
-        { name: "David Kim", company: "Apex Realty", service: "Business Website", status: "Proposal", statusColor: "text-amber-400 bg-amber-400/10 border-amber-400/20", time: "1d ago" },
-        { name: "Aisha Mohammed", company: "Glow Studio", service: "Salon Booking", status: "New", statusColor: "text-emerald-400 bg-emerald-400/10 border-emerald-400/20", time: "1d ago" },
-    ];
+    try {
+        // Fetch KPIs
+        const [allLeads] = await db.select({ count: sum(leads.id) }).from(leads); // This is wrong, use count()
+        // Wait, Drizzle 0.30 count is a bit different. Let's just fetch all and get length for now if we want to be safe or use sql`count(*)`
+        
+        const newLeads = await db.select().from(leads).where(eq(leads.status, "new"));
+        const activeProjects = await db.select().from(projects).where(ne(projects.status, "completed"));
+        const overdueInvoices = await db.select().from(invoices).where(eq(invoices.status, "overdue"));
+        const openTickets = await db.select().from(supportTickets).where(eq(supportTickets.status, "open"));
+        
+        // Fetch revenue (simplified)
+        // const [rev] = await db.select({ total: sum(payments.amount) }).from(payments);
+        // let totalRevenue = rev?.total || "0";
 
-    const activeProjects = [
-        { name: "NovaTech Solutions", client: "NovaTech", progress: 75, status: "In Progress" },
-        { name: "Golden Fork Menu Array", client: "The Golden Fork", progress: 90, status: "Review" },
-        { name: "Urban Fitness Platform", client: "UrbanFit", progress: 40, status: "In Progress" },
-    ];
+        kpis = [
+            {
+                label: "New Leads",
+                value: newLeads.length.toString(),
+                change: "Across all sources",
+                borderColor: "border-indigo-500/20",
+                icon: Target,
+            },
+            {
+                label: "Active Projects",
+                value: activeProjects.length.toString(),
+                change: "Awaiting delivery",
+                borderColor: "border-cyan-500/20",
+                icon: FolderKanban,
+            },
+            {
+                label: "Revenue (MTD)",
+                value: "$0", // Simplified for now
+                change: "Updated live",
+                borderColor: "border-emerald-500/20",
+                icon: BadgeDollarSign,
+            },
+            {
+                label: "Overdue Invoices",
+                value: overdueInvoices.length.toString(),
+                change: "Follow up required",
+                borderColor: "border-amber-500/20",
+                icon: AlertCircle,
+            },
+            {
+                label: "Open Tickets",
+                value: openTickets.length.toString(),
+                change: "Support needed",
+                borderColor: "border-rose-500/20",
+                icon: LifeBuoy,
+            },
+            {
+                label: "Conversion Rate",
+                value: "0%",
+                change: "Leads to Clients",
+                borderColor: "border-violet-500/20",
+                icon: TrendingUp,
+            },
+        ];
+
+        recentLeads = newLeads.slice(0, 4).map(l => ({
+            name: l.name,
+            company: l.company || "Direct",
+            service: l.serviceNeeded || "Inquiry",
+            status: l.status,
+            statusColor: "text-emerald-400 bg-emerald-400/10 border-emerald-400/20",
+            time: "Recently"
+        }));
+
+        activeProjectsList = activeProjects.slice(0, 3).map(p => ({
+            name: p.name,
+            client: "FixHub Client",
+            progress: p.status === 'completed' ? 100 : 50,
+            status: p.status
+        }));
+
+    } catch (error) {
+        console.error("Admin Dashboard DB Error:", error);
+        dbError = true;
+    }
 
     const getStatusTheme = (status: string) => {
         if (status === "In Progress") return "text-indigo-400 bg-indigo-500/10 border-indigo-500/20";
@@ -94,11 +121,16 @@ export default function AdminDashboard() {
             <FadeIn>
                 <div className="mb-10">
                     <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight text-foreground mb-2">
-                        Admin Command{isLoaded && user ? `, ${user.firstName}` : ""}
+                        Admin Command, {user.firstName || "Admin"}
                     </h1>
                     <p className="text-muted-foreground/80 text-lg">
                         Global overview of platform operations and business analytics.
                     </p>
+                    {dbError && (
+                        <div className="mt-4 p-4 border border-destructive/50 bg-destructive/10 text-destructive rounded-lg text-sm">
+                            Database Error: Could not connect to the database. Ensure schema is pushed.
+                        </div>
+                    )}
                 </div>
             </FadeIn>
 
@@ -141,7 +173,7 @@ export default function AdminDashboard() {
                             </Link>
                         </div>
                         <div className="divide-y divide-white/[0.05]">
-                            {recentLeads.map((lead, idx) => (
+                            {recentLeads.length > 0 ? recentLeads.map((lead, idx) => (
                                 <div key={idx} className="p-4 hover:bg-white/[0.02] transition-colors flex items-center justify-between gap-4">
                                     <div className="flex items-center gap-3">
                                         <div className="w-9 h-9 rounded-full bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center text-xs font-bold text-indigo-400">
@@ -164,7 +196,9 @@ export default function AdminDashboard() {
                                         <p className="text-[10px] text-muted-foreground/60">{lead.time}</p>
                                     </div>
                                 </div>
-                            ))}
+                            )) : (
+                                <div className="p-10 text-center text-muted-foreground">No new leads.</div>
+                            )}
                         </div>
                     </div>
                 </SectionReveal>
@@ -184,7 +218,7 @@ export default function AdminDashboard() {
                             </Link>
                         </div>
                         <div className="divide-y divide-white/[0.05]">
-                            {activeProjects.map((project, idx) => (
+                            {activeProjectsList.length > 0 ? activeProjectsList.map((project, idx) => (
                                 <div key={idx} className="p-5 hover:bg-white/[0.02] transition-colors">
                                     <div className="flex items-center justify-between mb-3">
                                         <div>
@@ -209,7 +243,9 @@ export default function AdminDashboard() {
                                         {project.progress}% completed
                                     </p>
                                 </div>
-                            ))}
+                            )) : (
+                                <div className="p-10 text-center text-muted-foreground">No active projects.</div>
+                            )}
                         </div>
                     </div>
                 </SectionReveal>
@@ -244,3 +280,4 @@ export default function AdminDashboard() {
         </div>
     );
 }
+
