@@ -6,7 +6,7 @@ import { FadeIn, SectionReveal } from "@/components/shared/motion";
 import { BadgeDollarSign, ArrowRight, Search, Filter } from "lucide-react";
 
 export default async function InvoicesPage() {
-    let allInvoices = [];
+    let allInvoices: any[] = [];
     let dbError = false;
 
     try {

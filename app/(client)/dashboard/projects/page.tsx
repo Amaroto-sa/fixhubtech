@@ -10,7 +10,7 @@ export default async function ClientProjectsPage() {
     const user = await currentUser();
     if (!user) return null;
 
-    let userProjects = [];
+    let userProjects: any[] = [];
     let dbError = false;
 
     try {

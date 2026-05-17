@@ -24,9 +24,9 @@ export default async function AdminDashboard() {
     const user = await currentUser();
     if (!user) return null;
 
-    let kpis = [];
-    let recentLeads = [];
-    let activeProjectsList = [];
+    let kpis: any[] = [];
+    let recentLeads: any[] = [];
+    let activeProjectsList: any[] = [];
     let dbError = false;
 
     try {

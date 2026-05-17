@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 
 export default async function LeadsPage() {
-    let allLeads = [];
+    let allLeads: any[] = [];
     let dbError = false;
 
     try {

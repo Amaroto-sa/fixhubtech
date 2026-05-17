@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 
 export default async function ProjectsPage() {
-    let allProjects = [];
+    let allProjects: any[] = [];
     let dbError = false;
 
     try {
