@@ -24,11 +24,6 @@ export default async function ClientDashboard() {
     const user = await currentUser();
     if (!user) return null;
 
-    const { has } = auth();
-    if (has({ role: "org:admin" }) || has({ role: "org:super_admin" })) {
-        redirect("/admin/dashboard");
-    }
-
     let activeProjectsCount = 0;
     let pendingInvoicesCount = 0;
     let openTicketsCount = 0;
@@ -40,6 +35,10 @@ export default async function ClientDashboard() {
         const [dbUser] = await db.select().from(users).where(eq(users.clerkId, user.id));
         
         if (dbUser) {
+            if (dbUser.role === "admin" || dbUser.role === "super_admin") {
+                redirect("/admin/dashboard");
+            }
+            
             const [client] = await db.select().from(clients).where(eq(clients.userId, dbUser.id));
 
             if (client) {

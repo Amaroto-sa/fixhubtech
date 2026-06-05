@@ -9,11 +9,9 @@ export default clerkMiddleware(async (auth, req) => {
         await auth().protect();
     }
 
-    // Protect admin routes + check for admin role
+    // Protect admin routes (role check moved to layout)
     if (isAdminRoute(req)) {
-        await auth().protect((has) => {
-            return has({ role: "org:admin" }) || has({ role: "org:super_admin" });
-        });
+        await auth().protect();
     }
 });
 

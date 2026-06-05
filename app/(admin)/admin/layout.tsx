@@ -1,11 +1,26 @@
 import { AdminSidebar } from "@/components/admin/admin-sidebar";
 import { UserButton } from "@clerk/nextjs";
+import { currentUser } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
+import { db } from "@/db";
+import { users } from "@/db/schema";
+import { eq } from "drizzle-orm";
 
-export default function AdminLayout({
+export default async function AdminLayout({
     children,
 }: {
     children: React.ReactNode;
 }) {
+    const user = await currentUser();
+    if (!user) {
+        redirect("/sign-in");
+    }
+
+    const [dbUser] = await db.select().from(users).where(eq(users.clerkId, user.id));
+    if (!dbUser || (dbUser.role !== "admin" && dbUser.role !== "super_admin")) {
+        redirect("/dashboard");
+    }
+
     return (
         <div className="min-h-screen bg-background flex flex-col md:flex-row">
             {/* Desktop Sidebar */}
