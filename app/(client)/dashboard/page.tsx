@@ -15,10 +15,10 @@ import {
     LifeBuoy,
     UploadCloud,
     ArrowRight,
+    ArrowRight,
     CircleDotDashed,
     CheckCircle2
 } from "lucide-react";
-import { FileUploadAction } from "@/components/dashboard/file-upload";
 
 export default async function ClientDashboard() {
     const user = await currentUser();
@@ -225,18 +225,18 @@ export default async function ClientDashboard() {
                     <SectionReveal delay={0.4}>
                         <h3 className="text-[12px] font-semibold tracking-widest text-muted-foreground/50 uppercase mb-4 px-1">Quick Actions</h3>
 
-                        <SpotlightCard className="p-5 flex items-center gap-4 border-t border-t-white/[0.05] mb-4">
-                            <div className="p-3 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400">
-                                <UploadCloud className="w-5 h-5" />
-                            </div>
-                            <div className="flex-1">
-                                <h4 className="text-[14px] font-medium text-foreground tracking-tight">Upload Files</h4>
-                                <p className="text-[12px] text-muted-foreground">Share project assets securely</p>
-                            </div>
-                            <div>
-                                <FileUploadAction />
-                            </div>
-                        </SpotlightCard>
+                        <Link href="/dashboard/files" className="block mb-4">
+                            <SpotlightCard className="p-5 flex items-center gap-4 group cursor-pointer border-t border-t-white/[0.05]">
+                                <div className="p-3 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 group-hover:scale-110 transition-transform duration-300">
+                                    <UploadCloud className="w-5 h-5" />
+                                </div>
+                                <div className="flex-1">
+                                    <h4 className="text-[14px] font-medium text-foreground tracking-tight">Upload Files</h4>
+                                    <p className="text-[12px] text-muted-foreground">Share project assets securely</p>
+                                </div>
+                                <ArrowRight className="w-4 h-4 text-muted-foreground/50 group-hover:text-indigo-400 group-hover:translate-x-1 transition-all" />
+                            </SpotlightCard>
+                        </Link>
 
                         <SpotlightCard className="p-5 flex items-center gap-4 group cursor-pointer border-t border-t-white/[0.05] mb-4">
                             <div className="p-3 rounded-xl bg-amber-500/10 border border-amber-500/20 text-amber-400 group-hover:scale-110 transition-transform duration-300">
