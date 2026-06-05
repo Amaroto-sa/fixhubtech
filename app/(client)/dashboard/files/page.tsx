@@ -4,6 +4,7 @@ import { users, clients, files, projects } from "@/db/schema";
 import { eq, desc, inArray } from "drizzle-orm";
 import { FadeIn, SectionReveal } from "@/components/shared/motion";
 import { FileCode2, Download, ExternalLink } from "lucide-react";
+import Link from "next/link";
 
 export default async function ClientFilesPage() {
     const user = await currentUser();
@@ -56,14 +57,19 @@ export default async function ClientFilesPage() {
     return (
         <div className="pb-10">
             <FadeIn>
-                <div className="mb-8">
-                    <h1 className="font-display text-3xl font-bold tracking-tight text-foreground mb-2 flex items-center gap-3">
-                        <FileCode2 className="w-8 h-8 text-cyan-400" />
-                        Project Deliverables & Files
-                    </h1>
-                    <p className="text-muted-foreground/80 text-lg">
-                        Access and download assets, documents, and final deliverables for your projects.
-                    </p>
+                <div className="mb-8 flex flex-col md:flex-row md:items-end justify-between gap-4">
+                    <div>
+                        <h1 className="font-display text-3xl font-bold tracking-tight text-foreground mb-2 flex items-center gap-3">
+                            <FileCode2 className="w-8 h-8 text-cyan-400" />
+                            Project Deliverables & Files
+                        </h1>
+                        <p className="text-muted-foreground/80 text-lg">
+                            Access and download assets, documents, and final deliverables for your projects.
+                        </p>
+                    </div>
+                    <Link href="/dashboard/files/new" className="inline-flex items-center gap-2 px-4 py-2 bg-cyan-500 hover:bg-cyan-600 text-white font-medium rounded-lg text-sm transition-colors whitespace-nowrap">
+                        Upload File
+                    </Link>
                 </div>
             </FadeIn>
 
