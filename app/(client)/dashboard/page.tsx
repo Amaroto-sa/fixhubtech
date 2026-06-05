@@ -1,8 +1,9 @@
 import Link from "next/link";
-import { currentUser } from "@clerk/nextjs/server";
+import { currentUser, auth } from "@clerk/nextjs/server";
 import { db } from "@/db";
 import { users, clients, projects, invoices, supportTickets } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
+import { redirect } from "next/navigation";
 import {
     SpotlightCard,
     FadeIn,
@@ -22,6 +23,11 @@ import {
 export default async function ClientDashboard() {
     const user = await currentUser();
     if (!user) return null;
+
+    const { has } = auth();
+    if (has({ role: "org:admin" }) || has({ role: "org:super_admin" })) {
+        redirect("/admin/dashboard");
+    }
 
     let activeProjectsCount = 0;
     let pendingInvoicesCount = 0;
