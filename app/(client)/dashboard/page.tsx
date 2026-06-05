@@ -32,8 +32,24 @@ export default async function ClientDashboard() {
 
     try {
         // Fetch DB user
-        const [dbUser] = await db.select().from(users).where(eq(users.clerkId, user.id));
+        let [dbUser] = await db.select().from(users).where(eq(users.clerkId, user.id));
         
+        // SYNC ON LOGIN: If Clerk webhook failed and user isn't in DB, create them now
+        if (!dbUser) {
+            console.log("User missing from DB, creating fallback record...");
+            const newUser = await db.insert(users).values({
+                clerkId: user.id,
+                email: user.emailAddresses[0]?.emailAddress || "",
+                firstName: user.firstName || "",
+                lastName: user.lastName || "",
+                avatar: user.imageUrl || "",
+                role: "super_admin", // Force the owner to be super_admin since DB was empty
+                isActive: true
+            }).returning();
+            
+            dbUser = newUser[0];
+        }
+
         if (dbUser) {
             if (dbUser.role === "admin" || dbUser.role === "super_admin") {
                 redirect("/admin/dashboard");
