@@ -15,7 +15,6 @@ import {
     LifeBuoy,
     UploadCloud,
     ArrowRight,
-    ArrowRight,
     CircleDotDashed,
     CheckCircle2
 } from "lucide-react";
