@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SectionReveal } from "@/components/shared/motion";
+import { Monitor } from "lucide-react";
 
 export const metadata: Metadata = {
     title: "Portfolio",
@@ -92,7 +93,7 @@ export default function PortfolioPage() {
                                     <div className="aspect-[16/10] bg-gradient-to-br from-indigo-500/10 to-violet-500/10 relative overflow-hidden">
                                         <div className="absolute inset-0 bg-dot-pattern opacity-10" />
                                         <div className="absolute inset-0 flex items-center justify-center">
-                                            <div className="text-5xl opacity-15">🖥️</div>
+                                            <Monitor className="w-12 h-12 text-white opacity-15" />
                                         </div>
                                         {item.isFeatured && (
                                             <div className="absolute top-4 left-4">

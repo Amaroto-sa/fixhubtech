@@ -59,8 +59,8 @@ export default async function ClientRevisionsPage() {
                             Request changes and track revision history for your deliverables.
                         </p>
                     </div>
-                    <button className="inline-flex items-center gap-2 px-4 py-2 bg-rose-500 hover:bg-rose-600 text-white font-medium rounded-lg text-sm transition-colors whitespace-nowrap">
-                        <Plus className="w-4 h-4" /> Request Revision
+                    <button className="btn-primary py-2 px-4 text-sm whitespace-nowrap">
+                        <Plus className="w-4 h-4" /> <span>Request Revision</span>
                     </button>
                 </div>
             </FadeIn>
