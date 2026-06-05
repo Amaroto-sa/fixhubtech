@@ -4,6 +4,7 @@ import { users, clients, projectRevisions, projects } from "@/db/schema";
 import { eq, desc } from "drizzle-orm";
 import { FadeIn, SectionReveal } from "@/components/shared/motion";
 import { PenTool, ArrowRight, Plus } from "lucide-react";
+import Link from "next/link";
 
 export default async function ClientRevisionsPage() {
     const user = await currentUser();
@@ -59,9 +60,9 @@ export default async function ClientRevisionsPage() {
                             Request changes and track revision history for your deliverables.
                         </p>
                     </div>
-                    <button className="btn-primary py-2 px-4 text-sm whitespace-nowrap">
+                    <Link href="/dashboard/revisions/new" className="inline-flex items-center gap-2 px-4 py-2 bg-rose-500 hover:bg-rose-600 text-white font-medium rounded-lg text-sm transition-colors whitespace-nowrap">
                         <Plus className="w-4 h-4" /> <span>Request Revision</span>
-                    </button>
+                    </Link>
                 </div>
             </FadeIn>
 

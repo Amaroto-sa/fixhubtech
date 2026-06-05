@@ -4,6 +4,7 @@ import { users, clients, projectMessages, projects } from "@/db/schema";
 import { eq, desc, inArray } from "drizzle-orm";
 import { FadeIn, SectionReveal } from "@/components/shared/motion";
 import { MessageSquare, Send } from "lucide-react";
+import { MessageInput } from "@/components/dashboard/message-input";
 
 export default async function ClientMessagesPage() {
     const user = await currentUser();
@@ -17,7 +18,7 @@ export default async function ClientMessagesPage() {
         if (dbUser.length > 0) {
             const clientProfile = await db.select().from(clients).where(eq(clients.userId, dbUser[0].id)).limit(1);
             if (clientProfile.length > 0) {
-                const clientProjects = await db.select({ id: projects.id }).from(projects).where(eq(projects.clientId, clientProfile[0].id));
+                const clientProjects = await db.select({ id: projects.id, name: projects.name }).from(projects).where(eq(projects.clientId, clientProfile[0].id));
                 const projectIds = clientProjects.map(p => p.id);
                 
                 if (projectIds.length > 0) {
@@ -42,6 +43,18 @@ export default async function ClientMessagesPage() {
         console.error("Client Messages DB Error:", error);
         dbError = true;
     }
+
+    // Default empty array if query failed or no projects
+    let availableProjects: {id: string, name: string}[] = [];
+    try {
+        const dbUser = await db.select().from(users).where(eq(users.clerkId, user.id)).limit(1);
+        if (dbUser.length > 0) {
+            const clientProfile = await db.select().from(clients).where(eq(clients.userId, dbUser[0].id)).limit(1);
+            if (clientProfile.length > 0) {
+                availableProjects = await db.select({ id: projects.id, name: projects.name }).from(projects).where(eq(projects.clientId, clientProfile[0].id));
+            }
+        }
+    } catch(e) {}
 
     return (
         <div className="pb-10 h-[80vh] flex flex-col">
@@ -85,16 +98,7 @@ export default async function ClientMessagesPage() {
                     
                     {/* Input Area */}
                     <div className="p-4 bg-white/[0.02] border-t border-white/[0.05]">
-                        <div className="relative flex items-center">
-                            <textarea 
-                                placeholder="Type your message here..." 
-                                className="w-full bg-[#0a0a0e] border border-white/10 rounded-xl py-3 pl-4 pr-14 text-sm text-foreground focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/50 resize-none h-[50px]"
-                                rows={1}
-                            />
-                            <button className="absolute right-2 p-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg transition-colors">
-                                <Send className="w-4 h-4" />
-                            </button>
-                        </div>
+                        <MessageInput projects={availableProjects} />
                     </div>
                 </div>
             </SectionReveal>

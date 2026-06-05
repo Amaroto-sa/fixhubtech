@@ -62,9 +62,9 @@ export default async function ClientTicketsPage() {
                             Get help from our team and track your technical inquiries.
                         </p>
                     </div>
-                    <button className="btn-primary py-2 px-4 text-sm whitespace-nowrap">
+                    <Link href="/dashboard/tickets/new" className="inline-flex items-center gap-2 px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white font-medium rounded-lg text-sm transition-colors whitespace-nowrap">
                         <Plus className="w-4 h-4" /> <span>New Ticket</span>
-                    </button>
+                    </Link>
                 </div>
             </FadeIn>
 

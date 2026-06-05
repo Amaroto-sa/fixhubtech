@@ -4,6 +4,8 @@ import { users, clients } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { FadeIn, SectionReveal } from "@/components/shared/motion";
 import { Settings, Save, User, Building2, MapPin } from "lucide-react";
+import { updateProfile } from "@/app/actions/settings";
+import { SubmitButton } from "@/components/dashboard/submit-button";
 
 export default async function ClientSettingsPage() {
     const user = await currentUser();
@@ -78,7 +80,7 @@ export default async function ClientSettingsPage() {
                             <Building2 className="w-5 h-5 text-muted-foreground" />
                             Company Profile
                         </h2>
-                        <form className="space-y-6">
+                        <form action={updateProfile} className="space-y-6">
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label className="block text-[12px] font-semibold text-muted-foreground uppercase tracking-wider mb-2">Company Name</label>
@@ -105,9 +107,7 @@ export default async function ClientSettingsPage() {
                             </div>
                             
                             <div className="flex justify-end pt-4">
-                                <button type="button" className="inline-flex items-center gap-2 px-5 py-2.5 bg-indigo-500 hover:bg-indigo-600 text-white font-medium rounded-lg text-sm transition-colors shadow-lg shadow-indigo-500/20">
-                                    <Save className="w-4 h-4" /> Save Changes
-                                </button>
+                                <SubmitButton label="Save Changes" />
                             </div>
                         </form>
                     </div>
