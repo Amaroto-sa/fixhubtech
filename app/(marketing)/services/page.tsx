@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SectionReveal } from "@/components/shared/motion";
+import { Globe, RefreshCw, FileText, Utensils, Scissors, Building, TrendingUp, MapPin } from "lucide-react";
 
 export const metadata: Metadata = {
     title: "Services",
@@ -10,7 +11,7 @@ export const metadata: Metadata = {
 
 const allServices = [
     {
-        icon: "🌐",
+        icon: <Globe />,
         title: "Business Website Design",
         slug: "business-websites",
         description:
@@ -25,7 +26,7 @@ const allServices = [
         startingPrice: "$499",
     },
     {
-        icon: "🔄",
+        icon: <RefreshCw />,
         title: "Website Redesign",
         slug: "website-redesign",
         description:
@@ -40,7 +41,7 @@ const allServices = [
         startingPrice: "$799",
     },
     {
-        icon: "📄",
+        icon: <FileText />,
         title: "Landing Pages",
         slug: "landing-pages",
         description:
@@ -55,7 +56,7 @@ const allServices = [
         startingPrice: "$299",
     },
     {
-        icon: "🍽️",
+        icon: <Utensils />,
         title: "Restaurant Menu & Order Pages",
         slug: "restaurant-menu-pages",
         description:
@@ -70,7 +71,7 @@ const allServices = [
         startingPrice: "$699",
     },
     {
-        icon: "💈",
+        icon: <Scissors />,
         title: "Salon & Spa Booking",
         slug: "salon-booking-pages",
         description:
@@ -85,7 +86,7 @@ const allServices = [
         startingPrice: "$699",
     },
     {
-        icon: "🏨",
+        icon: <Building />,
         title: "Hospitality & Reservations",
         slug: "hospitality-systems",
         description:
@@ -100,7 +101,7 @@ const allServices = [
         startingPrice: "$999",
     },
     {
-        icon: "📈",
+        icon: <TrendingUp />,
         title: "Growth Retainers",
         slug: "growth-retainers",
         description:
@@ -115,7 +116,7 @@ const allServices = [
         startingPrice: "$199/mo",
     },
     {
-        icon: "📍",
+        icon: <MapPin />,
         title: "Local Visibility",
         slug: "local-visibility",
         description:
@@ -160,7 +161,7 @@ export default function ServicesPage() {
                             >
                                 <div className="card-elevated p-8 h-full flex flex-col">
                                     <div className="flex items-start gap-5 mb-6">
-                                        <div className="w-14 h-14 rounded-2xl bg-indigo-500/10 flex items-center justify-center text-3xl flex-shrink-0">
+                                        <div className="w-14 h-14 rounded-2xl bg-indigo-500/10 flex items-center justify-center text-indigo-400 flex-shrink-0">
                                             {service.icon}
                                         </div>
                                         <div className="flex-1">

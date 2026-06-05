@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SectionReveal } from "@/components/shared/motion";
+import { Mail, MessageCircle, Clock } from "lucide-react";
 
 export const metadata: Metadata = {
     title: "Contact Us",
@@ -105,21 +106,21 @@ export default function ContactPage() {
                                 </h3>
                                 <div className="space-y-4">
                                     <div className="flex items-start gap-3">
-                                        <span className="text-lg mt-0.5">📧</span>
+                                        <span className="mt-0.5"><Mail className="w-5 h-5 text-indigo-400" /></span>
                                         <div>
                                             <p className="text-sm text-muted-foreground">Email</p>
                                             <p className="text-sm text-foreground">hello@fixhubtech.com</p>
                                         </div>
                                     </div>
                                     <div className="flex items-start gap-3">
-                                        <span className="text-lg mt-0.5">💬</span>
+                                        <span className="mt-0.5"><MessageCircle className="w-5 h-5 text-indigo-400" /></span>
                                         <div>
                                             <p className="text-sm text-muted-foreground">WhatsApp</p>
                                             <p className="text-sm text-foreground">+1 (555) 000-0000</p>
                                         </div>
                                     </div>
                                     <div className="flex items-start gap-3">
-                                        <span className="text-lg mt-0.5">🕐</span>
+                                        <span className="mt-0.5"><Clock className="w-5 h-5 text-indigo-400" /></span>
                                         <div>
                                             <p className="text-sm text-muted-foreground">Business Hours</p>
                                             <p className="text-sm text-foreground">Mon – Fri, 9am – 6pm</p>

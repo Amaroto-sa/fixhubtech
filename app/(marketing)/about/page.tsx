@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SectionReveal } from "@/components/shared/motion";
+import { Target, Zap, Sparkles, ShieldCheck, Handshake, TrendingUp } from "lucide-react";
 
 export const metadata: Metadata = {
     title: "About",
@@ -65,15 +66,15 @@ export default function AboutPage() {
                         </h2>
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                             {[
-                                { icon: "🎯", title: "Clarity", desc: "Clear scope, clear pricing, clear timelines." },
-                                { icon: "⚡", title: "Speed", desc: "Most projects launch in 2–4 weeks." },
-                                { icon: "✨", title: "Quality", desc: "Premium design standards, no shortcuts." },
-                                { icon: "🔒", title: "Trust", desc: "Transparent processes — you always know where you stand." },
-                                { icon: "🤝", title: "Partnership", desc: "We're invested in your success, not just the deliverable." },
-                                { icon: "📈", title: "Results", desc: "Everything we build is designed to convert and perform." },
+                                { icon: <Target className="w-8 h-8" />, title: "Clarity", desc: "Clear scope, clear pricing, clear timelines." },
+                                { icon: <Zap className="w-8 h-8" />, title: "Speed", desc: "Most projects launch in 2–4 weeks." },
+                                { icon: <Sparkles className="w-8 h-8" />, title: "Quality", desc: "Premium design standards, no shortcuts." },
+                                { icon: <ShieldCheck className="w-8 h-8" />, title: "Trust", desc: "Transparent processes — you always know where you stand." },
+                                { icon: <Handshake className="w-8 h-8" />, title: "Partnership", desc: "We're invested in your success, not just the deliverable." },
+                                { icon: <TrendingUp className="w-8 h-8" />, title: "Results", desc: "Everything we build is designed to convert and perform." },
                             ].map((value, idx) => (
                                 <div key={idx} className="card-elevated p-6 text-center">
-                                    <div className="text-3xl mb-3">{value.icon}</div>
+                                    <div className="mb-4 text-indigo-400 flex justify-center">{value.icon}</div>
                                     <h3 className="font-semibold text-foreground mb-2">{value.title}</h3>
                                     <p className="text-sm text-muted-foreground">{value.desc}</p>
                                 </div>
