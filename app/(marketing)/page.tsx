@@ -367,7 +367,11 @@ function PortfolioPreview() {
                 </SectionReveal>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {[1, 2, 3].map((item, idx) => (
+                    {[
+                        { category: "Web Application", title: "Premium Logistics Portal", color: "indigo" },
+                        { category: "E-Commerce", title: "Luxury Fashion Storefront", color: "emerald" },
+                        { category: "SaaS Dashboard", title: "FinTech Analytics Platform", color: "violet" },
+                    ].map((project, idx) => (
                         <SectionReveal key={idx} delay={idx * 0.1}>
                             <SpotlightCard>
                                 <Link href="/portfolio" className="block group">
@@ -376,11 +380,11 @@ function PortfolioPreview() {
                                         {/* Abstract UI composition */}
                                         <div className="absolute inset-x-8 -bottom-4 top-8 rounded-t-xl bg-white/[0.03] border border-white/10 shadow-2xl transition-transform duration-500 group-hover:-translate-y-2">
                                             <div className="flex items-center gap-1.5 px-4 py-3 border-b border-white/[0.05]">
-                                                <div className="w-2 h-2 rounded-full bg-white/20" />
+                                                <div className={`w-2 h-2 rounded-full ${idx === 0 ? 'bg-indigo-400/40' : idx === 1 ? 'bg-emerald-400/40' : 'bg-violet-400/40'}`} />
                                                 <div className="w-2 h-2 rounded-full bg-white/20" />
                                             </div>
                                             <div className="p-4 space-y-3">
-                                                <div className="w-1/3 h-4 bg-white/10 rounded" />
+                                                <div className={`w-1/3 h-4 rounded ${idx === 0 ? 'bg-indigo-500/20' : idx === 1 ? 'bg-emerald-500/20' : 'bg-violet-500/20'}`} />
                                                 <div className="w-full h-16 bg-white/[0.02] rounded border border-white/5" />
                                                 <div className="w-2/3 h-16 bg-white/[0.02] rounded border border-white/5" />
                                             </div>
@@ -388,9 +392,9 @@ function PortfolioPreview() {
                                     </div>
                                     {/* Data */}
                                     <div className="p-6">
-                                        <div className="text-[11px] font-medium tracking-widest uppercase text-indigo-400/80 mb-2">Web Application</div>
+                                        <div className={`text-[11px] font-medium tracking-widest uppercase mb-2 ${idx === 0 ? 'text-indigo-400/80' : idx === 1 ? 'text-emerald-400/80' : 'text-violet-400/80'}`}>{project.category}</div>
                                         <h3 className="font-display text-lg font-medium text-foreground group-hover:text-indigo-300 transition-colors">
-                                            Premium Logistics Portal
+                                            {project.title}
                                         </h3>
                                     </div>
                                 </Link>

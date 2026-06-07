@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auditFormSchema } from "@/lib/validation/schemas";
+import { db } from "@/db";
+import { auditRequests } from "@/db/schema";
 
 export async function POST(req: NextRequest) {
     try {
@@ -15,9 +17,14 @@ export async function POST(req: NextRequest) {
 
         const data = parsed.data;
 
-        // In production: insert into auditRequests table
-        // await db.insert(auditRequests).values({...});
-        // Send confirmation + admin notification
+        await db.insert(auditRequests).values({
+            businessName: data.businessName,
+            websiteUrl: data.websiteUrl,
+            industry: data.industry,
+            mainIssue: data.mainIssue,
+            email: data.email,
+            whatsapp: data.whatsapp,
+        });
 
         return NextResponse.json(
             { success: true, message: "Audit request submitted successfully" },

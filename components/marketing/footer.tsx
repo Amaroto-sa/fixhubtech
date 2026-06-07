@@ -51,12 +51,18 @@ export function Footer() {
                             Premium digital solutions for serious businesses. We build
                             websites, platforms, and digital systems that convert.
                         </p>
-                        {/* Social links placeholder */}
+                        {/* Social links */}
                         <div className="flex items-center gap-3">
-                            {["twitter", "linkedin", "instagram"].map((social) => (
+                            {[
+                                { social: "twitter", href: "https://twitter.com/fixhubtech" },
+                                { social: "linkedin", href: "https://linkedin.com/company/fixhubtech" },
+                                { social: "instagram", href: "https://instagram.com/fixhubtech" },
+                            ].map(({ social, href }) => (
                                 <a
                                     key={social}
-                                    href="#"
+                                    href={href}
+                                    target="_blank"
+                                    rel="noopener noreferrer"
                                     aria-label={social}
                                     className="w-9 h-9 rounded-lg bg-secondary border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-indigo-500/30 transition-all"
                                 >

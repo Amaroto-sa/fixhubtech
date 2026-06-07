@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { validateWebhookSignature } from "@/lib/payments";
+import { db } from "@/db";
+import { invoices, payments } from "@/db/schema";
+import { eq } from "drizzle-orm";
 
 export async function POST(req: NextRequest) {
     try {
@@ -23,11 +26,24 @@ export async function POST(req: NextRequest) {
             const parts = tx_ref.split("-");
             const invoiceId = parts[1];
 
-            // In production:
-            // 1. Update invoice status to "paid"
-            // 2. Record payment in payments table
-            // 3. Update project payment status
-            // 4. Send payment confirmation email
+            // 1. Record payment in payments table
+            await db.insert(payments).values({
+                invoiceId,
+                amount: amount.toString(),
+                currency,
+                provider: "flutterwave",
+                providerRef: id.toString(),
+                status: "successful",
+                metadata: { tx_ref, raw_event: event.data },
+            });
+
+            // 2. Update invoice status to "paid"
+            await db.update(invoices).set({
+                status: "paid",
+                paidAt: new Date(),
+                receiptRef: id.toString(),
+                updatedAt: new Date(),
+            }).where(eq(invoices.id, invoiceId));
 
             console.log(`[PAYMENT] Invoice ${invoiceId} paid: ${currency} ${amount}`);
         }
