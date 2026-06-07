@@ -2,7 +2,7 @@ import Link from "next/link";
 import { currentUser } from "@clerk/nextjs/server";
 import { db } from "@/db";
 import { leads, projects, invoices, supportTickets, payments } from "@/db/schema";
-import { eq, and, ne, sum } from "drizzle-orm";
+import { eq, and, ne, sum, count } from "drizzle-orm";
 import {
     SpotlightCard,
     FadeIn,
@@ -31,7 +31,7 @@ export default async function AdminDashboard() {
 
     try {
         // Fetch KPIs
-        const [allLeads] = await db.select({ count: sum(leads.id) }).from(leads); // This is wrong, use count()
+        const [allLeads] = await db.select({ count: count(leads.id) }).from(leads);
         // Wait, Drizzle 0.30 count is a bit different. Let's just fetch all and get length for now if we want to be safe or use sql`count(*)`
         
         const newLeads = await db.select().from(leads).where(eq(leads.status, "new"));

@@ -29,6 +29,7 @@ export default async function ClientDashboard() {
     let openTicketsCount = 0;
     let recentProjectsList: any[] = [];
     let dbError = false;
+    let redirectUrl = "";
 
     try {
         // Fetch DB user
@@ -52,43 +53,47 @@ export default async function ClientDashboard() {
 
         if (dbUser) {
             if (dbUser.role === "admin" || dbUser.role === "super_admin") {
-                redirect("/admin/dashboard");
-            }
-            
-            const [client] = await db.select().from(clients).where(eq(clients.userId, dbUser.id));
+                redirectUrl = "/admin/dashboard";
+            } else {
+                const [client] = await db.select().from(clients).where(eq(clients.userId, dbUser.id));
 
-            if (client) {
-                // Fetch projects
-                const clientProjects = await db.select().from(projects).where(eq(projects.clientId, client.id));
-                activeProjectsCount = clientProjects.length;
+                if (client) {
+                    // Fetch projects
+                    const clientProjects = await db.select().from(projects).where(eq(projects.clientId, client.id));
+                    activeProjectsCount = clientProjects.length;
 
-                // Fetch pending invoices
-                const clientInvoices = await db.select().from(invoices).where(
-                    and(eq(invoices.clientId, client.id), eq(invoices.status, "draft"))
-                );
-                pendingInvoicesCount = clientInvoices.length;
+                    // Fetch pending invoices
+                    const clientInvoices = await db.select().from(invoices).where(
+                        and(eq(invoices.clientId, client.id), eq(invoices.status, "draft"))
+                    );
+                    pendingInvoicesCount = clientInvoices.length;
 
-                // Fetch open tickets
-                const tickets = await db.select().from(supportTickets).where(
-                    and(eq(supportTickets.clientId, client.id), eq(supportTickets.status, "open"))
-                );
-                openTicketsCount = tickets.length;
+                    // Fetch open tickets
+                    const tickets = await db.select().from(supportTickets).where(
+                        and(eq(supportTickets.clientId, client.id), eq(supportTickets.status, "open"))
+                    );
+                    openTicketsCount = tickets.length;
 
-                // Map recent projects
-                recentProjectsList = clientProjects.slice(0, 3).map(p => ({
-                    name: p.name,
-                    status: p.status,
-                    statusIcon: CircleDotDashed,
-                    statusColor: "text-indigo-400 bg-indigo-500/10 border-indigo-500/20",
-                    milestone: "Ongoing",
-                    dueDate: p.dueDate ? new Date(p.dueDate).toLocaleDateString() : "TBD",
-                    progress: p.status === 'completed' ? 100 : 50,
-                }));
+                    // Map recent projects
+                    recentProjectsList = clientProjects.slice(0, 3).map(p => ({
+                        name: p.name,
+                        status: p.status,
+                        statusIcon: CircleDotDashed,
+                        statusColor: "text-indigo-400 bg-indigo-500/10 border-indigo-500/20",
+                        milestone: "Ongoing",
+                        dueDate: p.dueDate ? new Date(p.dueDate).toLocaleDateString() : "TBD",
+                        progress: p.status === 'completed' ? 100 : 50,
+                    }));
+                }
             }
         }
     } catch (error) {
         console.error("Dashboard DB Error:", error);
         dbError = true;
+    }
+
+    if (redirectUrl) {
+        redirect(redirectUrl);
     }
 
     const stats = [
