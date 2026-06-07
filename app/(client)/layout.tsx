@@ -28,9 +28,16 @@ export default function ClientLayout({
                         <span className="font-display font-semibold text-foreground tracking-tight md:hidden">Portal</span>
                     </div>
                     <div className="flex items-center gap-4">
-                        {/* We hide the user button on desktop topbar since it's in the sidebar, but show it on mobile */}
-                        <div className="md:hidden">
-                            <UserButton afterSignOutUrl="/" />
+                        <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-full pl-3 pr-1 py-1">
+                            <span className="text-xs font-medium text-foreground hidden sm:block">My Account</span>
+                            <UserButton 
+                                afterSignOutUrl="/" 
+                                appearance={{
+                                    elements: {
+                                        avatarBox: "w-7 h-7 border border-white/20",
+                                    }
+                                }}
+                            />
                         </div>
                     </div>
                 </header>

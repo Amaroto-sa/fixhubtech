@@ -43,8 +43,16 @@ export default async function AdminLayout({
                         <span className="font-display font-semibold text-foreground tracking-tight md:hidden">Admin</span>
                     </div>
                     <div className="flex items-center gap-4">
-                        <div className="md:hidden">
-                            <UserButton afterSignOutUrl="/" />
+                        <div className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-full pl-3 pr-1 py-1">
+                            <span className="text-xs font-medium text-foreground hidden sm:block">Admin Account</span>
+                            <UserButton 
+                                afterSignOutUrl="/" 
+                                appearance={{
+                                    elements: {
+                                        avatarBox: "w-7 h-7 border border-white/20",
+                                    }
+                                }}
+                            />
                         </div>
                     </div>
                 </header>
