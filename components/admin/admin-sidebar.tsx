@@ -58,7 +58,7 @@ export function AdminSidebar() {
     const { isLoaded, isSignedIn, user } = useUser();
 
     return (
-        <aside className="fixed top-0 left-0 bottom-0 w-64 bg-[#0a0a0e] border-r border-white/[0.05] z-40 flex flex-col">
+        <aside className="h-full w-full bg-[#0a0a0e] border-r border-white/[0.05] flex flex-col">
             {/* Logo Area */}
             <div className="h-16 flex items-center px-6 border-b border-white/[0.05]">
                 <Link href="/admin/dashboard" className="flex items-center gap-3">

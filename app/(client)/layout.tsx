@@ -1,5 +1,6 @@
 import { ClientSidebar } from "@/components/dashboard/client-sidebar";
 import { UserButton } from "@clerk/nextjs";
+import { MobileNav } from "@/components/shared/mobile-nav";
 
 export default function ClientLayout({
     children,
@@ -9,17 +10,22 @@ export default function ClientLayout({
     return (
         <div className="min-h-screen bg-background flex flex-col md:flex-row">
             {/* Desktop Sidebar */}
-            <div className="hidden md:block w-64 flex-shrink-0">
-                <ClientSidebar />
+            <div className="hidden md:block w-64 flex-shrink-0 border-r border-white/[0.05]">
+                <div className="fixed top-0 left-0 bottom-0 w-64">
+                    <ClientSidebar />
+                </div>
             </div>
 
             {/* Main Content Area */}
             <div className="flex-1 flex flex-col min-w-0">
                 {/* Top Nav (Mobile & Breadcrumbs) */}
-                <header className="h-16 flex items-center justify-between px-6 border-b border-white/[0.05] bg-[#0a0a0e] sticky top-0 z-30">
-                    <div className="flex items-center gap-2">
-                        {/* Empty space for breadcrumbs later or a mobile menu toggle */}
-                        <span className="md:hidden font-display font-semibold text-foreground tracking-tight">FixHub Portal</span>
+                <header className="h-16 flex items-center justify-between px-6 border-b border-white/[0.05] bg-[#0a0a0e]/80 backdrop-blur-xl sticky top-0 z-30">
+                    <div className="flex items-center gap-4">
+                        <MobileNav>
+                            <ClientSidebar />
+                        </MobileNav>
+                        <span className="font-display font-semibold text-foreground tracking-tight hidden md:block">Client Portal</span>
+                        <span className="font-display font-semibold text-foreground tracking-tight md:hidden">Portal</span>
                     </div>
                     <div className="flex items-center gap-4">
                         {/* We hide the user button on desktop topbar since it's in the sidebar, but show it on mobile */}

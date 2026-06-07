@@ -5,6 +5,7 @@ import { redirect } from "next/navigation";
 import { db } from "@/db";
 import { users } from "@/db/schema";
 import { eq } from "drizzle-orm";
+import { MobileNav } from "@/components/shared/mobile-nav";
 
 export default async function AdminLayout({
     children,
@@ -24,16 +25,22 @@ export default async function AdminLayout({
     return (
         <div className="min-h-screen bg-background flex flex-col md:flex-row">
             {/* Desktop Sidebar */}
-            <div className="hidden md:block w-64 flex-shrink-0">
-                <AdminSidebar />
+            <div className="hidden md:block w-64 flex-shrink-0 border-r border-white/[0.05]">
+                <div className="fixed top-0 left-0 bottom-0 w-64">
+                    <AdminSidebar />
+                </div>
             </div>
 
             {/* Main Content Area */}
             <div className="flex-1 flex flex-col min-w-0">
                 {/* Top Nav (Mobile & Breadcrumbs) */}
-                <header className="h-16 flex items-center justify-between px-6 border-b border-white/[0.05] bg-[#0a0a0e] sticky top-0 z-30">
-                    <div className="flex items-center gap-2">
-                        <span className="md:hidden font-display font-semibold text-foreground tracking-tight">FixHub Admin</span>
+                <header className="h-16 flex items-center justify-between px-6 border-b border-white/[0.05] bg-[#0a0a0e]/80 backdrop-blur-xl sticky top-0 z-30">
+                    <div className="flex items-center gap-4">
+                        <MobileNav>
+                            <AdminSidebar />
+                        </MobileNav>
+                        <span className="font-display font-semibold text-foreground tracking-tight hidden md:block">FixHub Command Center</span>
+                        <span className="font-display font-semibold text-foreground tracking-tight md:hidden">Admin</span>
                     </div>
                     <div className="flex items-center gap-4">
                         <div className="md:hidden">
