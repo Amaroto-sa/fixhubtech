@@ -21,7 +21,7 @@ export default async function AboutPage() {
     }
 
     const getContent = (key: string, fallback: { title: string; body: string }) => {
-        const section = dbContent.find(s => s.sectionKey === key);
+        const section = dbContent.find((s: any) => s.sectionKey === key);
         if (section) {
             return {
                 title: section.title || fallback.title,

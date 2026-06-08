@@ -89,7 +89,7 @@ export default async function FAQPage() {
 
     if (dbFaqs.length > 0) {
         const grouped: Record<string, { q: string; a: string }[]> = {};
-        dbFaqs.forEach(f => {
+        dbFaqs.forEach((f: any) => {
             const cat = f.category || "General";
             if (!grouped[cat]) grouped[cat] = [];
             grouped[cat].push({ q: f.question, a: f.answer });

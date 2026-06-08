@@ -141,7 +141,7 @@ export default async function PortfolioDetailPage({ params }: { params: { slug: 
                             {project.summary}
                         </p>
                         <div className="flex flex-wrap gap-2 mt-6">
-                            {project.services.map((s, i) => (
+                            {(project.services || []).map((s: string, i: number) => (
                                 <span key={i} className="badge !text-xs">{s}</span>
                             ))}
                         </div>
@@ -180,7 +180,7 @@ export default async function PortfolioDetailPage({ params }: { params: { slug: 
                     <div className="card-glass p-8 glow-indigo mb-16">
                         <h2 className="font-display text-xl font-semibold text-foreground mb-6">Results</h2>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            {project.results.map((result, i) => (
+                            {(project.results || []).map((result: string, i: number) => (
                                 <div key={i} className="flex items-start gap-3 text-sm text-muted-foreground">
                                     <CheckCircle2 className="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" />
                                     {result}

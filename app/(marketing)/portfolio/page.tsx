@@ -77,7 +77,7 @@ export default async function PortfolioPage() {
         console.error(e);
     }
 
-    const displayItems = dbPortfolio.length > 0 ? dbPortfolio.map(p => ({
+    const displayItems = dbPortfolio.length > 0 ? dbPortfolio.map((p: any) => ({
         title: p.title,
         slug: p.slug,
         industry: p.industry || "General",

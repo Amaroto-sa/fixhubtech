@@ -90,7 +90,7 @@ export default async function PricingPage() {
         console.error(e);
     }
 
-    const displayPlans = dbPackages.length > 0 ? dbPackages.map(p => ({
+    const displayPlans = dbPackages.length > 0 ? dbPackages.map((p: any) => ({
         name: p.name,
         price: Number(p.price).toLocaleString(),
         period: p.isStartingFrom ? "starting at" : "one-time",

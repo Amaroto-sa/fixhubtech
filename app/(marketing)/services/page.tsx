@@ -143,7 +143,7 @@ export default async function ServicesPage() {
         console.error("Failed to fetch services", e);
     }
 
-    const displayServices = dbServices.length > 0 ? dbServices.map(s => ({
+    const displayServices = dbServices.length > 0 ? dbServices.map((s: any) => ({
         icon: <Box />, // Generic icon for db services, or map to a specific one if needed
         title: s.title,
         slug: s.slug,

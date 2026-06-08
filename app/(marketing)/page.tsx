@@ -187,7 +187,7 @@ async function ServicesSection() {
         console.error(e);
     }
 
-    const displayServices = dbServices.length > 0 ? dbServices.map(s => ({
+    const displayServices = dbServices.length > 0 ? dbServices.map((s: any) => ({
         icon: <Box className="w-6 h-6 text-indigo-400" />,
         title: s.title,
         description: s.shortDescription || "",
@@ -354,7 +354,7 @@ async function PortfolioPreview() {
         console.error(e);
     }
 
-    const displayItems = dbPortfolio.length > 0 ? dbPortfolio.map((p, idx) => ({
+    const displayItems = dbPortfolio.length > 0 ? dbPortfolio.map((p: any, idx: number) => ({
         category: p.industry || "General",
         title: p.title,
         color: idx === 0 ? "indigo" : idx === 1 ? "emerald" : "violet",

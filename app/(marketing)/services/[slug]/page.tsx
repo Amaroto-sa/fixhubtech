@@ -154,7 +154,7 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
                         <div className="card-elevated p-8">
                             <h2 className="font-display text-xl font-semibold text-foreground mb-6">What&apos;s Included</h2>
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                {service.features.map((feature, i) => (
+                                {(service.features || []).map((feature: string, i: number) => (
                                     <div key={i} className="flex items-start gap-3 text-sm text-muted-foreground">
                                         <CheckCircle2 className="w-4 h-4 text-emerald-400 mt-0.5 flex-shrink-0" />
                                         {feature}
@@ -181,7 +181,7 @@ export default async function ServiceDetailPage({ params }: { params: { slug: st
                     <div className="card-elevated p-8 mb-16">
                         <h2 className="font-display text-xl font-semibold text-foreground mb-6">Our Process</h2>
                         <div className="space-y-4">
-                            {service.process.map((step, i) => (
+                            {(service.process || []).map((step: string, i: number) => (
                                 <div key={i} className="flex items-start gap-4">
                                     <div className="w-8 h-8 rounded-lg bg-indigo-500/15 flex items-center justify-center text-sm text-indigo-400 font-bold flex-shrink-0">
                                         {i + 1}
