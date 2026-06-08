@@ -7,7 +7,7 @@ import {
     ScaleIn,
     SpotlightCard,
 } from "@/components/shared/motion";
-import { ChevronRight, Globe, RefreshCw, LayoutTemplate, Utensils, Scissors, Building, Terminal, Target, ArrowRight, ShieldCheck, Zap, Server, Box } from "lucide-react";
+import { ChevronRight, Globe, RefreshCw, LayoutTemplate, Utensils, Scissors, Building, Terminal, Target, ArrowRight, ShieldCheck, Zap, Server, Box, LayoutDashboard, Smartphone, CheckCircle2 } from "lucide-react";
 import { db } from "@/db";
 import { services, portfolioItems } from "@/db/schema";
 import { eq, desc, asc } from "drizzle-orm";
