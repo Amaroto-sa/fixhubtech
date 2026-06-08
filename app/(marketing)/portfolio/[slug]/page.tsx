@@ -150,7 +150,7 @@ export default async function PortfolioDetailPage({ params }: { params: { slug: 
 
                 {/* Project Image */}
                 <SectionReveal delay={0.1}>
-                    <div className="aspect-[16/9] bg-gradient-to-br from-indigo-500/10 to-violet-500/10 rounded-2xl overflow-hidden relative mb-16 border border-white/[0.05]">
+                    <div className="aspect-[16/9] bg-gradient-to-br from-indigo-500/10 to-violet-500/10 rounded-2xl overflow-hidden relative mb-16 border border-border/50">
                         <div className="absolute inset-0 bg-dot-pattern opacity-10" />
                         <div className="absolute inset-0 flex items-center justify-center">
                             <Monitor className="w-16 h-16 text-white opacity-10" />

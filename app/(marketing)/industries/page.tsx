@@ -31,7 +31,7 @@ export default function IndustriesPage() {
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                         {industries.map((industry, i) => (
-                            <div key={i} className="card-elevated bg-[#0a0a0e] border border-white/[0.05] p-8 hover:border-indigo-500/30 transition-colors group">
+                            <div key={i} className="card-elevated bg-background border border-border/50 p-8 hover:border-indigo-500/30 transition-colors group">
                                 <div className="w-12 h-12 rounded-xl bg-indigo-500/10 border border-indigo-500/20 flex items-center justify-center mb-6 text-indigo-400 group-hover:scale-110 transition-transform">
                                     <industry.icon className="w-6 h-6" />
                                 </div>

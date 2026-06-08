@@ -43,7 +43,7 @@ export function Navbar() {
                         <Link
                             key={link.href}
                             href={link.href}
-                            className="px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-white/[0.04]"
+                            className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors rounded-lg hover:bg-secondary"
                         >
                             {link.label}
                         </Link>
@@ -54,11 +54,11 @@ export function Navbar() {
                 <div className="hidden lg:flex items-center gap-3">
                     <Link
                         href="/sign-in"
-                        className="px-4 py-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
+                        className="px-4 py-2 text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
                     >
                         Sign In
                     </Link>
-                    <Link href="/quote" className="btn-primary !py-2.5 !px-6 !text-sm">
+                    <Link href="/quote" className="btn-primary !py-2.5 !px-6 !text-sm shadow-md shadow-indigo-500/10">
                         <span>Get a Quote</span>
                     </Link>
                 </div>
@@ -97,7 +97,7 @@ export function Navbar() {
                             key={link.href}
                             href={link.href}
                             onClick={() => setIsMobileOpen(false)}
-                            className="px-4 py-3 text-base text-muted-foreground hover:text-foreground hover:bg-white/[0.04] rounded-lg transition-colors"
+                            className="px-4 py-3 text-base font-medium text-muted-foreground hover:text-foreground hover:bg-secondary rounded-lg transition-colors"
                         >
                             {link.label}
                         </Link>
