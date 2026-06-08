@@ -76,10 +76,10 @@ export default function RootLayout({
         >
             <html
                 lang="en"
-                className={`${inter.variable} ${outfit.variable}`}
+                className={`${inter.variable} ${outfit.variable} dark`}
                 suppressHydrationWarning
             >
-                <body className="min-h-screen bg-background font-sans antialiased text-foreground">
+                <body className="min-h-screen bg-background font-sans antialiased">
                     {children}
                 </body>
             </html>

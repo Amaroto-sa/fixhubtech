@@ -23,7 +23,7 @@ export default async function AdminLayout({
     }
 
     return (
-        <div className="dark min-h-screen bg-background flex flex-col md:flex-row">
+        <div className="min-h-screen bg-background flex flex-col md:flex-row">
             {/* Desktop Sidebar */}
             <div className="hidden md:block w-64 flex-shrink-0 border-r border-white/[0.05]">
                 <div className="fixed top-0 left-0 bottom-0 w-64">

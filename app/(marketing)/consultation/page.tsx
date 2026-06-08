@@ -17,7 +17,7 @@ export default function ConsultationPage() {
             <div className="max-w-4xl mx-auto relative z-10">
                 <FadeIn>
                     <div className="text-center mb-16">
-                        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary/50 border border-border/50 text-sm text-indigo-500 font-medium mb-6">
+                        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-sm text-indigo-400 font-medium mb-6">
                             <Calendar className="w-4 h-4" />
                             <span>Free Strategy Session</span>
                         </div>
@@ -32,7 +32,7 @@ export default function ConsultationPage() {
                         </p>
                     </div>
 
-                    <div className="card-elevated bg-background/80 backdrop-blur-xl border border-border/50 p-8 md:p-12 text-center">
+                    <div className="card-elevated bg-[#0a0a0e]/80 backdrop-blur-xl border border-white/[0.05] p-8 md:p-12 text-center">
                         <h2 className="text-2xl font-bold text-foreground mb-4">Calendar Integration Pending</h2>
                         <p className="text-muted-foreground mb-8 max-w-lg mx-auto">
                             Please connect your Calendly or Cal.com embed code here. In the meantime, you can reach out to us via our contact form.

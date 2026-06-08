@@ -17,9 +17,9 @@ import { eq, desc, asc } from "drizzle-orm";
 // ============================================================
 function BrandBadge({ children }: { children: React.ReactNode }) {
     return (
-        <div className="inline-flex items-center gap-2 rounded-full border border-border/50 bg-secondary/50 backdrop-blur-md px-3 py-1">
-            <span className="h-1.5 w-1.5 rounded-full bg-indigo-500" />
-            <span className="text-xs font-medium text-muted-foreground tracking-wide uppercase">{children}</span>
+        <div className="inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-3 py-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]">
+            <span className="h-1.5 w-1.5 rounded-full bg-indigo-400 animate-pulse" />
+            <span className="text-xs font-medium text-indigo-300 tracking-wide uppercase">{children}</span>
         </div>
     );
 }
@@ -29,48 +29,111 @@ function BrandBadge({ children }: { children: React.ReactNode }) {
 // ============================================================
 function HeroSection() {
     return (
-        <section className="relative min-h-[90vh] flex flex-col items-center justify-center overflow-hidden pt-24 pb-12">
-            <div className="absolute inset-0 bg-background pointer-events-none" />
-            
-            {/* Extremely subtle grid background for depth without clutter */}
-            <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.01] mix-blend-multiply pointer-events-none" />
+        <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
+            {/* Dark premium gradient backdrops */}
+            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(99,102,241,0.08),transparent_50%)]" />
+            <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.02] mix-blend-overlay" />
+            <div className="absolute top-0 w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
 
-            <div className="section-container relative z-10 text-center flex flex-col items-center justify-center mt-12">
+            <div className="section-container relative z-10 text-center py-20 mt-10">
                 <FadeIn delay={0.1}>
                     <BrandBadge>Now Accepting Projects</BrandBadge>
                 </FadeIn>
 
                 <FadeIn delay={0.2}>
-                    <h1 className="mt-10 font-display text-5xl sm:text-6xl md:text-7xl lg:text-[6.5rem] font-medium tracking-tight mb-8 max-w-5xl mx-auto leading-[1.05] text-balance text-foreground">
-                        Design that moves your business forward.
+                    <h1 className="mt-8 font-display text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-bold tracking-tight mb-8 max-w-5xl mx-auto leading-[1.05] text-balance">
+                        <span className="text-foreground">Build a Stronger</span>
+                        <br />
+                        <span className="text-gradient-brand">Digital Presence.</span>
                     </h1>
                 </FadeIn>
 
                 <FadeIn delay={0.3}>
-                    <p className="text-lg sm:text-xl text-muted-foreground max-w-2xl mx-auto mb-14 leading-relaxed text-balance font-light">
-                        We build premium digital experiences, client portals, and brand websites designed to elevate your online presence and convert visitors into loyal customers.
+                    <p className="text-lg sm:text-xl text-muted-foreground/80 max-w-2xl mx-auto mb-12 leading-relaxed text-balance">
+                        Premium websites, redesigns, client portals, and robust digital systems
+                        for businesses that refuse to settle for templates. Fast execution. Zero compromises.
                     </p>
                 </FadeIn>
 
                 <FadeIn delay={0.4}>
-                    <div className="flex flex-col sm:flex-row items-center justify-center gap-5">
-                        <Link href="/quote" className="btn-primary text-base px-8 py-4 w-full sm:w-auto shadow-xl shadow-indigo-500/20">
-                            Start a Project
+                    <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                        <Link href="/quote" className="btn-primary text-base px-8 py-4 w-full sm:w-auto">
+                            <span>Start a Project</span>
+                            <ArrowRight className="w-4 h-4" />
                         </Link>
-                        <Link href="/portfolio" className="btn-secondary text-base px-8 py-4 w-full sm:w-auto bg-transparent border-border hover:bg-secondary">
+                        <Link href="/portfolio" className="btn-secondary text-base px-8 py-4 w-full sm:w-auto">
                             View Our Work
                         </Link>
                     </div>
                 </FadeIn>
-                
-                {/* Elegant abstract visual anchor instead of a fake browser mockup */}
+
+                {/* Dashboard Application Mockup */}
                 <FadeIn delay={0.6}>
-                    <div className="mt-28 relative w-full max-w-4xl mx-auto aspect-[21/9] rounded-3xl overflow-hidden bg-secondary/30 border border-border/50">
-                        <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/5 via-transparent to-violet-500/5" />
-                        <div className="absolute inset-0 backdrop-blur-[100px]" />
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-indigo-500/10 rounded-full blur-3xl" />
-                        <div className="relative h-full w-full flex items-center justify-center">
-                            <span className="font-display text-2xl tracking-widest text-muted-foreground/30 uppercase font-light">FixHub Digital</span>
+                    <div className="mt-24 relative max-w-5xl mx-auto perspective-1000">
+                        {/* Glow Behind Mockup */}
+                        <div className="absolute -inset-4 bg-gradient-to-b from-indigo-500/20 to-transparent rounded-[32px] blur-3xl opacity-30 pointer-events-none" />
+
+                        <div className="relative card-glass p-2 rounded-2xl md:rounded-[24px] shadow-2xl shadow-black/50 transform-gpu rotate-x-12 scale-95 transition-transform duration-700 hover:rotate-x-0 hover:scale-100">
+                            <div className="bg-[#0a0a0e] rounded-xl md:rounded-[20px] overflow-hidden border border-white/5">
+                                {/* Browser Toolbar */}
+                                <div className="flex items-center gap-3 px-4 py-3 border-b border-white/[0.04] bg-white/[0.01]">
+                                    <div className="flex gap-1.5">
+                                        <div className="w-3 h-3 rounded-full bg-[#ff5f56] border border-black/10" />
+                                        <div className="w-3 h-3 rounded-full bg-[#ffbd2e] border border-black/10" />
+                                        <div className="w-3 h-3 rounded-full bg-[#27c93f] border border-black/10" />
+                                    </div>
+                                    <div className="flex-1 flex justify-center">
+                                        <div className="bg-white/[0.03] border border-white/[0.05] rounded-md px-4 py-1 text-[11px] font-medium text-muted-foreground/60 tracking-wider">
+                                            app.fixhubtech.com
+                                        </div>
+                                    </div>
+                                </div>
+
+                                {/* Dashboard Content */}
+                                <div className="p-6 md:p-10 flex gap-8">
+                                    {/* Sidebar Mock */}
+                                    <div className="hidden md:flex flex-col gap-4 w-48 border-r border-white/[0.02] pr-6">
+                                        <div className="h-4 w-24 bg-white/10 rounded-sm mb-6" />
+                                        {[1, 2, 3, 4].map(i => (
+                                            <div key={i} className="flex gap-3 items-center">
+                                                <div className="w-4 h-4 rounded bg-white/5" />
+                                                <div className="h-2 w-full bg-white/5 rounded-sm" />
+                                            </div>
+                                        ))}
+                                    </div>
+
+                                    {/* Main Content Mock */}
+                                    <div className="flex-1">
+                                        <div className="flex justify-between items-center mb-8">
+                                            <div className="h-6 w-32 bg-white/10 rounded" />
+                                            <div className="h-8 w-8 rounded-full bg-indigo-500/20 border border-indigo-500/30" />
+                                        </div>
+                                        <div className="grid grid-cols-3 gap-4 mb-8">
+                                            {[1, 2, 3].map(i => (
+                                                <div key={i} className="bg-white/[0.02] border border-white/[0.04] p-4 rounded-xl">
+                                                    <div className="h-8 w-8 rounded-full bg-white/5 mb-3" />
+                                                    <div className="h-5 w-16 bg-white/10 rounded mb-2" />
+                                                    <div className="h-2 w-24 bg-white/5 rounded" />
+                                                </div>
+                                            ))}
+                                        </div>
+                                        <div className="space-y-3">
+                                            {[1, 2].map(i => (
+                                                <div key={i} className="bg-white/[0.02] border border-white/[0.04] p-4 rounded-xl flex items-center justify-between">
+                                                    <div className="flex items-center gap-4">
+                                                        <div className="h-10 w-10 rounded-lg bg-indigo-500/10" />
+                                                        <div>
+                                                            <div className="h-3 w-32 bg-white/10 rounded mb-1.5" />
+                                                            <div className="h-2 w-20 bg-white/5 rounded" />
+                                                        </div>
+                                                    </div>
+                                                    <div className="h-6 w-16 rounded-full bg-emerald-500/10 border border-emerald-500/20" />
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </FadeIn>
@@ -84,26 +147,26 @@ function HeroSection() {
 // ============================================================
 function TrustStrip() {
     const trustItems = [
-        { icon: <Zap className="w-5 h-5 text-foreground" />, label: "Fast Delivery", detail: "2–4 week turnaround" },
-        { icon: <Smartphone className="w-5 h-5 text-foreground" />, label: "Mobile-First", detail: "Flawless on every screen" },
-        { icon: <Target className="w-5 h-5 text-foreground" />, label: "Conversion-Focused", detail: "Engineered to perform" },
-        { icon: <ShieldCheck className="w-5 h-5 text-foreground" />, label: "Structured Process", detail: "Zero guesswork" },
+        { icon: <Zap className="w-5 h-5 text-indigo-400" />, label: "Fast Delivery", detail: "2–4 week turnaround" },
+        { icon: <Smartphone className="w-5 h-5 text-indigo-400" />, label: "Mobile-First", detail: "Flawless on every screen" },
+        { icon: <Target className="w-5 h-5 text-indigo-400" />, label: "Conversion-Focused", detail: "Engineered to perform" },
+        { icon: <ShieldCheck className="w-5 h-5 text-indigo-400" />, label: "Structured Process", detail: "Zero guesswork" },
     ];
 
     return (
-        <section className="relative py-12 border-y border-border/50 bg-secondary/20">
+        <section className="relative py-12 border-y border-white/[0.05] bg-white/[0.01]">
             <div className="section-container">
                 <SectionReveal>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
                         {trustItems.map((item, idx) => (
                             <div key={idx} className="flex flex-col items-center text-center">
-                                <div className="mb-3 p-3 rounded-xl bg-background border border-border/50 shadow-sm">
+                                <div className="mb-3 p-3 rounded-xl bg-white/[0.03] border border-white/[0.05]">
                                     {item.icon}
                                 </div>
                                 <p className="font-medium text-foreground text-sm tracking-tight mb-1">
                                     {item.label}
                                 </p>
-                                <p className="text-[13px] text-muted-foreground">{item.detail}</p>
+                                <p className="text-[13px] text-muted-foreground/70">{item.detail}</p>
                             </div>
                         ))}
                     </div>
@@ -303,20 +366,20 @@ async function PortfolioPreview() {
     ];
 
     return (
-        <section className="py-32 relative border-y border-border/50 bg-secondary/10">
+        <section className="py-32 relative border-y border-white/[0.05] bg-white/[0.01]">
             <div className="section-container">
                 <SectionReveal>
                     <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16">
                         <div className="max-w-2xl">
                             <BrandBadge>Featured Work</BrandBadge>
-                            <h2 className="mt-6 font-display text-4xl sm:text-5xl font-medium tracking-tight text-foreground mb-4">
+                            <h2 className="mt-6 font-display text-4xl sm:text-5xl font-bold tracking-tight text-gradient mb-4">
                                 Proof of Quality.
                             </h2>
-                            <p className="text-lg text-muted-foreground leading-relaxed font-light">
+                            <p className="text-lg text-muted-foreground/80 leading-relaxed">
                                 See how we transform ordinary businesses into premium digital brands.
                             </p>
                         </div>
-                        <Link href="/portfolio" className="group flex items-center gap-2 text-sm font-medium text-foreground hover:text-indigo-500 transition-colors pb-2">
+                        <Link href="/portfolio" className="group flex items-center gap-2 text-sm font-medium text-foreground hover:text-indigo-400 transition-colors pb-2">
                             View case studies <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                         </Link>
                     </div>
@@ -327,19 +390,25 @@ async function PortfolioPreview() {
                         <SectionReveal key={idx} delay={idx * 0.1}>
                             <SpotlightCard>
                                 <Link href={project.slug ? `/portfolio/${project.slug}` : "/portfolio"} className="block group">
-                                    {/* Sleek Abstract Project Visual */}
-                                    <div className="aspect-[4/3] bg-secondary/30 relative overflow-hidden flex items-center justify-center p-8 border-b border-border/50">
-                                        <div className={`absolute inset-0 bg-gradient-to-tr opacity-20 ${idx === 0 ? 'from-indigo-500 to-transparent' : idx === 1 ? 'from-emerald-500 to-transparent' : 'from-violet-500 to-transparent'}`} />
-                                        <div className="w-16 h-16 rounded-2xl bg-background border border-border/50 flex items-center justify-center shadow-sm relative z-10">
-                                            <span className={`text-xl font-display font-light ${idx === 0 ? 'text-indigo-500' : idx === 1 ? 'text-emerald-500' : 'text-violet-500'}`}>
-                                                {project.title.charAt(0)}
-                                            </span>
+                                    {/* Project Image Panel */}
+                                    <div className="aspect-[4/3] bg-[#0a0a0e] relative overflow-hidden flex items-center justify-center p-8 border-b border-white/[0.05]">
+                                        {/* Abstract UI composition */}
+                                        <div className="absolute inset-x-8 -bottom-4 top-8 rounded-t-xl bg-white/[0.03] border border-white/10 shadow-2xl transition-transform duration-500 group-hover:-translate-y-2">
+                                            <div className="flex items-center gap-1.5 px-4 py-3 border-b border-white/[0.05]">
+                                                <div className={`w-2 h-2 rounded-full ${idx === 0 ? 'bg-indigo-400/40' : idx === 1 ? 'bg-emerald-400/40' : 'bg-violet-400/40'}`} />
+                                                <div className="w-2 h-2 rounded-full bg-white/20" />
+                                            </div>
+                                            <div className="p-4 space-y-3">
+                                                <div className={`w-1/3 h-4 rounded ${idx === 0 ? 'bg-indigo-500/20' : idx === 1 ? 'bg-emerald-500/20' : 'bg-violet-500/20'}`} />
+                                                <div className="w-full h-16 bg-white/[0.02] rounded border border-white/5" />
+                                                <div className="w-2/3 h-16 bg-white/[0.02] rounded border border-white/5" />
+                                            </div>
                                         </div>
                                     </div>
                                     {/* Data */}
                                     <div className="p-6">
-                                        <div className={`text-[11px] font-medium tracking-widest uppercase mb-2 ${idx === 0 ? 'text-indigo-500' : idx === 1 ? 'text-emerald-500' : 'text-violet-500'}`}>{project.category}</div>
-                                        <h3 className="font-display text-lg font-medium text-foreground group-hover:text-indigo-500 transition-colors">
+                                        <div className={`text-[11px] font-medium tracking-widest uppercase mb-2 ${idx === 0 ? 'text-indigo-400/80' : idx === 1 ? 'text-emerald-400/80' : 'text-violet-400/80'}`}>{project.category}</div>
+                                        <h3 className="font-display text-lg font-medium text-foreground group-hover:text-indigo-300 transition-colors">
                                             {project.title}
                                         </h3>
                                     </div>
@@ -358,20 +427,21 @@ async function PortfolioPreview() {
 // ============================================================
 function FinalCTA() {
     return (
-        <section className="py-32 relative overflow-hidden bg-background">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.04),transparent_70%)]" />
+        <section className="py-32 relative overflow-hidden">
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.08),transparent_70%)]" />
 
             <div className="section-container relative z-10 text-center">
                 <SectionReveal>
-                    <h2 className="font-display text-5xl sm:text-6xl lg:text-7xl font-medium tracking-tight text-foreground mb-8 max-w-4xl mx-auto text-balance">
+                    <h2 className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-gradient mb-8 max-w-4xl mx-auto text-balance">
                         Ready to elevate your standards?
                     </h2>
-                    <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-10 text-balance font-light">
+                    <p className="text-xl text-muted-foreground/80 max-w-2xl mx-auto mb-10 text-balance">
                         Stop losing clients to competitors with better websites. Request a custom quote today and get a strategic breakdown.
                     </p>
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                        <Link href="/quote" className="btn-primary text-base px-8 py-4 w-full sm:w-auto shadow-xl shadow-indigo-500/20">
-                            Start a Project
+                        <Link href="/quote" className="btn-primary text-base px-8 py-4 w-full sm:w-auto">
+                            <span>Start a Project</span>
+                            <ArrowRight className="w-4 h-4 ml-1" />
                         </Link>
                     </div>
                 </SectionReveal>
