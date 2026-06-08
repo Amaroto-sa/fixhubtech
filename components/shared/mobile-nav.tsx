@@ -33,37 +33,31 @@ export function MobileNav({ children }: { children: React.ReactNode }) {
     const drawerContent = (
         <AnimatePresence>
             {isOpen && (
-                <>
-                    {/* Backdrop */}
-                    <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        onClick={() => setIsOpen(false)}
-                        className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[100] md:hidden"
-                        aria-hidden="true"
-                    />
-                    {/* Sidebar Drawer */}
-                    <motion.div
-                        initial={{ x: "-100%" }}
-                        animate={{ x: 0 }}
-                        exit={{ x: "-100%" }}
-                        transition={{ type: "spring", bounce: 0, duration: 0.3 }}
-                        className="fixed inset-y-0 left-0 w-[280px] bg-[#0a0a0e] border-r border-white/10 z-[110] md:hidden shadow-2xl flex flex-col"
-                    >
-                        <div className="absolute top-4 right-4 z-50">
-                            <button 
-                                onClick={() => setIsOpen(false)}
-                                className="p-2 rounded-full bg-white/5 text-muted-foreground hover:text-foreground hover:bg-white/10 border border-white/10 transition-colors backdrop-blur-md"
-                            >
-                                <X className="w-4 h-4" />
-                            </button>
-                        </div>
-                        <div className="flex-1 overflow-y-auto w-full h-full [&>div]:h-full [&>div]:w-full">
+                <motion.div
+                    initial={{ opacity: 0 }}
+                    animate={{ opacity: 1 }}
+                    exit={{ opacity: 0 }}
+                    transition={{ duration: 0.3, ease: "easeInOut" }}
+                    className="fixed inset-0 z-[100] md:hidden bg-background/95 backdrop-blur-3xl flex flex-col"
+                >
+                    {/* Header bar inside menu */}
+                    <div className="flex items-center justify-end h-20 px-6 border-b border-white/[0.05]">
+                        <button 
+                            onClick={() => setIsOpen(false)}
+                            className="w-10 h-10 rounded-full bg-white/[0.03] border border-white/10 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors hover:bg-white/[0.08]"
+                        >
+                            <X className="w-5 h-5" />
+                        </button>
+                    </div>
+                    
+                    {/* Menu Content container with custom scrollbar styling */}
+                    <div className="flex-1 overflow-y-auto w-full px-6 py-8 mobile-nav-content">
+                        {/* We use a wrapper to stagger children if needed, but since children are passed as a server/client component prop (the sidebar), we rely on it rendering properly. */}
+                        <div className="max-w-md mx-auto w-full pb-12">
                             {children}
                         </div>
-                    </motion.div>
-                </>
+                    </div>
+                </motion.div>
             )}
         </AnimatePresence>
     );
@@ -72,10 +66,10 @@ export function MobileNav({ children }: { children: React.ReactNode }) {
         <>
             <button 
                 onClick={() => setIsOpen(true)}
-                className="p-2 -ml-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-white/5 transition-colors md:hidden"
+                className="w-10 h-10 rounded-full border border-white/10 bg-white/[0.02] flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-white/5 transition-colors md:hidden"
                 aria-label="Open menu"
             >
-                <Menu className="w-6 h-6" />
+                <Menu className="w-5 h-5" />
             </button>
             {mounted && typeof document !== "undefined" ? createPortal(drawerContent, document.body) : null}
         </>
