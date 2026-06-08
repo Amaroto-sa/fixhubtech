@@ -135,7 +135,7 @@ export default async function PortfolioPage() {
                                             {item.summary}
                                         </p>
                                         <div className="flex flex-wrap gap-2">
-                                            {item.services.map((s, i) => (
+                                            {(item.services || []).map((s: string, i: number) => (
                                                 <span key={i} className="badge !text-xs">
                                                     {s}
                                                 </span>

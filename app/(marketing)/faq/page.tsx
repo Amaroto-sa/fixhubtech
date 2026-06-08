@@ -116,7 +116,7 @@ export default async function FAQPage() {
                 </SectionReveal>
 
                 <div className="space-y-12">
-                    {displayCategories.map((category, catIdx) => (
+                    {displayCategories.map((category: any, catIdx: number) => (
                         <SectionReveal key={catIdx} delay={catIdx * 0.1}>
                             <div>
                                 <h2 className="font-display text-xl font-semibold text-foreground mb-6 flex items-center gap-3">
@@ -126,7 +126,7 @@ export default async function FAQPage() {
                                     {category.title}
                                 </h2>
                                 <div className="space-y-4">
-                                    {category.questions.map((faq, qIdx) => (
+                                    {(category.questions || []).map((faq: any, qIdx: number) => (
                                         <details
                                             key={qIdx}
                                             className="card-elevated group"

@@ -151,7 +151,7 @@ export default async function PricingPage() {
                                         What&apos;s included
                                     </p>
                                     <ul className="space-y-2.5 mb-6">
-                                        {plan.features.map((feature, i) => (
+                                        {(plan.features || []).map((feature: string, i: number) => (
                                             <li key={i} className="flex items-center gap-2.5 text-sm text-muted-foreground">
                                                 <span className="w-4 h-4 rounded-full bg-emerald-500/15 flex items-center justify-center text-[10px] text-emerald-400 flex-shrink-0">
                                                     ✓
@@ -162,7 +162,7 @@ export default async function PricingPage() {
                                     </ul>
                                     {plan.notIncluded.length > 0 && (
                                         <ul className="space-y-2 mb-6">
-                                            {plan.notIncluded.map((item, i) => (
+                                            {(plan.notIncluded || []).map((item: string, i: number) => (
                                                 <li key={i} className="flex items-center gap-2.5 text-sm text-muted-foreground/50">
                                                     <span className="w-4 h-4 rounded-full bg-secondary flex items-center justify-center text-[10px] text-muted-foreground flex-shrink-0">
                                                         ✕

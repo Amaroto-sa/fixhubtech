@@ -194,7 +194,7 @@ export default async function ServicesPage() {
                                     </div>
 
                                     <ul className="space-y-2 mb-6 flex-1">
-                                        {service.features.map((feature, i) => (
+                                        {(service.features || []).map((feature: string, i: number) => (
                                             <li
                                                 key={i}
                                                 className="flex items-center gap-2 text-sm text-muted-foreground"
