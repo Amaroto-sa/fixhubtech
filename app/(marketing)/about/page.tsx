@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { SectionReveal } from "@/components/shared/motion";
 import { Target, Zap, Sparkles, ShieldCheck, Handshake, TrendingUp } from "lucide-react";
+import { db } from "@/db";
+import { contentSections } from "@/db/schema";
+import { eq, and } from "drizzle-orm";
 
 export const metadata: Metadata = {
     title: "About",
@@ -9,7 +12,40 @@ export const metadata: Metadata = {
         "Learn about FixHub Technology — a premium digital solutions company helping serious businesses build stronger online presence.",
 };
 
-export default function AboutPage() {
+export default async function AboutPage() {
+    let dbContent: any[] = [];
+    try {
+        dbContent = await db.select().from(contentSections).where(and(eq(contentSections.page, "about"), eq(contentSections.isActive, true)));
+    } catch (e) {
+        console.error(e);
+    }
+
+    const getContent = (key: string, fallback: { title: string; body: string }) => {
+        const section = dbContent.find(s => s.sectionKey === key);
+        if (section) {
+            return {
+                title: section.title || fallback.title,
+                body: section.body || fallback.body,
+            };
+        }
+        return fallback;
+    };
+
+    const hero = getContent("hero", {
+        title: "We Build Digital Experiences That Win",
+        body: "FixHub Technology is a premium digital solutions company. We help serious businesses launch, redesign, and manage high-converting websites and digital platforms."
+    });
+
+    const mission = getContent("mission", {
+        title: "Our Mission",
+        body: "To give every business — from local salons to growing tech companies — access to premium-quality digital solutions that were previously only available to well-funded startups. Speed, clarity, and execution are our core pillars."
+    });
+
+    const approach = getContent("approach", {
+        title: "Our Approach",
+        body: "We combine structured project management with modern design and engineering. Every project follows a clear plan with milestones, transparent communication, and measurable outcomes. No guesswork, no scope creep, no excuses."
+    });
+
     return (
         <div className="pt-32 pb-24">
             <div className="section-container max-w-5xl">
@@ -18,12 +54,10 @@ export default function AboutPage() {
                     <div className="text-center mb-20">
                         <span className="badge-primary mb-4 inline-flex">About Us</span>
                         <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-gradient mb-6">
-                            We Build Digital Experiences That Win
+                            {hero.title}
                         </h1>
                         <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-                            FixHub Technology is a premium digital solutions company. We help
-                            serious businesses launch, redesign, and manage high-converting
-                            websites and digital platforms.
+                            {hero.body}
                         </p>
                     </div>
                 </SectionReveal>
@@ -34,24 +68,18 @@ export default function AboutPage() {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
                             <div>
                                 <h2 className="font-display text-2xl font-bold text-foreground mb-4">
-                                    Our Mission
+                                    {mission.title}
                                 </h2>
                                 <p className="text-muted-foreground leading-relaxed">
-                                    To give every business — from local salons to growing tech
-                                    companies — access to premium-quality digital solutions that
-                                    were previously only available to well-funded startups. Speed,
-                                    clarity, and execution are our core pillars.
+                                    {mission.body}
                                 </p>
                             </div>
                             <div>
                                 <h2 className="font-display text-2xl font-bold text-foreground mb-4">
-                                    Our Approach
+                                    {approach.title}
                                 </h2>
                                 <p className="text-muted-foreground leading-relaxed">
-                                    We combine structured project management with modern design and
-                                    engineering. Every project follows a clear plan with milestones,
-                                    transparent communication, and measurable outcomes. No
-                                    guesswork, no scope creep, no excuses.
+                                    {approach.body}
                                 </p>
                             </div>
                         </div>

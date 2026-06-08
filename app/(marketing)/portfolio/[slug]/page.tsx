@@ -3,8 +3,11 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SectionReveal } from "@/components/shared/motion";
 import { ArrowLeft, ArrowRight, CheckCircle2, Monitor } from "lucide-react";
+import { db } from "@/db";
+import { portfolioItems } from "@/db/schema";
+import { eq } from "drizzle-orm";
 
-const portfolioData: Record<string, {
+const FALLBACK_PORTFOLIO_DATA: Record<string, {
     title: string;
     industry: string;
     summary: string;
@@ -70,7 +73,17 @@ const portfolioData: Record<string, {
 };
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-    const project = portfolioData[params.slug];
+    try {
+        const dbPortfolio = await db.select().from(portfolioItems).where(eq(portfolioItems.slug, params.slug)).limit(1);
+        if (dbPortfolio.length > 0) {
+            return {
+                title: `${dbPortfolio[0].title} — Case Study`,
+                description: (dbPortfolio[0].summary || "").slice(0, 160),
+            };
+        }
+    } catch (e) {}
+
+    const project = FALLBACK_PORTFOLIO_DATA[params.slug];
     if (!project) return { title: "Project Not Found" };
     return {
         title: `${project.title} — Case Study`,
@@ -78,12 +91,35 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     };
 }
 
-export function generateStaticParams() {
-    return Object.keys(portfolioData).map((slug) => ({ slug }));
+export async function generateStaticParams() {
+    return Object.keys(FALLBACK_PORTFOLIO_DATA).map((slug) => ({ slug }));
 }
 
-export default function PortfolioDetailPage({ params }: { params: { slug: string } }) {
-    const project = portfolioData[params.slug];
+export default async function PortfolioDetailPage({ params }: { params: { slug: string } }) {
+    let project: any = null;
+
+    try {
+        const dbPortfolio = await db.select().from(portfolioItems).where(eq(portfolioItems.slug, params.slug)).limit(1);
+        if (dbPortfolio.length > 0) {
+            const p = dbPortfolio[0];
+            project = {
+                title: p.title,
+                industry: p.industry || "General",
+                summary: p.summary || "",
+                challenge: p.challenge || "Not provided.",
+                solution: p.solution || "Not provided.",
+                results: p.servicesDelivered || [], // Reusing this for results if needed, or maybe screenshots
+                services: p.servicesDelivered || [],
+            };
+        }
+    } catch (e) {
+        console.error(e);
+    }
+
+    if (!project) {
+        project = FALLBACK_PORTFOLIO_DATA[params.slug];
+    }
+
     if (!project) notFound();
 
     return (

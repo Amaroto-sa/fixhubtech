@@ -3,8 +3,11 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { SectionReveal } from "@/components/shared/motion";
 import { ArrowLeft, ArrowRight, CheckCircle2 } from "lucide-react";
+import { db } from "@/db";
+import { services } from "@/db/schema";
+import { eq } from "drizzle-orm";
 
-const serviceData: Record<string, {
+const FALLBACK_SERVICE_DATA: Record<string, {
     title: string;
     description: string;
     features: string[];
@@ -79,7 +82,17 @@ const serviceData: Record<string, {
 };
 
 export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
-    const service = serviceData[params.slug];
+    try {
+        const dbService = await db.select().from(services).where(eq(services.slug, params.slug)).limit(1);
+        if (dbService.length > 0) {
+            return {
+                title: dbService[0].title,
+                description: (dbService[0].shortDescription || "").slice(0, 160),
+            };
+        }
+    } catch (e) {}
+    
+    const service = FALLBACK_SERVICE_DATA[params.slug];
     if (!service) return { title: "Service Not Found" };
     return {
         title: service.title,
@@ -87,12 +100,34 @@ export async function generateMetadata({ params }: { params: { slug: string } })
     };
 }
 
-export function generateStaticParams() {
-    return Object.keys(serviceData).map((slug) => ({ slug }));
+export async function generateStaticParams() {
+    return Object.keys(FALLBACK_SERVICE_DATA).map((slug) => ({ slug }));
 }
 
-export default function ServiceDetailPage({ params }: { params: { slug: string } }) {
-    const service = serviceData[params.slug];
+export default async function ServiceDetailPage({ params }: { params: { slug: string } }) {
+    let service: any = null;
+
+    try {
+        const dbService = await db.select().from(services).where(eq(services.slug, params.slug)).limit(1);
+        if (dbService.length > 0) {
+            const s = dbService[0];
+            service = {
+                title: s.title,
+                description: s.fullDescription || s.shortDescription || "",
+                features: s.features || [],
+                process: s.process || [],
+                startingPrice: s.startingPrice ? `$${s.startingPrice}` : "Custom",
+                timeline: s.timeline || "TBD",
+            };
+        }
+    } catch (e) {
+        console.error(e);
+    }
+
+    if (!service) {
+        service = FALLBACK_SERVICE_DATA[params.slug];
+    }
+    
     if (!service) notFound();
 
     return (

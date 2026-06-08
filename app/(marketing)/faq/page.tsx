@@ -1,5 +1,8 @@
 import type { Metadata } from "next";
 import { SectionReveal } from "@/components/shared/motion";
+import { db } from "@/db";
+import { faqs } from "@/db/schema";
+import { eq, asc } from "drizzle-orm";
 
 export const metadata: Metadata = {
     title: "FAQ",
@@ -7,7 +10,7 @@ export const metadata: Metadata = {
         "Frequently asked questions about FixHub Technology's services, pricing, process, and platform.",
 };
 
-const faqCategories = [
+const FALLBACK_FAQ_CATEGORIES = [
     {
         title: "General",
         questions: [
@@ -74,7 +77,29 @@ const faqCategories = [
     },
 ];
 
-export default function FAQPage() {
+export default async function FAQPage() {
+    let dbFaqs: any[] = [];
+    try {
+        dbFaqs = await db.select().from(faqs).where(eq(faqs.isActive, true)).orderBy(asc(faqs.sortOrder));
+    } catch (e) {
+        console.error(e);
+    }
+
+    let displayCategories = FALLBACK_FAQ_CATEGORIES;
+
+    if (dbFaqs.length > 0) {
+        const grouped: Record<string, { q: string; a: string }[]> = {};
+        dbFaqs.forEach(f => {
+            const cat = f.category || "General";
+            if (!grouped[cat]) grouped[cat] = [];
+            grouped[cat].push({ q: f.question, a: f.answer });
+        });
+        displayCategories = Object.keys(grouped).map(title => ({
+            title,
+            questions: grouped[title],
+        }));
+    }
+
     return (
         <div className="pt-32 pb-24">
             <div className="section-container max-w-4xl">
@@ -91,7 +116,7 @@ export default function FAQPage() {
                 </SectionReveal>
 
                 <div className="space-y-12">
-                    {faqCategories.map((category, catIdx) => (
+                    {displayCategories.map((category, catIdx) => (
                         <SectionReveal key={catIdx} delay={catIdx * 0.1}>
                             <div>
                                 <h2 className="font-display text-xl font-semibold text-foreground mb-6 flex items-center gap-3">

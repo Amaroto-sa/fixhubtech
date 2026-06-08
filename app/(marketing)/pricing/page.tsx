@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SectionReveal } from "@/components/shared/motion";
+import { db } from "@/db";
+import { packages } from "@/db/schema";
+import { eq, asc } from "drizzle-orm";
 
 export const metadata: Metadata = {
     title: "Pricing",
@@ -8,7 +11,7 @@ export const metadata: Metadata = {
         "Transparent pricing for FixHub Technology's premium digital services. Choose from Starter, Growth, Premium, or Custom plans.",
 };
 
-const plans = [
+const FALLBACK_PLANS = [
     {
         name: "Starter",
         price: "499",
@@ -79,7 +82,25 @@ const addOns = [
     { name: "WhatsApp chat integration", price: "$49" },
 ];
 
-export default function PricingPage() {
+export default async function PricingPage() {
+    let dbPackages: any[] = [];
+    try {
+        dbPackages = await db.select().from(packages).where(eq(packages.isActive, true)).orderBy(asc(packages.sortOrder));
+    } catch (e) {
+        console.error(e);
+    }
+
+    const displayPlans = dbPackages.length > 0 ? dbPackages.map(p => ({
+        name: p.name,
+        price: Number(p.price).toLocaleString(),
+        period: p.isStartingFrom ? "starting at" : "one-time",
+        description: p.description || "",
+        features: p.deliverables || [],
+        notIncluded: [],
+        cta: "Get Started",
+        highlighted: p.isPopular || false,
+    })) : FALLBACK_PLANS;
+
     return (
         <div className="pt-32 pb-24">
             <div className="section-container">
@@ -99,7 +120,7 @@ export default function PricingPage() {
 
                 {/* Plans */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto mb-20">
-                    {plans.map((plan, idx) => (
+                    {displayPlans.map((plan, idx) => (
                         <SectionReveal key={idx} delay={idx * 0.1}>
                             <div
                                 className={`relative card-elevated p-8 h-full flex flex-col ${plan.highlighted

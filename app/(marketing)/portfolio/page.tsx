@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { SectionReveal } from "@/components/shared/motion";
 import { Monitor } from "lucide-react";
+import { db } from "@/db";
+import { portfolioItems } from "@/db/schema";
+import { eq, desc } from "drizzle-orm";
 
 export const metadata: Metadata = {
     title: "Portfolio",
@@ -9,7 +12,7 @@ export const metadata: Metadata = {
         "See our latest work. FixHub Technology creates premium websites, booking platforms, and digital solutions for businesses worldwide.",
 };
 
-const portfolioItems = [
+const FALLBACK_PORTFOLIO = [
     {
         title: "Bella Salon & Spa",
         slug: "bella-salon",
@@ -66,7 +69,23 @@ const portfolioItems = [
     },
 ];
 
-export default function PortfolioPage() {
+export default async function PortfolioPage() {
+    let dbPortfolio: any[] = [];
+    try {
+        dbPortfolio = await db.select().from(portfolioItems).where(eq(portfolioItems.status, 'published')).orderBy(desc(portfolioItems.createdAt));
+    } catch (e) {
+        console.error(e);
+    }
+
+    const displayItems = dbPortfolio.length > 0 ? dbPortfolio.map(p => ({
+        title: p.title,
+        slug: p.slug,
+        industry: p.industry || "General",
+        services: p.servicesDelivered || [],
+        summary: p.summary || "",
+        isFeatured: p.isFeatured || false,
+    })) : FALLBACK_PORTFOLIO;
+
     return (
         <div className="pt-32 pb-24">
             <div className="section-container">
@@ -85,7 +104,7 @@ export default function PortfolioPage() {
 
                 {/* Portfolio grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-                    {portfolioItems.map((item, idx) => (
+                    {displayItems.map((item, idx) => (
                         <SectionReveal key={idx} delay={idx * 0.08}>
                             <Link href={`/portfolio/${item.slug}`} className="group block h-full">
                                 <div className="card-elevated overflow-hidden h-full flex flex-col">

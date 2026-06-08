@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SectionReveal } from "@/components/shared/motion";
-import { Globe, RefreshCw, FileText, Utensils, Scissors, Building, TrendingUp, MapPin } from "lucide-react";
+import { Globe, RefreshCw, FileText, Utensils, Scissors, Building, TrendingUp, MapPin, Box } from "lucide-react";
+import { db } from "@/db";
+import { services } from "@/db/schema";
+import { eq, asc } from "drizzle-orm";
 
 export const metadata: Metadata = {
     title: "Services",
@@ -9,7 +12,7 @@ export const metadata: Metadata = {
         "Explore FixHub Technology's premium digital services — business websites, redesigns, landing pages, restaurant menus, salon booking, and hospitality systems.",
 };
 
-const allServices = [
+const FALLBACK_SERVICES = [
     {
         icon: <Globe />,
         title: "Business Website Design",
@@ -132,7 +135,23 @@ const allServices = [
     },
 ];
 
-export default function ServicesPage() {
+export default async function ServicesPage() {
+    let dbServices: any[] = [];
+    try {
+        dbServices = await db.select().from(services).where(eq(services.isActive, true)).orderBy(asc(services.sortOrder));
+    } catch (e) {
+        console.error("Failed to fetch services", e);
+    }
+
+    const displayServices = dbServices.length > 0 ? dbServices.map(s => ({
+        icon: <Box />, // Generic icon for db services, or map to a specific one if needed
+        title: s.title,
+        slug: s.slug,
+        description: s.shortDescription || "",
+        features: s.features || [],
+        startingPrice: s.startingPrice ? `$${s.startingPrice}` : "Custom",
+    })) : FALLBACK_SERVICES;
+
     return (
         <div className="pt-32 pb-24">
             <div className="section-container">
@@ -153,7 +172,7 @@ export default function ServicesPage() {
 
                 {/* Services grid */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-20">
-                    {allServices.map((service, idx) => (
+                    {displayServices.map((service, idx) => (
                         <SectionReveal key={idx} delay={idx * 0.08}>
                             <Link
                                 href={`/services/${service.slug}`}

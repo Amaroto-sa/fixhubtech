@@ -1,4 +1,4 @@
-"use client";
+// Server Component
 
 import Link from "next/link";
 import {
@@ -7,21 +7,10 @@ import {
     ScaleIn,
     SpotlightCard,
 } from "@/components/shared/motion";
-import {
-    LayoutDashboard,
-    Globe,
-    RefreshCw,
-    LayoutTemplate,
-    Utensils,
-    Scissors,
-    Building,
-    ArrowRight,
-    Zap,
-    Smartphone,
-    Target,
-    ShieldCheck,
-    CheckCircle2
-} from "lucide-react";
+import { ChevronRight, Globe, RefreshCw, LayoutTemplate, Utensils, Scissors, Building, Terminal, Target, ArrowRight, ShieldCheck, Zap, Server, Box } from "lucide-react";
+import { db } from "@/db";
+import { services, portfolioItems } from "@/db/schema";
+import { eq, desc, asc } from "drizzle-orm";
 
 // ============================================================
 // BRAND BADGE
@@ -190,8 +179,20 @@ function TrustStrip() {
 // ============================================================
 // SERVICES OVERVIEW
 // ============================================================
-function ServicesSection() {
-    const services = [
+async function ServicesSection() {
+    let dbServices: any[] = [];
+    try {
+        dbServices = await db.select().from(services).where(eq(services.isActive, true)).orderBy(asc(services.sortOrder)).limit(6);
+    } catch (e) {
+        console.error(e);
+    }
+
+    const displayServices = dbServices.length > 0 ? dbServices.map(s => ({
+        icon: <Box className="w-6 h-6 text-indigo-400" />,
+        title: s.title,
+        description: s.shortDescription || "",
+        href: `/services/${s.slug}`,
+    })) : [
         {
             icon: <Globe className="w-6 h-6 text-indigo-400" />,
             title: "Business Websites",
@@ -247,7 +248,7 @@ function ServicesSection() {
                 </SectionReveal>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {services.map((service, idx) => (
+                    {displayServices.map((service, idx) => (
                         <SectionReveal key={idx} delay={idx * 0.1}>
                             <SpotlightCard className="h-full">
                                 <Link href={service.href} className="block group p-8 lg:p-10 h-full">
@@ -345,7 +346,25 @@ function ProcessSection() {
 // ============================================================
 // PORTFOLIO PREVIEW
 // ============================================================
-function PortfolioPreview() {
+async function PortfolioPreview() {
+    let dbPortfolio: any[] = [];
+    try {
+        dbPortfolio = await db.select().from(portfolioItems).where(eq(portfolioItems.status, 'published')).orderBy(desc(portfolioItems.createdAt)).limit(3);
+    } catch (e) {
+        console.error(e);
+    }
+
+    const displayItems = dbPortfolio.length > 0 ? dbPortfolio.map((p, idx) => ({
+        category: p.industry || "General",
+        title: p.title,
+        color: idx === 0 ? "indigo" : idx === 1 ? "emerald" : "violet",
+        slug: p.slug
+    })) : [
+        { category: "Web Application", title: "Premium Logistics Portal", color: "indigo", slug: "" },
+        { category: "E-Commerce", title: "Luxury Fashion Storefront", color: "emerald", slug: "" },
+        { category: "SaaS Dashboard", title: "FinTech Analytics Platform", color: "violet", slug: "" },
+    ];
+
     return (
         <section className="py-32 relative border-y border-white/[0.05] bg-white/[0.01]">
             <div className="section-container">
@@ -367,14 +386,10 @@ function PortfolioPreview() {
                 </SectionReveal>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {[
-                        { category: "Web Application", title: "Premium Logistics Portal", color: "indigo" },
-                        { category: "E-Commerce", title: "Luxury Fashion Storefront", color: "emerald" },
-                        { category: "SaaS Dashboard", title: "FinTech Analytics Platform", color: "violet" },
-                    ].map((project, idx) => (
+                    {displayItems.map((project, idx) => (
                         <SectionReveal key={idx} delay={idx * 0.1}>
                             <SpotlightCard>
-                                <Link href="/portfolio" className="block group">
+                                <Link href={project.slug ? `/portfolio/${project.slug}` : "/portfolio"} className="block group">
                                     {/* Project Image Panel */}
                                     <div className="aspect-[4/3] bg-[#0a0a0e] relative overflow-hidden flex items-center justify-center p-8 border-b border-white/[0.05]">
                                         {/* Abstract UI composition */}
