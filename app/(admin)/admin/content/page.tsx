@@ -19,17 +19,25 @@ export default async function ContentManagementPage() {
     try {
         sections = await db.select().from(contentSections).orderBy(asc(contentSections.page), asc(contentSections.sortOrder));
         
-        // If empty, let's insert a seed record just so the UI isn't completely blank for the user to start
-        if (sections.length === 0) {
-            const [newSection] = await db.insert(contentSections).values({
-                page: "home",
-                sectionKey: "hero",
-                title: "Transform Your Business",
-                subtitle: "We build digital experiences that drive growth.",
-                ctaText: "Get Started",
-                ctaLink: "/quote"
-            }).returning();
-            sections = [newSection];
+        const seedData = [
+            { page: "home", sectionKey: "hero", title: "Build a Stronger Digital Presence.", body: "Premium websites, redesigns, client portals, and robust digital systems for businesses that refuse to settle for templates. Fast execution. Zero compromises.", ctaText: "Start a Project", ctaLink: "/quote", isActive: true },
+            { page: "home", sectionKey: "services", title: "Everything You Need to Win Online.", body: "From brand-new builds to complete architectural overhauls — we design and develop digital platforms that convert passive visitors into paying customers.", isActive: true },
+            { page: "home", sectionKey: "process", title: "Engineered for Predictability.", body: "No endless email chains. No missed deadlines. Just a transparent, structured process.", isActive: true },
+            { page: "home", sectionKey: "portfolio", title: "Proof of Quality.", body: "See how we transform ordinary businesses into premium digital brands.", isActive: true },
+            { page: "home", sectionKey: "cta", title: "Ready to elevate your standards?", body: "Stop losing clients to competitors with better websites. Request a custom quote today and get a strategic breakdown.", ctaText: "Start a Project", ctaLink: "/quote", isActive: true },
+            { page: "pricing", sectionKey: "header", title: "Simple, Transparent Pricing", body: "No hidden fees. No long contracts. Choose a package and we'll build something great.", isActive: true },
+            { page: "pricing", sectionKey: "custom_plan", title: "Need Something Custom?", body: "Enterprise builds, multi-platform projects, and complex systems. Let's design a plan that fits.", ctaText: "Request Custom Quote", ctaLink: "/quote", isActive: true },
+            { page: "services", sectionKey: "header", title: "Premium Digital Solutions", body: "From brand-new website builds to complete digital overhauls — we design and develop experiences that convert visitors into paying customers.", isActive: true },
+            { page: "services", sectionKey: "cta", title: "Not sure which service you need?", body: "Request a free audit and we'll recommend the best solution for your business.", ctaText: "Get a Free Audit", ctaLink: "/audit", isActive: true },
+            { page: "portfolio", sectionKey: "header", title: "Projects That Perform", body: "Every project is built to convert, designed to impress, and delivered on time. Here's a sample of our work.", isActive: true },
+        ];
+        
+        const existingKeys = new Set(sections.map(s => `${s.page}-${s.sectionKey}`));
+        const missingSeeds = seedData.filter(s => !existingKeys.has(`${s.page}-${s.sectionKey}`));
+
+        if (missingSeeds.length > 0) {
+            const newSections = await db.insert(contentSections).values(missingSeeds).returning();
+            sections = [...sections, ...newSections];
         }
     } catch (error) {
         console.error("Admin Content DB Error:", error);
