@@ -17,9 +17,9 @@ import { eq, desc, asc } from "drizzle-orm";
 // ============================================================
 function BrandBadge({ children }: { children: React.ReactNode }) {
     return (
-        <div className="inline-flex items-center gap-2 rounded-full border border-indigo-500/30 bg-indigo-500/10 px-3 py-1 shadow-[inset_0_1px_0_rgba(255,255,255,0.1)]">
-            <span className="h-1.5 w-1.5 rounded-full bg-indigo-400 animate-pulse" />
-            <span className="text-xs font-medium text-indigo-300 tracking-wide uppercase">{children}</span>
+        <div className="inline-flex items-center gap-2 rounded-full border border-border bg-secondary px-3 py-1">
+            <span className="h-1.5 w-1.5 rounded-full bg-primary" />
+            <span className="text-xs font-semibold text-foreground tracking-wide uppercase">{children}</span>
         </div>
     );
 }
@@ -30,10 +30,9 @@ function BrandBadge({ children }: { children: React.ReactNode }) {
 function HeroSection() {
     return (
         <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
-            {/* Dark premium gradient backdrops */}
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(99,102,241,0.08),transparent_50%)]" />
-            <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.02] mix-blend-overlay" />
-            <div className="absolute top-0 w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+            {/* Clean minimalist backdrop */}
+            <div className="absolute inset-0 bg-background" />
+            <div className="absolute top-0 w-full h-px bg-border" />
 
             <div className="section-container relative z-10 text-center py-20 mt-10">
                 <FadeIn delay={0.1}>
@@ -70,11 +69,10 @@ function HeroSection() {
                 {/* Dashboard Application Mockup */}
                 <FadeIn delay={0.6}>
                     <div className="mt-24 relative max-w-5xl mx-auto perspective-1000">
-                        {/* Glow Behind Mockup */}
-                        <div className="absolute -inset-4 bg-gradient-to-b from-indigo-500/20 to-transparent rounded-[32px] blur-3xl opacity-30 pointer-events-none" />
+                        {/* Removed glow */}
 
-                        <div className="relative card-glass p-2 rounded-2xl md:rounded-[24px] shadow-2xl shadow-black/50 transform-gpu rotate-x-12 scale-95 transition-transform duration-700 hover:rotate-x-0 hover:scale-100">
-                            <div className="bg-[#0a0a0e] rounded-xl md:rounded-[20px] overflow-hidden border border-white/5">
+                        <div className="relative bg-card border border-border p-2 rounded-2xl md:rounded-[24px] shadow-2xl transform-gpu rotate-x-12 scale-95 transition-transform duration-700 hover:rotate-x-0 hover:scale-100">
+                            <div className="bg-background rounded-xl md:rounded-[20px] overflow-hidden border border-border">
                                 {/* Browser Toolbar */}
                                 <div className="flex items-center gap-3 px-4 py-3 border-b border-white/[0.04] bg-white/[0.01]">
                                     <div className="flex gap-1.5">
@@ -303,7 +301,6 @@ function ProcessSection() {
 
     return (
         <section className="py-32 relative">
-            <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,rgba(99,102,241,0.05),transparent_50%)]" />
             <div className="section-container relative">
                 <SectionReveal>
                     <div className="text-center mb-20 max-w-3xl mx-auto">
@@ -428,7 +425,6 @@ async function PortfolioPreview() {
 function FinalCTA() {
     return (
         <section className="py-32 relative overflow-hidden">
-            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(99,102,241,0.08),transparent_70%)]" />
 
             <div className="section-container relative z-10 text-center">
                 <SectionReveal>

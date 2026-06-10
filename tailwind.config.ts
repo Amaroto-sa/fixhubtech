@@ -88,10 +88,6 @@ const config = withUt({
             },
             backgroundImage: {
                 "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-                "hero-glow":
-                    "radial-gradient(ellipse at center top, rgba(99,102,241,0.15), transparent 60%)",
-                "card-glow":
-                    "radial-gradient(ellipse at center, rgba(99,102,241,0.08), transparent 70%)",
             },
             maxWidth: {
                 container: "1400px",

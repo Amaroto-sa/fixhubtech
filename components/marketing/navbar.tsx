@@ -17,14 +17,14 @@ export function Navbar() {
     return (
         <header
             className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${isScrolled
-                    ? "bg-background/80 backdrop-blur-xl border-b border-border/50 shadow-lg shadow-black/10"
+                    ? "bg-background border-b border-border shadow-sm"
                     : "bg-transparent"
                 }`}
         >
             <nav className="section-container flex items-center justify-between h-20">
                 {/* Logo */}
                 <Link href="/" className="flex items-center gap-3 group">
-                    <div className="relative w-10 h-10 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center font-display font-bold text-white text-lg shadow-lg shadow-indigo-500/25 group-hover:shadow-indigo-500/40 transition-shadow">
+                    <div className="relative w-10 h-10 rounded-md bg-foreground flex items-center justify-center font-display font-bold text-background text-lg transition-transform group-hover:scale-105">
                         F
                     </div>
                     <div className="flex flex-col">
@@ -86,7 +86,7 @@ export function Navbar() {
 
             {/* Mobile Menu */}
             <div
-                className={`lg:hidden absolute top-20 left-0 right-0 bg-background/95 backdrop-blur-2xl border-b border-border/50 transition-all duration-300 ${isMobileOpen
+                className={`lg:hidden absolute top-20 left-0 right-0 bg-background border-b border-border transition-all duration-300 ${isMobileOpen
                         ? "opacity-100 translate-y-0 pointer-events-auto"
                         : "opacity-0 -translate-y-4 pointer-events-none"
                     }`}
@@ -102,7 +102,7 @@ export function Navbar() {
                             {link.label}
                         </Link>
                     ))}
-                    <div className="divider-gradient my-4" />
+                    <div className="h-px bg-border my-4" />
                     <div className="flex flex-col gap-3 px-4">
                         <Link
                             href="/sign-in"
