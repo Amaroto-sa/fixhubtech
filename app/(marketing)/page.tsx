@@ -72,66 +72,93 @@ function HeroSection({ data }: { data?: any }) {
                     </div>
                 </FadeIn>
 
-                {/* Dashboard Application Mockup */}
+                {/* Dashboard Application Mockup - Flat Editorial Style */}
                 <FadeIn delay={0.6}>
-                    <div className="mt-24 relative max-w-5xl mx-auto perspective-1000">
-                        {/* Removed glow */}
-
-                        <div className="relative bg-card border border-border p-2 rounded-2xl md:rounded-[24px] shadow-2xl transform-gpu rotate-x-12 scale-95 transition-transform duration-700 hover:rotate-x-0 hover:scale-100">
-                            <div className="bg-background rounded-xl md:rounded-[20px] overflow-hidden border border-border">
-                                {/* Browser Toolbar */}
-                                <div className="flex items-center gap-3 px-4 py-3 border-b border-white/[0.04] bg-white/[0.01]">
-                                    <div className="flex gap-1.5">
-                                        <div className="w-3 h-3 rounded-full bg-[#ff5f56] border border-black/10" />
-                                        <div className="w-3 h-3 rounded-full bg-[#ffbd2e] border border-black/10" />
-                                        <div className="w-3 h-3 rounded-full bg-[#27c93f] border border-black/10" />
+                    <div className="mt-24 relative max-w-5xl mx-auto">
+                        <div className="bg-card border-2 border-border rounded-xl overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-500 flex flex-col">
+                            {/* Browser Toolbar - Flat and minimal */}
+                            <div className="flex items-center gap-3 px-5 py-4 border-b border-border bg-muted/30">
+                                <div className="flex gap-2">
+                                    <div className="w-3 h-3 rounded-full bg-border" />
+                                    <div className="w-3 h-3 rounded-full bg-border" />
+                                    <div className="w-3 h-3 rounded-full bg-border" />
+                                </div>
+                                <div className="flex-1 flex justify-center">
+                                    <div className="bg-background border border-border rounded px-6 py-1.5 text-xs font-semibold text-muted-foreground tracking-wide">
+                                        app.fixhubtech.com
                                     </div>
-                                    <div className="flex-1 flex justify-center">
-                                        <div className="bg-white/[0.03] border border-white/[0.05] rounded-md px-4 py-1 text-[11px] font-medium text-muted-foreground/60 tracking-wider">
-                                            app.fixhubtech.com
+                                </div>
+                                <div className="w-12"></div> {/* Spacer for symmetry */}
+                            </div>
+
+                            {/* Dashboard Content */}
+                            <div className="flex bg-background min-h-[500px]">
+                                {/* Sidebar Mock */}
+                                <div className="hidden md:flex flex-col w-64 border-r border-border p-6 bg-muted/10">
+                                    <div className="h-7 w-32 bg-foreground/10 rounded mb-10" />
+                                    <div className="space-y-6">
+                                        <div>
+                                            <div className="text-[10px] font-bold tracking-widest text-muted-foreground uppercase mb-4">Overview</div>
+                                            <div className="space-y-3">
+                                                {[1, 2, 3].map(i => (
+                                                    <div key={i} className="flex gap-3 items-center opacity-60">
+                                                        <div className="w-4 h-4 rounded bg-foreground/20" />
+                                                        <div className="h-3 w-full bg-foreground/10 rounded" />
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div className="text-[10px] font-bold tracking-widest text-muted-foreground uppercase mb-4">Management</div>
+                                            <div className="space-y-3">
+                                                {[1, 2, 3].map(i => (
+                                                    <div key={i} className="flex gap-3 items-center opacity-60">
+                                                        <div className="w-4 h-4 rounded bg-foreground/20" />
+                                                        <div className="h-3 w-full bg-foreground/10 rounded" />
+                                                    </div>
+                                                ))}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
 
-                                {/* Dashboard Content */}
-                                <div className="p-6 md:p-10 flex gap-8">
-                                    {/* Sidebar Mock */}
-                                    <div className="hidden md:flex flex-col gap-4 w-48 border-r border-white/[0.02] pr-6">
-                                        <div className="h-4 w-24 bg-white/10 rounded-sm mb-6" />
-                                        {[1, 2, 3, 4].map(i => (
-                                            <div key={i} className="flex gap-3 items-center">
-                                                <div className="w-4 h-4 rounded bg-white/5" />
-                                                <div className="h-2 w-full bg-white/5 rounded-sm" />
+                                {/* Main Content Mock */}
+                                <div className="flex-1 p-8 md:p-12">
+                                    <div className="flex justify-between items-start mb-10 border-b border-border pb-8">
+                                        <div>
+                                            <div className="h-8 w-48 bg-foreground/10 rounded mb-3" />
+                                            <div className="h-4 w-72 bg-foreground/5 rounded" />
+                                        </div>
+                                        <div className="h-12 w-12 rounded-full bg-indigo-500 text-white flex items-center justify-center font-bold text-lg shadow-sm">
+                                            FH
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-12">
+                                        {[1, 2, 3].map(i => (
+                                            <div key={i} className="bg-card border border-border p-6 rounded-lg">
+                                                <div className="h-10 w-10 rounded bg-muted flex items-center justify-center mb-5">
+                                                    <div className="h-4 w-4 bg-foreground/20 rounded-sm" />
+                                                </div>
+                                                <div className="h-7 w-24 bg-foreground/10 rounded mb-2" />
+                                                <div className="h-3 w-32 bg-foreground/5 rounded" />
                                             </div>
                                         ))}
                                     </div>
-
-                                    {/* Main Content Mock */}
-                                    <div className="flex-1">
-                                        <div className="flex justify-between items-center mb-8">
-                                            <div className="h-6 w-32 bg-white/10 rounded" />
-                                            <div className="h-8 w-8 rounded-full bg-indigo-500/20 border border-indigo-500/30" />
-                                        </div>
-                                        <div className="grid grid-cols-3 gap-4 mb-8">
+                                    
+                                    <div>
+                                        <div className="h-5 w-40 bg-foreground/10 rounded mb-6" />
+                                        <div className="space-y-4">
                                             {[1, 2, 3].map(i => (
-                                                <div key={i} className="bg-white/[0.02] border border-white/[0.04] p-4 rounded-xl">
-                                                    <div className="h-8 w-8 rounded-full bg-white/5 mb-3" />
-                                                    <div className="h-5 w-16 bg-white/10 rounded mb-2" />
-                                                    <div className="h-2 w-24 bg-white/5 rounded" />
-                                                </div>
-                                            ))}
-                                        </div>
-                                        <div className="space-y-3">
-                                            {[1, 2].map(i => (
-                                                <div key={i} className="bg-white/[0.02] border border-white/[0.04] p-4 rounded-xl flex items-center justify-between">
-                                                    <div className="flex items-center gap-4">
-                                                        <div className="h-10 w-10 rounded-lg bg-indigo-500/10" />
+                                                <div key={i} className="bg-card border border-border p-5 rounded-lg flex items-center justify-between">
+                                                    <div className="flex items-center gap-5">
+                                                        <div className="h-12 w-12 rounded bg-muted" />
                                                         <div>
-                                                            <div className="h-3 w-32 bg-white/10 rounded mb-1.5" />
-                                                            <div className="h-2 w-20 bg-white/5 rounded" />
+                                                            <div className="h-4 w-48 bg-foreground/10 rounded mb-2" />
+                                                            <div className="h-3 w-32 bg-foreground/5 rounded" />
                                                         </div>
                                                     </div>
-                                                    <div className="h-6 w-16 rounded-full bg-emerald-500/10 border border-emerald-500/20" />
+                                                    <div className="h-8 w-24 rounded bg-emerald-500/10 text-emerald-600 border border-emerald-500/20" />
                                                 </div>
                                             ))}
                                         </div>
