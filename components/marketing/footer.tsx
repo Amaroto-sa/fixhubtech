@@ -53,7 +53,6 @@ export async function Footer() {
                     <div className="lg:col-span-1">
                         <Link href="/" className="flex items-center gap-3 mb-6 group">
                             {brandLogoUrl ? (
-                                {/* eslint-disable-next-line @next/next/no-img-element */}
                                 <img src={brandLogoUrl} alt="FixHub Technology" className="h-10 w-auto object-contain" />
                             ) : (
                                 <div className="w-10 h-10 rounded-lg bg-indigo-500 flex items-center justify-center font-display font-bold text-white text-lg">

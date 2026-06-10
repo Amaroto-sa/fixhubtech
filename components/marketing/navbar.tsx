@@ -25,7 +25,6 @@ export function Navbar({ logoUrl }: { logoUrl?: string }) {
                 {/* Logo */}
                 <Link href="/" className="flex items-center gap-3 group">
                     {logoUrl ? (
-                        /* eslint-disable-next-line @next/next/no-img-element */
                         <img src={logoUrl} alt="FixHub Technology" className="h-10 w-auto object-contain transition-transform group-hover:scale-105" />
                     ) : (
                         <div className="relative w-10 h-10 rounded-md bg-foreground flex items-center justify-center font-display font-bold text-background text-lg transition-transform group-hover:scale-105">
