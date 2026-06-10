@@ -10,6 +10,7 @@ export async function updateSettings(formData: FormData) {
         const twitter = formData.get("twitter") as string;
         const linkedin = formData.get("linkedin") as string;
         const instagram = formData.get("instagram") as string;
+        const logoUrl = formData.get("imageUrl") as string;
 
         const { eq } = await import("drizzle-orm");
 
@@ -17,7 +18,8 @@ export async function updateSettings(formData: FormData) {
             { key: "contact_email", value: email || "hello@fixhubtech.com", label: "Contact Email", category: "contact" },
             { key: "social_twitter", value: twitter || "https://twitter.com/fixhubtech", label: "Twitter URL", category: "social" },
             { key: "social_linkedin", value: linkedin || "https://linkedin.com/company/fixhubtech", label: "LinkedIn URL", category: "social" },
-            { key: "social_instagram", value: instagram || "https://instagram.com/fixhubtech", label: "Instagram URL", category: "social" }
+            { key: "social_instagram", value: instagram || "https://instagram.com/fixhubtech", label: "Instagram URL", category: "social" },
+            { key: "brand_logo", value: logoUrl, label: "Brand Logo", category: "brand" }
         ];
 
         for (const setting of settingsToUpdate) {

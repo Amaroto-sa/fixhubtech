@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import { NAV_LINKS } from "@/lib/constants";
 
-export function Navbar() {
+export function Navbar({ logoUrl }: { logoUrl?: string }) {
     const [isScrolled, setIsScrolled] = useState(false);
     const [isMobileOpen, setIsMobileOpen] = useState(false);
 
@@ -24,9 +24,14 @@ export function Navbar() {
             <nav className="section-container flex items-center justify-between h-20">
                 {/* Logo */}
                 <Link href="/" className="flex items-center gap-3 group">
-                    <div className="relative w-10 h-10 rounded-md bg-foreground flex items-center justify-center font-display font-bold text-background text-lg transition-transform group-hover:scale-105">
-                        F
-                    </div>
+                    {logoUrl ? (
+                        /* eslint-disable-next-line @next/next/no-img-element */
+                        <img src={logoUrl} alt="FixHub Technology" className="h-10 w-auto object-contain transition-transform group-hover:scale-105" />
+                    ) : (
+                        <div className="relative w-10 h-10 rounded-md bg-foreground flex items-center justify-center font-display font-bold text-background text-lg transition-transform group-hover:scale-105">
+                            F
+                        </div>
+                    )}
                     <div className="flex flex-col">
                         <span className="font-display font-bold text-lg text-foreground tracking-tight leading-tight">
                             FixHub

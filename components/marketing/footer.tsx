@@ -42,6 +42,7 @@ export async function Footer() {
     const twitterUrl = settingsMap["social_twitter"] || "https://twitter.com/fixhubtech";
     const linkedinUrl = settingsMap["social_linkedin"] || "https://linkedin.com/company/fixhubtech";
     const instagramUrl = settingsMap["social_instagram"] || "https://instagram.com/fixhubtech";
+    const brandLogoUrl = settingsMap["brand_logo"] || "";
 
     return (
         <footer className="border-t-2 border-border bg-background">
@@ -51,9 +52,14 @@ export async function Footer() {
                     {/* Brand column */}
                     <div className="lg:col-span-1">
                         <Link href="/" className="flex items-center gap-3 mb-6 group">
-                            <div className="w-10 h-10 rounded-lg bg-indigo-500 flex items-center justify-center font-display font-bold text-white text-lg">
-                                F
-                            </div>
+                            {brandLogoUrl ? (
+                                {/* eslint-disable-next-line @next/next/no-img-element */}
+                                <img src={brandLogoUrl} alt="FixHub Technology" className="h-10 w-auto object-contain" />
+                            ) : (
+                                <div className="w-10 h-10 rounded-lg bg-indigo-500 flex items-center justify-center font-display font-bold text-white text-lg">
+                                    F
+                                </div>
+                            )}
                             <div className="flex flex-col">
                                 <span className="font-display font-bold text-lg text-foreground tracking-tight leading-tight">
                                     FixHub

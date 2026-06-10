@@ -8,9 +8,11 @@ import {
     Settings as SettingsIcon,
     CheckCircle2,
     Globe,
-    Mail
+    Mail,
+    Image as ImageIcon
 } from "lucide-react";
 import { updateSettings } from "./actions";
+import { ImageUpload } from "@/components/admin/image-upload";
 
 export default async function SettingsPage() {
     let settingsMap: Record<string, string> = {};
@@ -52,6 +54,15 @@ export default async function SettingsPage() {
                     </div>
 
                     <form action={handleSubmit} className="space-y-6">
+                        <div className="space-y-2 mb-8">
+                            <label className="text-sm font-medium text-foreground flex items-center gap-2">
+                                <ImageIcon className="w-4 h-4 text-muted-foreground" />
+                                Brand Logo
+                            </label>
+                            <p className="text-xs text-muted-foreground mb-3">Upload your official brand logo. This replaces the default "F" block in the navbar and footer.</p>
+                            <ImageUpload defaultValue={settingsMap["brand_logo"] || ""} />
+                        </div>
+
                         <div className="space-y-2">
                             <label htmlFor="email" className="text-sm font-medium text-foreground flex items-center gap-2">
                                 <Mail className="w-4 h-4 text-muted-foreground" />
