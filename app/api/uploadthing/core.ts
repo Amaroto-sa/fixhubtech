@@ -11,10 +11,19 @@ export const ourFileRouter = {
     // Set permissions and file types for this FileRoute
     .middleware(async ({ req }) => {
       // This code runs on your server before upload
-      const { userId } = auth();
+      let userId: string | null = null;
+      
+      try {
+        const authData = auth();
+        userId = authData.userId;
+      } catch (error) {
+        console.error("Clerk auth failed in UploadThing middleware:", error);
+      }
 
       // If you throw, the user will not be able to upload
-      if (!userId) throw new UploadThingError("Unauthorized");
+      if (!userId) {
+        throw new UploadThingError("Unauthorized or authentication failed.");
+      }
 
       // Whatever is returned here is accessible in onUploadComplete as `metadata`
       return { userId };
