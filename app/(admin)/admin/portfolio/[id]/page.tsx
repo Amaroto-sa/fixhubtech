@@ -13,6 +13,7 @@ import {
     ArrowLeft,
     CheckCircle2
 } from "lucide-react";
+import { ImageUpload } from "@/components/admin/image-upload";
 
 export default async function EditPortfolioPage({ params }: { params: { id: string } }) {
     const items = await db.select().from(portfolioItems).where(eq(portfolioItems.id, params.id)).limit(1);
@@ -121,21 +122,8 @@ export default async function EditPortfolioPage({ params }: { params: { id: stri
                         </div>
 
                         <div className="space-y-2">
-                            <label htmlFor="imageUrl" className="text-sm font-medium text-foreground">Project Image URL</label>
-                            <input 
-                                type="url" 
-                                id="imageUrl" 
-                                name="imageUrl" 
-                                defaultValue={imageUrl}
-                                placeholder="https://example.com/image.jpg"
-                                className="w-full px-4 py-2.5 bg-black/50 border border-white/10 rounded-lg text-sm focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/50 text-foreground"
-                            />
-                            {imageUrl && (
-                                <div className="mt-4 border border-white/10 rounded-lg overflow-hidden max-w-sm">
-                                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                                    <img src={imageUrl} alt="Project Preview" className="w-full h-auto object-cover" />
-                                </div>
-                            )}
+                            <label className="text-sm font-medium text-foreground">Project Image</label>
+                            <ImageUpload defaultValue={imageUrl} />
                         </div>
 
                         <div className="pt-4 border-t border-white/10 flex justify-end gap-3">
