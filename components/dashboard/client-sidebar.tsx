@@ -35,7 +35,7 @@ export function ClientSidebar() {
             {/* Logo Area */}
             <div className="h-16 flex items-center px-6 border-b border-white/[0.05]">
                 <Link href="/" className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-indigo-500 to-violet-600 flex items-center justify-center font-display font-bold text-white text-sm shadow-[inset_0_1px_0_rgba(255,255,255,0.2)]">
+                    <div className="w-8 h-8 rounded-md bg-foreground flex items-center justify-center font-display font-bold text-background text-sm">
                         F
                     </div>
                     <div className="flex flex-col">

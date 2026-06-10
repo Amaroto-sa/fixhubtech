@@ -19,7 +19,7 @@ export default function ClientLayout({
             {/* Main Content Area */}
             <div className="flex-1 flex flex-col min-w-0">
                 {/* Top Nav (Mobile & Breadcrumbs) */}
-                <header className="h-16 flex items-center justify-between px-6 border-b border-white/[0.05] bg-[#0a0a0e]/80 backdrop-blur-xl sticky top-0 z-30">
+                <header className="h-16 flex items-center justify-between px-6 border-b border-white/[0.05] bg-background sticky top-0 z-30">
                     <div className="flex items-center gap-4">
                         <MobileNav>
                             <ClientSidebar />
@@ -42,7 +42,7 @@ export default function ClientLayout({
                     </div>
                 </header>
 
-                <main className="flex-1 bg-[radial-gradient(ellipse_at_top,rgba(99,102,241,0.03),transparent_50%)]">
+                <main className="flex-1 bg-background">
                     <div className="p-6 md:p-10 max-w-7xl mx-auto">
                         {children}
                     </div>
