@@ -9,7 +9,12 @@ if (process.env.UPLOADTHING_APP_ID) {
   process.env.UPLOADTHING_APP_ID = process.env.UPLOADTHING_APP_ID.replace(/^['"]|['"]$/g, '');
 }
 
-const f = createUploadthing();
+const f = createUploadthing({
+  errorFormatter: (err) => {
+    console.error("UploadThing SDK Error:", err);
+    return { message: err.message };
+  },
+});
 
 // FileRouter for your app, can contain multiple FileRoutes
 export const ourFileRouter = {

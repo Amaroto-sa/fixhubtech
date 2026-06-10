@@ -17,20 +17,8 @@ if (process.env.VERCEL || process.env.VERCEL_ENV) {
   delete process.env.UPLOADTHING_URL;
 }
 
-// Calculate the proper callback URL to prevent Vercel env var conflicts
-const callbackUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL 
-  ? `https://${process.env.VERCEL_PROJECT_PRODUCTION_URL}/api/uploadthing`
-  : process.env.VERCEL_URL 
-    ? `https://${process.env.VERCEL_URL}/api/uploadthing`
-    : process.env.NEXT_PUBLIC_APP_URL
-      ? `${process.env.NEXT_PUBLIC_APP_URL}/api/uploadthing`
-      : undefined;
-
 const handlers = createRouteHandler({
-  router: ourFileRouter,
-  config: {
-    callbackUrl: callbackUrl,
-  }
+  router: ourFileRouter
 });
 
 export async function GET(req: NextRequest) {
