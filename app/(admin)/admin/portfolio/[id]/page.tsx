@@ -1,6 +1,9 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import { createPortfolioItem } from "../actions";
+import { updatePortfolioItem } from "../actions";
+import { db } from "@/db";
+import { portfolioItems } from "@/db/schema";
+import { eq } from "drizzle-orm";
 import {
     FadeIn,
     SectionReveal
@@ -11,10 +14,19 @@ import {
     CheckCircle2
 } from "lucide-react";
 
-export default function NewPortfolioPage() {
+export default async function EditPortfolioPage({ params }: { params: { id: string } }) {
+    const items = await db.select().from(portfolioItems).where(eq(portfolioItems.id, params.id)).limit(1);
+    const item = items[0];
+
+    if (!item) {
+        redirect("/admin/portfolio");
+    }
+
+    const imageUrl = item.screenshots && item.screenshots.length > 0 ? item.screenshots[0] : "";
+
     async function handleSubmit(formData: FormData) {
         "use server";
-        const result = await createPortfolioItem(formData);
+        const result = await updatePortfolioItem(params.id, formData);
         if (result.success) {
             redirect("/admin/portfolio");
         }
@@ -33,10 +45,10 @@ export default function NewPortfolioPage() {
                     <div>
                         <h1 className="font-display text-2xl font-bold tracking-tight text-foreground flex items-center gap-3">
                             <ImageIcon className="w-6 h-6 text-indigo-400" />
-                            Add Portfolio Item
+                            Edit Portfolio Item
                         </h1>
                         <p className="text-muted-foreground/80 text-sm">
-                            Create a new case study to showcase your work.
+                            Update case study information.
                         </p>
                     </div>
                 </div>
@@ -53,8 +65,8 @@ export default function NewPortfolioPage() {
                                     type="text" 
                                     id="title" 
                                     name="title" 
+                                    defaultValue={item.title}
                                     required
-                                    placeholder="e.g. Acme Website Redesign"
                                     className="w-full px-4 py-2.5 bg-black/50 border border-white/10 rounded-lg text-sm focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/50 text-foreground"
                                 />
                             </div>
@@ -64,22 +76,37 @@ export default function NewPortfolioPage() {
                                 <input 
                                     type="text" 
                                     id="clientName" 
-                                    name="clientName" 
-                                    placeholder="e.g. Acme Corp"
+                                    name="clientName"
+                                    defaultValue={item.clientName || ""} 
                                     className="w-full px-4 py-2.5 bg-black/50 border border-white/10 rounded-lg text-sm focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/50 text-foreground"
                                 />
                             </div>
                         </div>
 
-                        <div className="space-y-2">
-                            <label htmlFor="slug" className="text-sm font-medium text-foreground">URL Slug</label>
-                            <input 
-                                type="text" 
-                                id="slug" 
-                                name="slug" 
-                                placeholder="Leave blank to auto-generate"
-                                className="w-full px-4 py-2.5 bg-black/50 border border-white/10 rounded-lg text-sm focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/50 text-foreground"
-                            />
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="space-y-2">
+                                <label htmlFor="slug" className="text-sm font-medium text-foreground">URL Slug</label>
+                                <input 
+                                    type="text" 
+                                    id="slug" 
+                                    name="slug" 
+                                    defaultValue={item.slug}
+                                    className="w-full px-4 py-2.5 bg-black/50 border border-white/10 rounded-lg text-sm focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/50 text-foreground"
+                                />
+                            </div>
+
+                            <div className="space-y-2">
+                                <label htmlFor="status" className="text-sm font-medium text-foreground">Status</label>
+                                <select 
+                                    id="status" 
+                                    name="status" 
+                                    defaultValue={item.status}
+                                    className="w-full px-4 py-2.5 bg-black/50 border border-white/10 rounded-lg text-sm focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/50 text-foreground"
+                                >
+                                    <option value="draft">Draft</option>
+                                    <option value="published">Published</option>
+                                </select>
+                            </div>
                         </div>
 
                         <div className="space-y-2">
@@ -88,7 +115,7 @@ export default function NewPortfolioPage() {
                                 id="summary" 
                                 name="summary" 
                                 rows={4}
-                                placeholder="A brief summary of the project..."
+                                defaultValue={item.summary || ""}
                                 className="w-full px-4 py-2.5 bg-black/50 border border-white/10 rounded-lg text-sm focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/50 text-foreground"
                             ></textarea>
                         </div>
@@ -99,9 +126,16 @@ export default function NewPortfolioPage() {
                                 type="url" 
                                 id="imageUrl" 
                                 name="imageUrl" 
+                                defaultValue={imageUrl}
                                 placeholder="https://example.com/image.jpg"
                                 className="w-full px-4 py-2.5 bg-black/50 border border-white/10 rounded-lg text-sm focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/50 text-foreground"
                             />
+                            {imageUrl && (
+                                <div className="mt-4 border border-white/10 rounded-lg overflow-hidden max-w-sm">
+                                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                                    <img src={imageUrl} alt="Project Preview" className="w-full h-auto object-cover" />
+                                </div>
+                            )}
                         </div>
 
                         <div className="pt-4 border-t border-white/10 flex justify-end gap-3">
@@ -116,7 +150,7 @@ export default function NewPortfolioPage() {
                                 className="px-5 py-2.5 bg-indigo-500 hover:bg-indigo-600 text-white font-medium rounded-lg text-sm transition-colors flex items-center gap-2"
                             >
                                 <CheckCircle2 className="w-4 h-4" />
-                                Save Item
+                                Save Changes
                             </button>
                         </div>
                     </form>

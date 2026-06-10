@@ -66,9 +66,9 @@ export default async function PortfolioPage() {
                                 {item.summary || "No summary provided."}
                             </p>
                             <div className="flex items-center justify-end mt-auto pt-4 border-t border-white/[0.05]">
-                                <button className="text-indigo-400 hover:text-indigo-300 transition-colors flex items-center gap-1 text-sm font-medium">
+                                <Link href={`/admin/portfolio/${item.id}`} className="text-indigo-400 hover:text-indigo-300 transition-colors flex items-center gap-1 text-sm font-medium">
                                     Edit <ArrowRight className="w-4 h-4" />
-                                </button>
+                                </Link>
                             </div>
                         </div>
                     )) : (
