@@ -7,7 +7,7 @@ import {
     ScaleIn,
     SpotlightCard,
 } from "@/components/shared/motion";
-import { ChevronRight, Globe, RefreshCw, LayoutTemplate, Utensils, Scissors, Building, Terminal, Target, ArrowRight, ShieldCheck, Zap, Server, Box, LayoutDashboard, Smartphone, CheckCircle2 } from "lucide-react";
+import { ChevronRight, Globe, RefreshCw, LayoutTemplate, Utensils, Scissors, Building, Terminal, Target, ArrowRight, ShieldCheck, Zap, Server, Box, LayoutDashboard, Smartphone, CheckCircle2, FolderKanban, Receipt, Settings, Plus, Search, Bell, Clock } from "lucide-react";
 import { db } from "@/db";
 import { services, portfolioItems, contentSections } from "@/db/schema";
 import { eq, desc, asc } from "drizzle-orm";
@@ -95,72 +95,148 @@ function HeroSection({ data }: { data?: any }) {
                             <div className="flex bg-background min-h-[500px]">
                                 {/* Sidebar Mock */}
                                 <div className="hidden md:flex flex-col w-64 border-r border-border p-6 bg-muted/10">
-                                    <div className="h-7 w-32 bg-foreground/10 rounded mb-10" />
-                                    <div className="space-y-6">
+                                    <div className="flex items-center gap-2 mb-10">
+                                        <div className="w-8 h-8 bg-indigo-500 rounded flex items-center justify-center">
+                                            <span className="text-white font-bold text-sm">FH</span>
+                                        </div>
+                                        <span className="font-display font-bold text-foreground tracking-tight text-lg">FixHub</span>
+                                    </div>
+                                    <div className="space-y-8 flex-1">
                                         <div>
                                             <div className="text-[10px] font-bold tracking-widest text-muted-foreground uppercase mb-4">Overview</div>
-                                            <div className="space-y-3">
-                                                {[1, 2, 3].map(i => (
-                                                    <div key={i} className="flex gap-3 items-center opacity-60">
-                                                        <div className="w-4 h-4 rounded bg-foreground/20" />
-                                                        <div className="h-3 w-full bg-foreground/10 rounded" />
-                                                    </div>
-                                                ))}
+                                            <div className="space-y-1">
+                                                <div className="flex gap-3 items-center px-3 py-2 rounded-md bg-indigo-500/10 text-indigo-500 font-medium text-sm">
+                                                    <LayoutDashboard className="w-4 h-4" />
+                                                    Dashboard
+                                                </div>
+                                                <div className="flex gap-3 items-center px-3 py-2 rounded-md text-muted-foreground hover:bg-muted/50 hover:text-foreground font-medium text-sm transition-colors">
+                                                    <FolderKanban className="w-4 h-4" />
+                                                    Projects
+                                                </div>
+                                                <div className="flex gap-3 items-center px-3 py-2 rounded-md text-muted-foreground hover:bg-muted/50 hover:text-foreground font-medium text-sm transition-colors">
+                                                    <Receipt className="w-4 h-4" />
+                                                    Invoices
+                                                </div>
                                             </div>
                                         </div>
                                         <div>
                                             <div className="text-[10px] font-bold tracking-widest text-muted-foreground uppercase mb-4">Management</div>
-                                            <div className="space-y-3">
-                                                {[1, 2, 3].map(i => (
-                                                    <div key={i} className="flex gap-3 items-center opacity-60">
-                                                        <div className="w-4 h-4 rounded bg-foreground/20" />
-                                                        <div className="h-3 w-full bg-foreground/10 rounded" />
-                                                    </div>
-                                                ))}
+                                            <div className="space-y-1">
+                                                <div className="flex gap-3 items-center px-3 py-2 rounded-md text-muted-foreground hover:bg-muted/50 hover:text-foreground font-medium text-sm transition-colors">
+                                                    <Settings className="w-4 h-4" />
+                                                    Settings
+                                                </div>
                                             </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="flex items-center gap-3 pt-6 border-t border-border">
+                                        <div className="w-8 h-8 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold text-xs">
+                                            JD
+                                        </div>
+                                        <div>
+                                            <div className="text-sm font-medium text-foreground">John Doe</div>
+                                            <div className="text-xs text-muted-foreground">Client Account</div>
                                         </div>
                                     </div>
                                 </div>
 
                                 {/* Main Content Mock */}
-                                <div className="flex-1 p-8 md:p-12">
-                                    <div className="flex justify-between items-start mb-10 border-b border-border pb-8">
+                                <div className="flex-1 p-8 md:p-12 overflow-hidden flex flex-col">
+                                    {/* Header */}
+                                    <div className="flex justify-between items-center mb-10 pb-6 border-b border-border">
                                         <div>
-                                            <div className="h-8 w-48 bg-foreground/10 rounded mb-3" />
-                                            <div className="h-4 w-72 bg-foreground/5 rounded" />
+                                            <h2 className="font-display text-2xl font-bold text-foreground mb-1">Welcome back, John</h2>
+                                            <p className="text-sm text-muted-foreground">Here is what&apos;s happening with your projects today.</p>
                                         </div>
-                                        <div className="h-12 w-12 rounded-full bg-indigo-500 text-white flex items-center justify-center font-bold text-lg shadow-sm">
-                                            FH
+                                        <div className="flex items-center gap-4">
+                                            <button className="w-9 h-9 flex items-center justify-center rounded-full border border-border text-muted-foreground hover:bg-muted transition-colors">
+                                                <Search className="w-4 h-4" />
+                                            </button>
+                                            <button className="w-9 h-9 flex items-center justify-center rounded-full border border-border text-muted-foreground hover:bg-muted transition-colors">
+                                                <Bell className="w-4 h-4" />
+                                            </button>
+                                            <button className="btn-primary py-2 px-4 text-sm hidden sm:flex items-center gap-2">
+                                                <Plus className="w-4 h-4" /> New Project
+                                            </button>
                                         </div>
                                     </div>
                                     
-                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-12">
-                                        {[1, 2, 3].map(i => (
-                                            <div key={i} className="bg-card border border-border p-6 rounded-lg">
-                                                <div className="h-10 w-10 rounded bg-muted flex items-center justify-center mb-5">
-                                                    <div className="h-4 w-4 bg-foreground/20 rounded-sm" />
-                                                </div>
-                                                <div className="h-7 w-24 bg-foreground/10 rounded mb-2" />
-                                                <div className="h-3 w-32 bg-foreground/5 rounded" />
+                                    {/* Metrics Grid */}
+                                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-10">
+                                        <div className="bg-card border border-border p-6 rounded-lg shadow-sm">
+                                            <div className="w-10 h-10 rounded-lg bg-indigo-500/10 text-indigo-500 flex items-center justify-center mb-4">
+                                                <FolderKanban className="w-5 h-5" />
                                             </div>
-                                        ))}
+                                            <div className="text-3xl font-display font-bold text-foreground mb-1">2</div>
+                                            <div className="text-sm font-medium text-muted-foreground">Active Projects</div>
+                                        </div>
+                                        <div className="bg-card border border-border p-6 rounded-lg shadow-sm">
+                                            <div className="w-10 h-10 rounded-lg bg-emerald-500/10 text-emerald-500 flex items-center justify-center mb-4">
+                                                <CheckCircle2 className="w-5 h-5" />
+                                            </div>
+                                            <div className="text-3xl font-display font-bold text-foreground mb-1">5</div>
+                                            <div className="text-sm font-medium text-muted-foreground">Completed Tasks</div>
+                                        </div>
+                                        <div className="bg-card border border-border p-6 rounded-lg shadow-sm">
+                                            <div className="w-10 h-10 rounded-lg bg-violet-500/10 text-violet-500 flex items-center justify-center mb-4">
+                                                <Receipt className="w-5 h-5" />
+                                            </div>
+                                            <div className="text-3xl font-display font-bold text-foreground mb-1">$4,250</div>
+                                            <div className="text-sm font-medium text-muted-foreground">Pending Invoices</div>
+                                        </div>
                                     </div>
                                     
-                                    <div>
-                                        <div className="h-5 w-40 bg-foreground/10 rounded mb-6" />
-                                        <div className="space-y-4">
-                                            {[1, 2, 3].map(i => (
-                                                <div key={i} className="bg-card border border-border p-5 rounded-lg flex items-center justify-between">
-                                                    <div className="flex items-center gap-5">
-                                                        <div className="h-12 w-12 rounded bg-muted" />
-                                                        <div>
-                                                            <div className="h-4 w-48 bg-foreground/10 rounded mb-2" />
-                                                            <div className="h-3 w-32 bg-foreground/5 rounded" />
+                                    {/* Recent Activity List */}
+                                    <div className="flex-1 flex flex-col">
+                                        <h3 className="text-lg font-display font-bold text-foreground mb-4">Recent Projects</h3>
+                                        <div className="space-y-3 flex-1">
+                                            {/* Project 1 */}
+                                            <div className="bg-card border border-border p-4 sm:p-5 rounded-lg flex items-center justify-between hover:shadow-md transition-shadow">
+                                                <div className="flex items-center gap-4">
+                                                    <div className="hidden sm:flex w-10 h-10 rounded bg-indigo-500/10 text-indigo-500 items-center justify-center">
+                                                        <Globe className="w-5 h-5" />
+                                                    </div>
+                                                    <div>
+                                                        <div className="font-semibold text-foreground text-sm sm:text-base mb-1">Corporate Website Redesign</div>
+                                                        <div className="text-xs text-muted-foreground flex items-center gap-2">
+                                                            <Clock className="w-3 h-3" /> Updated 2 hours ago
                                                         </div>
                                                     </div>
-                                                    <div className="h-8 w-24 rounded bg-emerald-500/10 text-emerald-600 border border-emerald-500/20" />
                                                 </div>
-                                            ))}
+                                                <div className="flex items-center gap-4">
+                                                    <div className="hidden md:block w-32 bg-muted rounded-full h-2">
+                                                        <div className="bg-indigo-500 h-2 rounded-full w-[65%]"></div>
+                                                    </div>
+                                                    <span className="px-3 py-1 rounded-full bg-indigo-500/10 text-indigo-500 text-xs font-bold border border-indigo-500/20">
+                                                        In Progress
+                                                    </span>
+                                                </div>
+                                            </div>
+
+                                            {/* Project 2 */}
+                                            <div className="bg-card border border-border p-4 sm:p-5 rounded-lg flex items-center justify-between hover:shadow-md transition-shadow">
+                                                <div className="flex items-center gap-4">
+                                                    <div className="hidden sm:flex w-10 h-10 rounded bg-emerald-500/10 text-emerald-500 items-center justify-center">
+                                                        <CheckCircle2 className="w-5 h-5" />
+                                                    </div>
+                                                    <div>
+                                                        <div className="font-semibold text-foreground text-sm sm:text-base mb-1">E-Commerce Integration</div>
+                                                        <div className="text-xs text-muted-foreground flex items-center gap-2">
+                                                            <Clock className="w-3 h-3" /> Updated 3 days ago
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div className="flex items-center gap-4">
+                                                    <div className="hidden md:block w-32 bg-muted rounded-full h-2">
+                                                        <div className="bg-emerald-500 h-2 rounded-full w-full"></div>
+                                                    </div>
+                                                    <span className="px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-500 text-xs font-bold border border-emerald-500/20">
+                                                        Completed
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            
                                         </div>
                                     </div>
                                 </div>
