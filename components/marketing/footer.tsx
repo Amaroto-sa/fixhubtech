@@ -24,7 +24,25 @@ const FOOTER_LEGAL = [
     { label: "Terms of Service", href: "/terms" },
 ];
 
-export function Footer() {
+import { db } from "@/db";
+import { siteSettings } from "@/db/schema";
+
+export async function Footer() {
+    let settingsMap: Record<string, string> = {};
+    try {
+        const settings = await db.select().from(siteSettings);
+        settings.forEach(s => {
+            settingsMap[s.key] = s.value;
+        });
+    } catch (error) {
+        console.error("Failed to fetch footer settings:", error);
+    }
+
+    const contactEmail = settingsMap["contact_email"] || "hello@fixhubtech.com";
+    const twitterUrl = settingsMap["social_twitter"] || "https://twitter.com/fixhubtech";
+    const linkedinUrl = settingsMap["social_linkedin"] || "https://linkedin.com/company/fixhubtech";
+    const instagramUrl = settingsMap["social_instagram"] || "https://instagram.com/fixhubtech";
+
     return (
         <footer className="border-t-2 border-border bg-background">
             <div className="section-container pt-20 pb-10">
@@ -52,13 +70,13 @@ export function Footer() {
                         
                         <div className="flex items-center gap-2 text-sm text-muted-foreground mb-6 font-medium">
                             <Mail className="w-4 h-4" />
-                            hello@fixhubtech.com
+                            {contactEmail}
                         </div>
 
                         {/* Social links */}
                         <div className="flex items-center gap-3">
                             <a
-                                href="https://twitter.com/fixhubtech"
+                                href={twitterUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 aria-label="Twitter"
@@ -67,7 +85,7 @@ export function Footer() {
                                 <Twitter className="w-4 h-4" />
                             </a>
                             <a
-                                href="https://linkedin.com/company/fixhubtech"
+                                href={linkedinUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 aria-label="LinkedIn"
@@ -76,7 +94,7 @@ export function Footer() {
                                 <Linkedin className="w-4 h-4" />
                             </a>
                             <a
-                                href="https://instagram.com/fixhubtech"
+                                href={instagramUrl}
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 aria-label="Instagram"
