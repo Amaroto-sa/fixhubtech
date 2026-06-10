@@ -3,8 +3,8 @@ import Link from "next/link";
 import { SectionReveal } from "@/components/shared/motion";
 import { Globe, RefreshCw, FileText, Utensils, Scissors, Building, TrendingUp, MapPin, Box } from "lucide-react";
 import { db } from "@/db";
-import { services } from "@/db/schema";
-import { eq, asc } from "drizzle-orm";
+import { services, contentSections } from "@/db/schema";
+import { eq, asc, and } from "drizzle-orm";
 
 export const metadata: Metadata = {
     title: "Services",
@@ -137,11 +137,36 @@ const FALLBACK_SERVICES = [
 
 export default async function ServicesPage() {
     let dbServices: any[] = [];
+    let dbContent: any[] = [];
     try {
         dbServices = await db.select().from(services).where(eq(services.isActive, true)).orderBy(asc(services.sortOrder));
+        dbContent = await db.select().from(contentSections).where(and(eq(contentSections.page, "services"), eq(contentSections.isActive, true)));
     } catch (e) {
         console.error("Failed to fetch services", e);
     }
+
+    const getContent = (key: string, fallback: { title: string; body: string; ctaText?: string }) => {
+        const section = dbContent.find((s: any) => s.sectionKey === key);
+        if (section) {
+            return {
+                title: section.title || fallback.title,
+                body: section.body || fallback.body,
+                ctaText: section.ctaText || fallback.ctaText,
+            };
+        }
+        return fallback;
+    };
+
+    const header = getContent("header", {
+        title: "Premium Digital Solutions",
+        body: "From brand-new website builds to complete digital overhauls — we design and develop experiences that convert visitors into paying customers."
+    });
+
+    const cta = getContent("cta", {
+        title: "Not sure which service you need?",
+        body: "Request a free audit and we'll recommend the best solution for your business.",
+        ctaText: "Get a Free Audit"
+    });
 
     const displayServices = dbServices.length > 0 ? dbServices.map((s: any) => ({
         icon: <Box />, // Generic icon for db services, or map to a specific one if needed
@@ -160,12 +185,10 @@ export default async function ServicesPage() {
                     <div className="text-center mb-20">
                         <span className="badge-primary mb-4 inline-flex">Our Services</span>
                         <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-gradient mb-6">
-                            Premium Digital Solutions
+                            {header.title}
                         </h1>
                         <p className="text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed">
-                            From brand-new website builds to complete digital overhauls — we
-                            design and develop experiences that convert visitors into paying
-                            customers.
+                            {header.body}
                         </p>
                     </div>
                 </SectionReveal>
@@ -224,17 +247,16 @@ export default async function ServicesPage() {
 
                 {/* CTA */}
                 <SectionReveal>
-                    <div className="card-glass p-12 text-center max-w-3xl mx-auto glow-indigo">
+                    <div className="card-elevated p-12 text-center max-w-3xl mx-auto">
                         <h2 className="font-display text-2xl sm:text-3xl font-bold text-gradient mb-4">
-                            Not sure which service you need?
+                            {cta.title}
                         </h2>
                         <p className="text-muted-foreground mb-8">
-                            Request a free audit and we&apos;ll recommend the best solution for
-                            your business.
+                            {cta.body}
                         </p>
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
                             <Link href="/audit" className="btn-primary">
-                                <span>Get a Free Audit</span>
+                                <span>{cta.ctaText}</span>
                             </Link>
                             <Link href="/quote" className="btn-secondary">
                                 Request Custom Quote

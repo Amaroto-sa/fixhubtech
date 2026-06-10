@@ -3,8 +3,8 @@ import Link from "next/link";
 import { SectionReveal } from "@/components/shared/motion";
 import { Monitor } from "lucide-react";
 import { db } from "@/db";
-import { portfolioItems } from "@/db/schema";
-import { eq, desc } from "drizzle-orm";
+import { portfolioItems, contentSections } from "@/db/schema";
+import { eq, desc, and } from "drizzle-orm";
 
 export const metadata: Metadata = {
     title: "Portfolio",
@@ -71,11 +71,30 @@ const FALLBACK_PORTFOLIO = [
 
 export default async function PortfolioPage() {
     let dbPortfolio: any[] = [];
+    let dbContent: any[] = [];
     try {
         dbPortfolio = await db.select().from(portfolioItems).where(eq(portfolioItems.status, 'published')).orderBy(desc(portfolioItems.createdAt));
+        dbContent = await db.select().from(contentSections).where(and(eq(contentSections.page, "portfolio"), eq(contentSections.isActive, true)));
     } catch (e) {
         console.error(e);
     }
+
+    const getContent = (key: string, fallback: { title: string; body: string; ctaText?: string }) => {
+        const section = dbContent.find((s: any) => s.sectionKey === key);
+        if (section) {
+            return {
+                title: section.title || fallback.title,
+                body: section.body || fallback.body,
+                ctaText: section.ctaText || fallback.ctaText,
+            };
+        }
+        return fallback;
+    };
+
+    const header = getContent("header", {
+        title: "Projects That Perform",
+        body: "Every project is built to convert, designed to impress, and delivered on time. Here's a sample of our work."
+    });
 
     const displayItems = dbPortfolio.length > 0 ? dbPortfolio.map((p: any) => ({
         title: p.title,
@@ -93,11 +112,10 @@ export default async function PortfolioPage() {
                     <div className="text-center mb-16">
                         <span className="badge-primary mb-4 inline-flex">Our Work</span>
                         <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-gradient mb-6">
-                            Projects That Perform
+                            {header.title}
                         </h1>
                         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                            Every project is built to convert, designed to impress, and
-                            delivered on time. Here&apos;s a sample of our work.
+                            {header.body}
                         </p>
                     </div>
                 </SectionReveal>

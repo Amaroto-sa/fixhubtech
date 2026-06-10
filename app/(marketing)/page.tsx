@@ -183,7 +183,7 @@ function TrustStrip() {
 // ============================================================
 // SERVICES OVERVIEW
 // ============================================================
-async function ServicesSection() {
+async function ServicesSection({ data }: { data?: any }) {
     let dbServices: any[] = [];
     try {
         dbServices = await db.select().from(services).where(eq(services.isActive, true)).orderBy(asc(services.sortOrder)).limit(6);
@@ -242,11 +242,10 @@ async function ServicesSection() {
                     <div className="text-center mb-20 max-w-3xl mx-auto">
                         <BrandBadge>Our Capabilities</BrandBadge>
                         <h2 className="mt-6 font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-gradient mb-6 text-balance">
-                            Everything You Need to Win Online.
+                            {data?.title || "Everything You Need to Win Online."}
                         </h2>
                         <p className="text-lg text-muted-foreground/80 leading-relaxed text-balance">
-                            From brand-new builds to complete architectural overhauls — we design and develop
-                            digital platforms that convert passive visitors into paying customers.
+                            {data?.body || "From brand-new builds to complete architectural overhauls — we design and develop digital platforms that convert passive visitors into paying customers."}
                         </p>
                     </div>
                 </SectionReveal>
@@ -281,7 +280,7 @@ async function ServicesSection() {
 // ============================================================
 // PROJECT PROCESS
 // ============================================================
-function ProcessSection() {
+function ProcessSection({ data }: { data?: any }) {
     const steps = [
         {
             step: "01",
@@ -312,10 +311,10 @@ function ProcessSection() {
                     <div className="text-center mb-20 max-w-3xl mx-auto">
                         <BrandBadge>Methodology</BrandBadge>
                         <h2 className="mt-6 font-display text-4xl sm:text-5xl lg:text-6xl font-bold tracking-tight text-gradient mb-6 text-balance">
-                            Engineered for Predictability.
+                            {data?.title || "Engineered for Predictability."}
                         </h2>
                         <p className="text-lg text-muted-foreground/80 leading-relaxed text-balance">
-                            No endless email chains. No missed deadlines. Just a transparent, structured process.
+                            {data?.body || "No endless email chains. No missed deadlines. Just a transparent, structured process."}
                         </p>
                     </div>
                 </SectionReveal>
@@ -349,7 +348,7 @@ function ProcessSection() {
 // ============================================================
 // PORTFOLIO PREVIEW
 // ============================================================
-async function PortfolioPreview() {
+async function PortfolioPreview({ data }: { data?: any }) {
     let dbPortfolio: any[] = [];
     try {
         dbPortfolio = await db.select().from(portfolioItems).where(eq(portfolioItems.status, 'published')).orderBy(desc(portfolioItems.createdAt)).limit(3);
@@ -376,10 +375,10 @@ async function PortfolioPreview() {
                         <div className="max-w-2xl">
                             <BrandBadge>Featured Work</BrandBadge>
                             <h2 className="mt-6 font-display text-4xl sm:text-5xl font-bold tracking-tight text-gradient mb-4">
-                                Proof of Quality.
+                                {data?.title || "Proof of Quality."}
                             </h2>
                             <p className="text-lg text-muted-foreground/80 leading-relaxed">
-                                See how we transform ordinary businesses into premium digital brands.
+                                {data?.body || "See how we transform ordinary businesses into premium digital brands."}
                             </p>
                         </div>
                         <Link href="/portfolio" className="group flex items-center gap-2 text-sm font-medium text-foreground hover:text-indigo-400 transition-colors pb-2">
@@ -473,9 +472,9 @@ export default async function HomePage() {
         <div className="w-full flex-col">
             <HeroSection data={getSection('hero')} />
             <TrustStrip />
-            <ServicesSection />
-            <ProcessSection />
-            <PortfolioPreview />
+            <ServicesSection data={getSection('services')} />
+            <ProcessSection data={getSection('process')} />
+            <PortfolioPreview data={getSection('portfolio')} />
             <FinalCTA data={getSection('cta')} />
         </div>
     );

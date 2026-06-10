@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { SectionReveal } from "@/components/shared/motion";
 import { db } from "@/db";
-import { packages } from "@/db/schema";
-import { eq, asc } from "drizzle-orm";
+import { packages, contentSections } from "@/db/schema";
+import { eq, asc, and } from "drizzle-orm";
 
 export const metadata: Metadata = {
     title: "Pricing",
@@ -84,11 +84,36 @@ const addOns = [
 
 export default async function PricingPage() {
     let dbPackages: any[] = [];
+    let dbContent: any[] = [];
     try {
         dbPackages = await db.select().from(packages).where(eq(packages.isActive, true)).orderBy(asc(packages.sortOrder));
+        dbContent = await db.select().from(contentSections).where(and(eq(contentSections.page, "pricing"), eq(contentSections.isActive, true)));
     } catch (e) {
         console.error(e);
     }
+
+    const getContent = (key: string, fallback: { title: string; body: string; ctaText?: string }) => {
+        const section = dbContent.find((s: any) => s.sectionKey === key);
+        if (section) {
+            return {
+                title: section.title || fallback.title,
+                body: section.body || fallback.body,
+                ctaText: section.ctaText || fallback.ctaText,
+            };
+        }
+        return fallback;
+    };
+
+    const header = getContent("header", {
+        title: "Simple, Transparent Pricing",
+        body: "No hidden fees. No long contracts. Choose a package and we'll build something great."
+    });
+
+    const customPlan = getContent("custom_plan", {
+        title: "Need Something Custom?",
+        body: "Enterprise builds, multi-platform projects, and complex systems. Let's design a plan that fits.",
+        ctaText: "Request Custom Quote"
+    });
 
     const displayPlans = dbPackages.length > 0 ? dbPackages.map((p: any) => ({
         name: p.name,
@@ -109,11 +134,10 @@ export default async function PricingPage() {
                     <div className="text-center mb-16">
                         <span className="badge-primary mb-4 inline-flex">Pricing</span>
                         <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-gradient mb-6">
-                            Simple, Transparent Pricing
+                            {header.title}
                         </h1>
                         <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-                            No hidden fees. No long contracts. Choose a package and
-                            we&apos;ll build something great.
+                            {header.body}
                         </p>
                     </div>
                 </SectionReveal>
@@ -187,16 +211,15 @@ export default async function PricingPage() {
 
                 {/* Custom plan */}
                 <SectionReveal>
-                    <div className="card-glass p-10 text-center max-w-3xl mx-auto mb-20 glow-indigo">
+                    <div className="card-elevated p-10 text-center max-w-3xl mx-auto mb-20">
                         <h2 className="font-display text-2xl font-bold text-foreground mb-3">
-                            Need Something Custom?
+                            {customPlan.title}
                         </h2>
                         <p className="text-muted-foreground mb-6">
-                            Enterprise builds, multi-platform projects, and complex systems.
-                            Let&apos;s design a plan that fits.
+                            {customPlan.body}
                         </p>
                         <Link href="/quote" className="btn-primary">
-                            <span>Request Custom Quote</span>
+                            <span>{customPlan.ctaText}</span>
                         </Link>
                     </div>
                 </SectionReveal>
