@@ -1,6 +1,6 @@
 import { createRouteHandler } from "uploadthing/next";
 import { ourFileRouter } from "./core";
-import { NextResponse } from "next/server";
+import { NextResponse, NextRequest } from "next/server";
 
 // SANITIZE VERCEL ENV VARS: If the user copy-pasted quotes into Vercel, this strips them out.
 // UploadThing's API will reject keys with quotes (returning 400 Bad Request).
@@ -33,11 +33,11 @@ const handlers = createRouteHandler({
   }
 });
 
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
   return handlers.GET(req);
 }
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   if (!process.env.UPLOADTHING_SECRET) {
     console.error("FATAL: UPLOADTHING_SECRET is missing from environment variables.");
     return NextResponse.json(
