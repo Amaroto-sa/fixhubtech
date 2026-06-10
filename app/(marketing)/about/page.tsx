@@ -113,7 +113,7 @@ export default async function AboutPage() {
 
                 {/* CTA */}
                 <SectionReveal>
-                    <div className="card-glass p-12 text-center glow-indigo">
+                    <div className="card-elevated p-12 text-center">
                         <h2 className="font-display text-2xl sm:text-3xl font-bold text-gradient mb-4">
                             Ready to Work Together?
                         </h2>

@@ -9,7 +9,7 @@ import {
 } from "@/components/shared/motion";
 import { ChevronRight, Globe, RefreshCw, LayoutTemplate, Utensils, Scissors, Building, Terminal, Target, ArrowRight, ShieldCheck, Zap, Server, Box, LayoutDashboard, Smartphone, CheckCircle2 } from "lucide-react";
 import { db } from "@/db";
-import { services, portfolioItems } from "@/db/schema";
+import { services, portfolioItems, contentSections } from "@/db/schema";
 import { eq, desc, asc } from "drizzle-orm";
 
 // ============================================================
@@ -27,7 +27,14 @@ function BrandBadge({ children }: { children: React.ReactNode }) {
 // ============================================================
 // HERO SECTION
 // ============================================================
-function HeroSection() {
+function HeroSection({ data }: { data?: any }) {
+    const title = data?.title || "Build a Stronger Digital Presence.";
+    const titleFirstHalf = title.split(" ").slice(0, 3).join(" ");
+    const titleSecondHalf = title.split(" ").slice(3).join(" ");
+    const subtitle = data?.subtitle || "Premium websites, redesigns, client portals, and robust digital systems for businesses that refuse to settle for templates. Fast execution. Zero compromises.";
+    const ctaText = data?.ctaText || "Start a Project";
+    const ctaLink = data?.ctaLink || "/quote";
+
     return (
         <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20">
             {/* Clean minimalist backdrop */}
@@ -41,23 +48,22 @@ function HeroSection() {
 
                 <FadeIn delay={0.2}>
                     <h1 className="mt-8 font-display text-5xl sm:text-6xl md:text-7xl lg:text-[5.5rem] font-bold tracking-tight mb-8 max-w-5xl mx-auto leading-[1.05] text-balance">
-                        <span className="text-foreground">Build a Stronger</span>
+                        <span className="text-foreground">{titleFirstHalf}</span>
                         <br />
-                        <span className="text-gradient-brand">Digital Presence.</span>
+                        <span className="text-gradient-brand">{titleSecondHalf}</span>
                     </h1>
                 </FadeIn>
 
                 <FadeIn delay={0.3}>
                     <p className="text-lg sm:text-xl text-muted-foreground/80 max-w-2xl mx-auto mb-12 leading-relaxed text-balance">
-                        Premium websites, redesigns, client portals, and robust digital systems
-                        for businesses that refuse to settle for templates. Fast execution. Zero compromises.
+                        {subtitle}
                     </p>
                 </FadeIn>
 
                 <FadeIn delay={0.4}>
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                        <Link href="/quote" className="btn-primary text-base px-8 py-4 w-full sm:w-auto">
-                            <span>Start a Project</span>
+                        <Link href={ctaLink} className="btn-primary text-base px-8 py-4 w-full sm:w-auto">
+                            <span>{ctaText}</span>
                             <ArrowRight className="w-4 h-4" />
                         </Link>
                         <Link href="/portfolio" className="btn-secondary text-base px-8 py-4 w-full sm:w-auto">
@@ -422,21 +428,26 @@ async function PortfolioPreview() {
 // ============================================================
 // FINAL CTA
 // ============================================================
-function FinalCTA() {
+function FinalCTA({ data }: { data?: any }) {
+    const title = data?.title || "Ready to elevate your standards?";
+    const subtitle = data?.subtitle || "Stop losing clients to competitors with better websites. Request a custom quote today and get a strategic breakdown.";
+    const ctaText = data?.ctaText || "Start a Project";
+    const ctaLink = data?.ctaLink || "/quote";
+
     return (
         <section className="py-32 relative overflow-hidden">
 
             <div className="section-container relative z-10 text-center">
                 <SectionReveal>
                     <h2 className="font-display text-5xl sm:text-6xl lg:text-7xl font-bold tracking-tight text-gradient mb-8 max-w-4xl mx-auto text-balance">
-                        Ready to elevate your standards?
+                        {title}
                     </h2>
                     <p className="text-xl text-muted-foreground/80 max-w-2xl mx-auto mb-10 text-balance">
-                        Stop losing clients to competitors with better websites. Request a custom quote today and get a strategic breakdown.
+                        {subtitle}
                     </p>
                     <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-                        <Link href="/quote" className="btn-primary text-base px-8 py-4 w-full sm:w-auto">
-                            <span>Start a Project</span>
+                        <Link href={ctaLink} className="btn-primary text-base px-8 py-4 w-full sm:w-auto">
+                            <span>{ctaText}</span>
                             <ArrowRight className="w-4 h-4 ml-1" />
                         </Link>
                     </div>
@@ -449,15 +460,23 @@ function FinalCTA() {
 // ============================================================
 // MAIN EXPORT
 // ============================================================
-export default function HomePage() {
+export default async function HomePage() {
+    let sections: any[] = [];
+    try {
+        sections = await db.select().from(contentSections).where(eq(contentSections.page, 'home'));
+    } catch (e) {
+        console.error(e);
+    }
+    const getSection = (key: string) => sections.find((s: any) => s.sectionKey === key);
+
     return (
         <div className="w-full flex-col">
-            <HeroSection />
+            <HeroSection data={getSection('hero')} />
             <TrustStrip />
             <ServicesSection />
             <ProcessSection />
             <PortfolioPreview />
-            <FinalCTA />
+            <FinalCTA data={getSection('cta')} />
         </div>
     );
 }
