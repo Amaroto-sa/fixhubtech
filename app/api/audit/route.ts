@@ -1,7 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { auditFormSchema } from "@/lib/validation/schemas";
 import { db } from "@/db";
-import { auditRequests } from "@/db/schema";
+import { leads } from "@/db/schema";
+import { sendLeadConfirmation, notifyAdminNewLead } from "@/lib/emails";
 
 export async function POST(req: NextRequest) {
     try {
@@ -17,13 +18,25 @@ export async function POST(req: NextRequest) {
 
         const data = parsed.data;
 
-        await db.insert(auditRequests).values({
-            businessName: data.businessName,
-            websiteUrl: data.websiteUrl,
-            industry: data.industry,
-            mainIssue: data.mainIssue,
+        await db.insert(leads).values({
+            name: data.businessName, // Fallback since audit doesn't have personal name
             email: data.email,
-            whatsapp: data.whatsapp,
+            phone: data.whatsapp,
+            company: data.businessName,
+            industry: data.industry,
+            currentWebsite: data.websiteUrl,
+            projectSummary: data.mainIssue,
+            serviceNeeded: "Free SEO Audit",
+            source: "audit",
+            status: "new",
+        });
+
+        await sendLeadConfirmation({ name: data.businessName, email: data.email });
+        await notifyAdminNewLead({ 
+            name: data.businessName, 
+            email: data.email, 
+            service: "Free SEO Audit", 
+            source: "audit" 
         });
 
         return NextResponse.json(

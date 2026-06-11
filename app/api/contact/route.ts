@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { contactFormSchema } from "@/lib/validation/schemas";
 import { db } from "@/db";
-import { contactRequests } from "@/db/schema";
+import { leads } from "@/db/schema";
 import { sendLeadConfirmation, notifyAdminNewLead } from "@/lib/emails";
 
 export async function POST(req: NextRequest) {
@@ -19,13 +19,15 @@ export async function POST(req: NextRequest) {
 
         const { name, email, phone, subject, message } = parsed.data;
 
-        // Insert into contactRequests table
-        await db.insert(contactRequests).values({
+        // Insert into unified leads table
+        await db.insert(leads).values({
             name,
             email,
             phone,
-            subject,
-            message,
+            serviceNeeded: subject || "Contact Form Inquiry",
+            projectSummary: message,
+            source: "contact",
+            status: "new",
         });
 
         // Send confirmation + notify admin
