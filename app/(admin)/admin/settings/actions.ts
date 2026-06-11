@@ -3,6 +3,7 @@
 import { db } from "@/db";
 import { siteSettings } from "@/db/schema";
 import { revalidatePath } from "next/cache";
+import { eq } from "drizzle-orm";
 
 export async function updateSettings(formData: FormData) {
     try {
@@ -11,8 +12,6 @@ export async function updateSettings(formData: FormData) {
         const linkedin = formData.get("linkedin") as string;
         const instagram = formData.get("instagram") as string;
         const logoUrl = formData.get("imageUrl") as string;
-
-        const { eq } = await import("drizzle-orm");
 
         const settingsToUpdate = [
             { key: "contact_email", value: email || "hello@fixhubtech.com", label: "Contact Email", category: "contact" },
@@ -37,7 +36,10 @@ export async function updateSettings(formData: FormData) {
             }
         }
 
+        // Aggressively revalidate all possible routes to ensure layout cache is purged
+        revalidatePath("/");
         revalidatePath("/", "layout");
+        
         return { success: true };
     } catch (error) {
         console.error("Failed to update settings:", error);
