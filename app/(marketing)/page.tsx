@@ -72,17 +72,109 @@ function HeroSection({ data }: { data?: any }) {
                     </div>
                 </FadeIn>
 
-                {/* Dashboard Application Mockup - Photorealistic Device Frame */}
+                {/* iPhone 14 Pro Max CSS Mockup - Framer Design */}
                 <FadeIn delay={0.6}>
-                    <div className="mt-24 relative max-w-3xl mx-auto flex justify-center">
-                        <div className="relative rounded-2xl overflow-hidden shadow-2xl shadow-indigo-500/10 transition-transform duration-700 hover:scale-[1.02] border border-white/5">
-                            <img 
-                                src="/assets/device-mockup.png" 
-                                alt="FixHub Premium Dashboard on Mobile" 
-                                className="w-full h-auto object-cover"
-                            />
-                            {/* Subtle premium overlay */}
-                            <div className="absolute inset-0 bg-gradient-to-tr from-indigo-500/10 via-transparent to-transparent pointer-events-none mix-blend-overlay" />
+                    <div className="mt-24 relative max-w-sm mx-auto flex justify-center perspective-[1000px]">
+                        <div className="relative w-[320px] h-[650px] bg-[#1a1a1a] rounded-[3.5rem] p-[8px] shadow-2xl shadow-indigo-500/20 ring-1 ring-white/10 transition-transform duration-700 hover:rotate-y-[5deg] hover:scale-[1.02] transform-style-3d">
+                            
+                            {/* Outer Bezel highlight */}
+                            <div className="absolute inset-0 rounded-[3.5rem] ring-1 ring-white/10 pointer-events-none" />
+
+                            {/* The Screen */}
+                            <div className="relative w-full h-full bg-[#0a0a0e] rounded-[3rem] overflow-hidden">
+                                {/* Dynamic Island */}
+                                <div className="absolute top-2 left-1/2 -translate-x-1/2 w-[110px] h-[30px] bg-black rounded-full z-50 flex items-center justify-end px-3">
+                                    <div className="w-2.5 h-2.5 rounded-full bg-indigo-500/20 mr-1" />
+                                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-500/40" />
+                                </div>
+
+                                {/* Content: Mobile Dashboard Mockup */}
+                                <div className="flex flex-col h-full text-foreground font-sans pt-12 relative z-10">
+                                    {/* Mobile Header */}
+                                    <div className="px-5 pb-4 flex items-center justify-between border-b border-white/[0.05]">
+                                        <div className="flex items-center gap-2">
+                                            <div className="w-7 h-7 bg-indigo-500 rounded flex items-center justify-center">
+                                                <span className="text-white font-bold text-[10px]">FH</span>
+                                            </div>
+                                            <span className="font-display font-bold text-sm">FixHub</span>
+                                        </div>
+                                        <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center border border-white/5">
+                                            <Bell className="w-4 h-4 text-muted-foreground" />
+                                        </div>
+                                    </div>
+
+                                    {/* Scrollable Content */}
+                                    <div className="flex-1 p-5 pb-20">
+                                        <h2 className="font-display text-xl font-bold mb-1 text-foreground">Welcome back, John</h2>
+                                        <p className="text-[12px] text-muted-foreground mb-6">Here is your project overview.</p>
+                                        
+                                        {/* Metrics */}
+                                        <div className="grid grid-cols-2 gap-3 mb-6">
+                                            <div className="bg-card border border-white/5 p-4 rounded-2xl shadow-sm">
+                                                <div className="w-8 h-8 rounded-xl bg-indigo-500/10 text-indigo-400 flex items-center justify-center mb-3">
+                                                    <FolderKanban className="w-4 h-4" />
+                                                </div>
+                                                <div className="text-2xl font-display font-bold mb-1">2</div>
+                                                <div className="text-[11px] font-medium text-muted-foreground">Active Projects</div>
+                                            </div>
+                                            <div className="bg-card border border-white/5 p-4 rounded-2xl shadow-sm">
+                                                <div className="w-8 h-8 rounded-xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center mb-3">
+                                                    <CheckCircle2 className="w-4 h-4" />
+                                                </div>
+                                                <div className="text-2xl font-display font-bold mb-1">5</div>
+                                                <div className="text-[11px] font-medium text-muted-foreground">Tasks Done</div>
+                                            </div>
+                                            <div className="bg-card border border-white/5 p-4 rounded-2xl shadow-sm col-span-2 flex items-center justify-between">
+                                                <div>
+                                                    <div className="text-[11px] font-medium text-muted-foreground mb-1">Pending Invoices</div>
+                                                    <div className="text-2xl font-display font-bold text-foreground">$4,250</div>
+                                                </div>
+                                                <div className="w-10 h-10 rounded-full bg-violet-500/10 text-violet-400 flex items-center justify-center">
+                                                    <Receipt className="w-5 h-5" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Recent Projects */}
+                                        <h3 className="text-[13px] font-display font-bold mb-3 text-muted-foreground uppercase tracking-wider">Recent Activity</h3>
+                                        <div className="space-y-3">
+                                            <div className="bg-card border border-white/5 p-4 rounded-2xl shadow-sm">
+                                                <div className="font-semibold text-[14px] mb-2 text-foreground">Website Redesign</div>
+                                                <div className="flex items-center justify-between text-[11px] mb-2">
+                                                    <span className="text-indigo-400 font-bold bg-indigo-500/10 px-2 py-0.5 rounded-full border border-indigo-500/20">In Progress</span>
+                                                    <span className="text-muted-foreground font-medium">65%</span>
+                                                </div>
+                                                <div className="w-full bg-muted rounded-full h-1.5">
+                                                    <div className="bg-indigo-500 h-1.5 rounded-full w-[65%] shadow-[0_0_8px_rgba(99,102,241,0.5)]"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    {/* Bottom App Nav */}
+                                    <div className="absolute bottom-0 inset-x-0 h-[80px] bg-[#0a0a0e]/80 backdrop-blur-md border-t border-white/[0.05] flex items-start justify-around px-4 pt-3 pb-safe z-50">
+                                        <div className="flex flex-col items-center gap-1 text-indigo-400 cursor-pointer">
+                                            <LayoutDashboard className="w-5 h-5" />
+                                            <div className="w-1 h-1 rounded-full bg-indigo-400 mt-0.5" />
+                                        </div>
+                                        <div className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground transition-colors cursor-pointer">
+                                            <Search className="w-5 h-5" />
+                                        </div>
+                                        <div className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground transition-colors cursor-pointer">
+                                            <FolderKanban className="w-5 h-5" />
+                                        </div>
+                                        <div className="flex flex-col items-center gap-1 text-muted-foreground hover:text-foreground transition-colors cursor-pointer">
+                                            <Settings className="w-5 h-5" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            {/* iPhone Physical Buttons */}
+                            <div className="absolute top-[120px] -left-[3px] w-[3px] h-[26px] bg-[#333] rounded-l-md border-l border-white/10" />
+                            <div className="absolute top-[160px] -left-[3px] w-[3px] h-[45px] bg-[#333] rounded-l-md border-l border-white/10" />
+                            <div className="absolute top-[220px] -left-[3px] w-[3px] h-[45px] bg-[#333] rounded-l-md border-l border-white/10" />
+                            <div className="absolute top-[180px] -right-[3px] w-[3px] h-[70px] bg-[#333] rounded-r-md border-r border-white/10" />
                         </div>
                     </div>
                 </FadeIn>
