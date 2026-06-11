@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/db";
-import { projects, projectMilestones, projectMessages } from "@/db/schema";
+import { projects, projectMilestones, projectMessages, projectRevisions } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
@@ -105,5 +105,47 @@ export async function addProjectMessage(projectId: string, content: string, send
     } catch (error) {
         console.error("Failed to add project message:", error);
         return { success: false, error: "Failed to add project message" };
+    }
+}
+
+export async function createProjectRevision(formData: FormData) {
+    try {
+        const projectId = formData.get("projectId") as string;
+        const clientId = formData.get("clientId") as string;
+        const description = formData.get("description") as string;
+        const milestoneId = formData.get("milestoneId") as string;
+        
+        if (!projectId || !clientId || !description) return { success: false, error: "Missing required fields" };
+
+        await db.insert(projectRevisions).values({
+            projectId,
+            clientId,
+            description,
+            milestoneId: milestoneId || null,
+            status: "submitted"
+        });
+
+        revalidatePath(`/admin/projects/${projectId}`);
+        return { success: true };
+    } catch (error) {
+        console.error("Failed to create revision:", error);
+        return { success: false, error: "Failed to create revision" };
+    }
+}
+
+export async function updateRevisionStatus(id: string, projectId: string, status: string) {
+    try {
+        await db.update(projectRevisions)
+            .set({ 
+                status, 
+                updatedAt: new Date() 
+            })
+            .where(eq(projectRevisions.id, id));
+            
+        revalidatePath(`/admin/projects/${projectId}`);
+        return { success: true };
+    } catch (error) {
+        console.error("Failed to update revision status:", error);
+        return { success: false, error: "Failed to update revision status" };
     }
 }

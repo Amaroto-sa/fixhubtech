@@ -1,5 +1,6 @@
 import { db } from "@/db";
 import { users } from "@/db/schema";
+import { updateUserRole, deleteUser } from "./actions";
 import { desc } from "drizzle-orm";
 import {
     FadeIn,
@@ -7,7 +8,10 @@ import {
 } from "@/components/shared/motion";
 import {
     Users as UsersIcon,
-    ArrowRight
+    ArrowRight,
+    Shield,
+    ShieldAlert,
+    Trash2
 } from "lucide-react";
 
 export default async function UsersPage() {
@@ -60,9 +64,32 @@ export default async function UsersPage() {
                                         {user.email} • Joined: {new Date(user.createdAt).toLocaleDateString()}
                                     </p>
                                 </div>
-                                <button className="text-indigo-400 hover:text-indigo-300 transition-colors flex items-center gap-1 text-sm font-medium">
-                                    View <ArrowRight className="w-4 h-4" />
-                                </button>
+                                <div className="flex items-center gap-2">
+                                    <form action={async () => {
+                                        "use server";
+                                        await updateUserRole(user.id, user.role === 'admin' ? 'client' : 'admin');
+                                    }}>
+                                        <button 
+                                            type="submit"
+                                            className="p-2 text-muted-foreground hover:text-indigo-400 hover:bg-indigo-500/10 rounded-md transition-colors"
+                                            title={user.role === 'admin' ? 'Revoke Admin' : 'Make Admin'}
+                                        >
+                                            {user.role === 'admin' ? <ShieldAlert className="w-4 h-4" /> : <Shield className="w-4 h-4" />}
+                                        </button>
+                                    </form>
+                                    <form action={async () => {
+                                        "use server";
+                                        await deleteUser(user.id);
+                                    }}>
+                                        <button 
+                                            type="submit"
+                                            className="p-2 text-muted-foreground hover:text-rose-400 hover:bg-rose-500/10 rounded-md transition-colors"
+                                            title="Delete User"
+                                        >
+                                            <Trash2 className="w-4 h-4" />
+                                        </button>
+                                    </form>
+                                </div>
                             </div>
                         )) : (
                             <div className="p-12 text-center bg-white/[0.01]">

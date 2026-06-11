@@ -7,7 +7,7 @@ import { UserButton, useUser } from "@clerk/nextjs";
 import {
     LayoutDashboard, Target, Users, Calendar, FolderKanban,
     CreditCard, LifeBuoy, Wrench, Package, ImageIcon,
-    Star, HelpCircle, FileText, UserCog, Settings
+    Star, HelpCircle, FileText, UserCog, Settings, FileIcon
 } from "lucide-react";
 
 const adminNavSections = [
@@ -29,6 +29,7 @@ const adminNavSections = [
         title: "Operations",
         items: [
             { label: "Projects", href: "/admin/projects", icon: FolderKanban },
+            { label: "Files", href: "/admin/files", icon: FileIcon },
             { label: "Invoices", href: "/admin/invoices", icon: CreditCard },
             { label: "Tickets", href: "/admin/tickets", icon: LifeBuoy },
         ],

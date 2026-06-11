@@ -15,7 +15,7 @@ import {
     DollarSign,
     Target
 } from "lucide-react";
-import { updateLeadStatus } from "../actions";
+import { updateLeadStatus, convertLeadToClient } from "../actions";
 
 export default async function LeadDetailsPage({ params }: { params: { id: string } }) {
     const leadRecords = await db.select().from(leads).where(eq(leads.id, params.id));
@@ -72,6 +72,20 @@ export default async function LeadDetailsPage({ params }: { params: { id: string
                                 Update Status
                             </button>
                         </form>
+                        {lead.status !== "converted" && (
+                            <form action={async () => {
+                                "use server";
+                                await convertLeadToClient(lead.id);
+                            }}>
+                                <button 
+                                    type="submit"
+                                    className="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white font-medium rounded-lg text-sm transition-colors flex items-center gap-2"
+                                >
+                                    <Briefcase className="w-4 h-4" />
+                                    Convert to Client
+                                </button>
+                            </form>
+                        )}
                     </div>
                 </div>
             </FadeIn>
