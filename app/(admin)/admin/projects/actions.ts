@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/db";
-import { projects } from "@/db/schema";
+import { projects, projectMilestones, projectMessages } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
@@ -45,5 +45,65 @@ export async function createProject(formData: FormData) {
     } catch (error) {
         console.error("Failed to create project:", error);
         return { success: false, error: "Failed to create project" };
+    }
+}
+
+export async function createProjectMilestone(formData: FormData) {
+    try {
+        const projectId = formData.get("projectId") as string;
+        const title = formData.get("title") as string;
+        const description = formData.get("description") as string;
+        const dueDateStr = formData.get("dueDate") as string;
+        
+        if (!projectId || !title) return { success: false, error: "Project and Title are required." };
+
+        await db.insert(projectMilestones).values({
+            projectId,
+            title,
+            description: description || null,
+            dueDate: dueDateStr ? new Date(dueDateStr) : null,
+            status: "pending"
+        });
+
+        revalidatePath(`/admin/projects/${projectId}`);
+        return { success: true };
+    } catch (error) {
+        console.error("Failed to create milestone:", error);
+        return { success: false, error: "Failed to create milestone" };
+    }
+}
+
+export async function updateMilestoneStatus(id: string, projectId: string, status: string) {
+    try {
+        await db.update(projectMilestones)
+            .set({ 
+                status, 
+                completedAt: status === "completed" ? new Date() : null 
+            })
+            .where(eq(projectMilestones.id, id));
+            
+        revalidatePath(`/admin/projects/${projectId}`);
+        return { success: true };
+    } catch (error) {
+        console.error("Failed to update milestone status:", error);
+        return { success: false, error: "Failed to update milestone status" };
+    }
+}
+
+export async function addProjectMessage(projectId: string, content: string, senderId?: string) {
+    try {
+        if (!projectId || !content) return { success: false, error: "Project and Content are required." };
+
+        await db.insert(projectMessages).values({
+            projectId,
+            content,
+            senderId: senderId || null,
+        });
+
+        revalidatePath(`/admin/projects/${projectId}`);
+        return { success: true };
+    } catch (error) {
+        console.error("Failed to add project message:", error);
+        return { success: false, error: "Failed to add project message" };
     }
 }

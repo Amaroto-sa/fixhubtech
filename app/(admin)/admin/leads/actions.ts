@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/db";
-import { leads } from "@/db/schema";
+import { leads, clients } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 
@@ -57,5 +57,31 @@ export async function createLead(formData: FormData) {
     } catch (error) {
         console.error("Failed to create lead:", error);
         return { success: false, error: "Failed to create lead" };
+    }
+}
+
+export async function convertLeadToClient(leadId: string) {
+    try {
+        const [lead] = await db.select().from(leads).where(eq(leads.id, leadId));
+        if (!lead) return { success: false, error: "Lead not found" };
+
+        const [newClient] = await db.insert(clients).values({
+            leadId: lead.id,
+            companyName: lead.company || "Unknown Company",
+            contactName: lead.name,
+            email: lead.email,
+            phone: lead.phone || null,
+        }).returning();
+
+        await db.update(leads)
+            .set({ status: "converted", convertedClientId: newClient.id, updatedAt: new Date() })
+            .where(eq(leads.id, leadId));
+
+        revalidatePath("/admin/leads");
+        revalidatePath("/admin/clients");
+        return { success: true, clientId: newClient.id };
+    } catch (error) {
+        console.error("Failed to convert lead:", error);
+        return { success: false, error: "Failed to convert lead" };
     }
 }

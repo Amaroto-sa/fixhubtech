@@ -1,8 +1,8 @@
 import Link from "next/link";
 import { currentUser } from "@clerk/nextjs/server";
 import { db } from "@/db";
-import { leads, projects, invoices, supportTickets, payments } from "@/db/schema";
-import { eq, and, ne, sum, count } from "drizzle-orm";
+import { leads, projects, invoices, supportTickets, payments, clients } from "@/db/schema";
+import { eq, and, ne, sum, count, sql } from "drizzle-orm";
 import {
     SpotlightCard,
     FadeIn,
@@ -31,17 +31,30 @@ export default async function AdminDashboard() {
 
     try {
         // Fetch KPIs
-        const [allLeads] = await db.select({ count: count(leads.id) }).from(leads);
-        // Wait, Drizzle 0.30 count is a bit different. Let's just fetch all and get length for now if we want to be safe or use sql`count(*)`
+        const [allLeadsResult] = await db.select({ count: sql<number>`count(*)` }).from(leads);
+        const [allClientsResult] = await db.select({ count: sql<number>`count(*)` }).from(clients);
+        const totalLeads = Number(allLeadsResult?.count || 0);
+        const totalClients = Number(allClientsResult?.count || 0);
+        const conversionRate = totalLeads > 0 ? Math.round((totalClients / totalLeads) * 100) : 0;
         
         const newLeads = await db.select().from(leads).where(eq(leads.status, "new"));
-        const activeProjects = await db.select().from(projects).where(ne(projects.status, "completed"));
+        
+        // Fetch projects with their clients
+        const activeProjects = await db
+            .select({
+                project: projects,
+                client: clients
+            })
+            .from(projects)
+            .leftJoin(clients, eq(projects.clientId, clients.id))
+            .where(ne(projects.status, "completed"));
+
         const overdueInvoices = await db.select().from(invoices).where(eq(invoices.status, "overdue"));
         const openTickets = await db.select().from(supportTickets).where(eq(supportTickets.status, "open"));
         
-        // Fetch revenue (simplified)
-        // const [rev] = await db.select({ total: sum(payments.amount) }).from(payments);
-        // let totalRevenue = rev?.total || "0";
+        // Fetch revenue (sum of all successful payments)
+        const [rev] = await db.select({ total: sum(payments.amount) }).from(payments).where(eq(payments.status, "successful"));
+        let totalRevenue = rev?.total ? `$${Number(rev.total).toLocaleString()}` : "$0";
 
         kpis = [
             {
@@ -60,7 +73,7 @@ export default async function AdminDashboard() {
             },
             {
                 label: "Revenue (MTD)",
-                value: "$0", // Simplified for now
+                value: totalRevenue,
                 change: "Updated live",
                 borderColor: "border-emerald-500/20",
                 icon: BadgeDollarSign,
@@ -81,7 +94,7 @@ export default async function AdminDashboard() {
             },
             {
                 label: "Conversion Rate",
-                value: "0%",
+                value: `${conversionRate}%`,
                 change: "Leads to Clients",
                 borderColor: "border-violet-500/20",
                 icon: TrendingUp,
@@ -97,11 +110,11 @@ export default async function AdminDashboard() {
             time: "Recently"
         }));
 
-        activeProjectsList = activeProjects.slice(0, 3).map(p => ({
-            name: p.name,
-            client: "FixHub Client",
-            progress: p.status === 'completed' ? 100 : 50,
-            status: p.status
+        activeProjectsList = activeProjects.slice(0, 3).map(({ project, client }) => ({
+            name: project.name,
+            client: client?.companyName || client?.contactName || "Unknown Client",
+            progress: project.status === 'completed' ? 100 : project.status === 'in-progress' ? 50 : 10,
+            status: project.status
         }));
 
     } catch (error) {
