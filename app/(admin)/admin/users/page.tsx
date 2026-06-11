@@ -12,24 +12,20 @@ export default async function UsersPage({ searchParams }: { searchParams: { q?: 
     let dbError = false;
 
     try {
-        let dbQuery = db.select({
+        const conditions = query ? or(
+            ilike(users.firstName, `%${query}%`),
+            ilike(users.lastName, `%${query}%`),
+            ilike(users.email, `%${query}%`)
+        ) : undefined;
+
+        usersData = await db.select({
             user: users,
             profile: profiles
         })
         .from(users)
-        .leftJoin(profiles, eq(users.id, profiles.userId));
-
-        if (query) {
-            dbQuery = dbQuery.where(
-                or(
-                    ilike(users.firstName, `%${query}%`),
-                    ilike(users.lastName, `%${query}%`),
-                    ilike(users.email, `%${query}%`)
-                )
-            );
-        }
-
-        usersData = await dbQuery.orderBy(desc(users.createdAt));
+        .leftJoin(profiles, eq(users.id, profiles.userId))
+        .where(conditions)
+        .orderBy(desc(users.createdAt));
     } catch (error) {
         console.error("Admin Users DB Error:", error);
         dbError = true;
