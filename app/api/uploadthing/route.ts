@@ -6,7 +6,6 @@ import { NextRequest } from "next/server";
 const cleanEnv = (val?: string) => val ? val.replace(/^['"]|['"]$/g, '').trim() : undefined;
 const uploadthingId = cleanEnv(process.env.UPLOADTHING_APP_ID);
 const uploadthingSecret = cleanEnv(process.env.UPLOADTHING_SECRET);
-const token = cleanEnv(process.env.UPLOADTHING_TOKEN);
 
 export async function GET(req: NextRequest) {
   const handlers = createRouteHandler({ router: ourFileRouter });
@@ -28,7 +27,6 @@ export async function POST(req: NextRequest) {
     config: {
       uploadthingId,
       uploadthingSecret,
-      token,
       callbackUrl,
     }
   });
