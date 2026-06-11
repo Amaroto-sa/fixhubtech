@@ -12,9 +12,13 @@ export async function updateSettings(formData: FormData) {
         const linkedin = formData.get("linkedin") as string;
         const instagram = formData.get("instagram") as string;
         const logoUrl = formData.get("imageUrl") as string;
+        const whatsapp = formData.get("whatsapp") as string;
+        const hours = formData.get("hours") as string;
 
         const settingsToUpdate = [
             { key: "contact_email", value: email || "hello@fixhubtech.com", label: "Contact Email", category: "contact" },
+            { key: "contact_whatsapp", value: whatsapp || "+1 (555) 000-0000", label: "WhatsApp / Phone", category: "contact" },
+            { key: "business_hours", value: hours || "Mon – Fri, 9am – 6pm", label: "Business Hours", category: "contact" },
             { key: "social_twitter", value: twitter || "https://twitter.com/fixhubtech", label: "Twitter URL", category: "social" },
             { key: "social_linkedin", value: linkedin || "https://linkedin.com/company/fixhubtech", label: "LinkedIn URL", category: "social" },
             { key: "social_instagram", value: instagram || "https://instagram.com/fixhubtech", label: "Instagram URL", category: "social" },

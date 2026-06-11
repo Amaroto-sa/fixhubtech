@@ -79,6 +79,28 @@ export default async function SettingsPage() {
                         </div>
 
                         <div className="space-y-2">
+                            <label htmlFor="whatsapp" className="text-sm font-medium text-foreground">WhatsApp / Phone Number</label>
+                            <input 
+                                type="text" 
+                                id="whatsapp" 
+                                name="whatsapp" 
+                                defaultValue={settingsMap["contact_whatsapp"] || "+1 (555) 000-0000"}
+                                className="w-full px-4 py-2.5 bg-black/50 border border-white/10 rounded-lg text-sm focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/50 text-foreground"
+                            />
+                        </div>
+
+                        <div className="space-y-2">
+                            <label htmlFor="hours" className="text-sm font-medium text-foreground">Business Hours</label>
+                            <input 
+                                type="text" 
+                                id="hours" 
+                                name="hours" 
+                                defaultValue={settingsMap["business_hours"] || "Mon – Fri, 9am – 6pm"}
+                                className="w-full px-4 py-2.5 bg-black/50 border border-white/10 rounded-lg text-sm focus:outline-none focus:border-indigo-500/50 focus:ring-1 focus:ring-indigo-500/50 text-foreground"
+                            />
+                        </div>
+
+                        <div className="space-y-2">
                             <label htmlFor="twitter" className="text-sm font-medium text-foreground">Twitter / X Profile URL</label>
                             <input 
                                 type="url" 
