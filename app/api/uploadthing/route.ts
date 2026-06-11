@@ -2,23 +2,21 @@ import { createRouteHandler } from "uploadthing/next";
 import { ourFileRouter } from "./core";
 import { NextResponse, NextRequest } from "next/server";
 
-// SANITIZE VERCEL ENV VARS: If the user copy-pasted quotes into Vercel, this strips them out.
-// UploadThing's API will reject keys with quotes (returning 400 Bad Request).
-if (process.env.UPLOADTHING_SECRET) {
-  process.env.UPLOADTHING_SECRET = process.env.UPLOADTHING_SECRET.replace(/^['"]|['"]$/g, '');
-}
-if (process.env.UPLOADTHING_APP_ID) {
-  process.env.UPLOADTHING_APP_ID = process.env.UPLOADTHING_APP_ID.replace(/^['"]|['"]$/g, '');
-}
-
-// FORCE DELETE UPLOADTHING_URL ON VERCEL
-// If the user accidentally set UPLOADTHING_URL=http://localhost:3000 in Vercel, it breaks everything.
-if (process.env.VERCEL || process.env.VERCEL_ENV) {
-  delete process.env.UPLOADTHING_URL;
-}
+// Securely read and sanitize the environment variables without mutating process.env
+const secret = (process.env.UPLOADTHING_SECRET || "").replace(/^['"]|['"]$/g, '');
+const appId = (process.env.UPLOADTHING_APP_ID || "").replace(/^['"]|['"]$/g, '');
 
 const handlers = createRouteHandler({
-  router: ourFileRouter
+  router: ourFileRouter,
+  config: {
+    uploadthingId: appId,
+    uploadthingSecret: secret,
+    isDev: process.env.NODE_ENV === "development",
+    // Explicitly define the callback URL to prevent Vercel's dynamic URL resolution from failing UploadThing's strict URL validation.
+    callbackUrl: process.env.NODE_ENV === "development" 
+      ? "http://localhost:3000/api/uploadthing" 
+      : "https://www.fixhubtech.com/api/uploadthing"
+  }
 });
 
 export async function GET(req: NextRequest) {
@@ -26,18 +24,18 @@ export async function GET(req: NextRequest) {
 }
 
 export async function POST(req: NextRequest) {
-  if (!process.env.UPLOADTHING_SECRET) {
+  if (!secret) {
     console.error("FATAL: UPLOADTHING_SECRET is missing from environment variables.");
     return NextResponse.json(
-      { error: "UPLOADTHING_SECRET is not set in Vercel." }, 
+      { error: "UPLOADTHING_SECRET is not set." }, 
       { status: 500 }
     );
   }
   
-  if (!process.env.UPLOADTHING_APP_ID) {
+  if (!appId) {
     console.error("FATAL: UPLOADTHING_APP_ID is missing from environment variables.");
     return NextResponse.json(
-      { error: "UPLOADTHING_APP_ID is not set in Vercel." }, 
+      { error: "UPLOADTHING_APP_ID is not set." }, 
       { status: 500 }
     );
   }

@@ -2,13 +2,6 @@ import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { UploadThingError } from "uploadthing/server";
 import { auth } from "@clerk/nextjs/server";
 
-if (process.env.UPLOADTHING_SECRET) {
-  process.env.UPLOADTHING_SECRET = process.env.UPLOADTHING_SECRET.replace(/^['"]|['"]$/g, '');
-}
-if (process.env.UPLOADTHING_APP_ID) {
-  process.env.UPLOADTHING_APP_ID = process.env.UPLOADTHING_APP_ID.replace(/^['"]|['"]$/g, '');
-}
-
 const f = createUploadthing({
   errorFormatter: (err) => {
     console.error("UploadThing SDK Error:", err);
